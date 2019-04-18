@@ -1,0 +1,11 @@
+bookdown::gitbook:
+  split_by: rmd
+  config:
+    toc:
+      collapse: section
+      before: |
+        <li><strong><a href="./">Functional Programming</a></strong></li>
+    edit:
+      link: https://github.com/dcl-docs/prog/edit/master/%s
+    download: null
+    sharing: null

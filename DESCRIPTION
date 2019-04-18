@@ -1,0 +1,7 @@
+Imports:
+  bookdown,
+  ggrepel,
+  hexbin,
+  knitr,
+  rmarkdown,
+  tidyverse

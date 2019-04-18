@@ -1,0 +1,9 @@
+new_session: true
+delete_merged_file: true
+
+rmd_files: [
+  "index.Rmd",
+  "purrr-basics.Rmd"
+]
+
+before_chapter_script: "_common.R"
