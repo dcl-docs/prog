@@ -1,6 +1,6 @@
 # purrr inside mutate
 
-```{r message = FALSE}
+```{r message = FALSE, warning = FALSE}
 library(tidyverse)
 ```
 
@@ -71,19 +71,19 @@ df %>%
 Tibble columns are vector, so when we reference `feeling` inside `map_chr()`, we are supplying a vector.
 
 ```{r echo=FALSE}
-knitr::include_graphics("images/map-mutate-emoticons-1.png")
+knitr::include_graphics("images/map-mutate-emoticons-1.png", dpi = image_dpi)
 ```
 
 `map_chr()` then applies `emoticons_1()` to each element of `feelings`,
 
 ```{r echo=FALSE}
-knitr::include_graphics("images/map-mutate-emoticons-2.png")
+knitr::include_graphics("images/map-mutate-emoticons-2.png", dpi = image_dpi)
 ```
 
 producing a vector with an emoticon for each element of `feelings`.
 
 ```{r echo=FALSE}
-knitr::include_graphics("images/map-mutate-emoticons-3.png")
+knitr::include_graphics("images/map-mutate-emoticons-3.png", dpi = image_dpi )
 ```
 
 This pattern will work with any scalar function, but remember to think about which map variant to use. If the output type of the scalar function doesn't match the suffix, you'll get an error about coercion.

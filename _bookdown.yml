@@ -3,7 +3,9 @@ delete_merged_file: true
 
 rmd_files: [
   "index.Rmd",
-  "purrr-basics.Rmd"
+  "purrr-basics.Rmd",
+  "purrr-mutate.Rmd",
+  "purrr-parallel.Rmd"
 ]
 
 before_chapter_script: "_common.R"
