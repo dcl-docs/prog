@@ -4,6 +4,7 @@ delete_merged_file: true
 rmd_files: [
   "index.Rmd",
   "purrr-basics.Rmd",
+  "function-vector.Rmd",
   "purrr-mutate.Rmd",
   "purrr-parallel.Rmd"
 ]
