@@ -12,8 +12,6 @@ In the vector functions unit, you learned that `mutate()` creates new columns by
 
 In this reading, you'll learn about a fourth option: supplying `mutate()` with a vector created by a `map` function.
 
-## Using map functions inside `mutate()`
-
 `emoticons_1()` is a simple scalar function that turns feelings into emoticons.
 
 ```{r}
@@ -92,8 +90,6 @@ This pattern will work with any scalar function, but remember to think about whi
 df %>% 
   mutate(emoticon = map_int(feeling, emoticons_1))
 ```
-
-## Additional arguments and anonymous values
 
 You can use the map functions inside `mutate()` as you would outside `mutate()`, and so you can still specify additional arguments by listing them after the function.
 

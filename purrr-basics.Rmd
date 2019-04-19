@@ -55,7 +55,7 @@ We'll explain the most general map function, `map()`, first. `map()`, like all t
 knitr::include_graphics("images/map-step-1.png", dpi = image_dpi) 
 ```
 
-(All diagrams were adapted from https://adv-r.hadley.nz/functionals.html .)
+(All diagrams were adapted from https://adv-r.hadley.nz/functionals.html.)
 
 `map()` then applies that function to each element of the input list/vector.
 
