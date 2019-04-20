@@ -66,7 +66,7 @@ df %>%
   mutate(emoticon = map_chr(feeling, emoticons_1))
 ```
 
-Tibble columns are vector, so when we reference `feeling` inside `map_chr()`, we are supplying a vector.
+Tibble columns are vectors, so `map_chr()` treats `feeling` just like any other vector.
 
 ```{r echo=FALSE}
 knitr::include_graphics("images/map-mutate-emoticons-1.png", dpi = image_dpi)
