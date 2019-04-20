@@ -1,1 +1,1 @@
-# Data structures
+# Data structure basics

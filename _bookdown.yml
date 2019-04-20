@@ -3,10 +3,16 @@ delete_merged_file: true
 
 rmd_files: [
   "index.Rmd",
+  
+  "data-structures.Rmd",
   "data-structure-basics.Rmd",
+  
+  "functions.Rmd",
   "function-basics.Rmd",
   "function-vector.Rmd",
   "function-anonymous.Rmd",
+  
+  "iteration.Rmd",
   "purrr-basics.Rmd",
   "purrr-mutate.Rmd",
   "purrr-parallel.Rmd"
