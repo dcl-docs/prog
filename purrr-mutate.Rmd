@@ -73,19 +73,25 @@ df %>%
   mutate(emoticon = map_chr(feeling, emoticons_1))
 ```
 
-`map_chr()` does the same thing inside `mutate()` as it does outside. The `feeling` column is just a vector, so the entire vector of emotions is supplied to `map_chr()`.
+`map_chr()` does the same thing inside `mutate()` as it does outside. 
+
+```{r echo=FALSE}
+knitr::include_graphics("images/emoticons-mutate-0.png", dpi = image_dpi)
+```
+
+The `feeling` column is just a vector, so the entire vector of emotions is supplied to `map_chr()`.
 
 ```{r echo=FALSE}
 knitr::include_graphics("images/emoticons-mutate-1.png", dpi = image_dpi)
 ```
 
-Then, `map_chr()` applies `emoticons_1()` to each element of `feelings` in turn,
+Then, `map_chr()` applies `emoticons_1()` to each element of `feelings`.
 
 ```{r echo=FALSE}
 knitr::include_graphics("images/emoticons-mutate-2.png", dpi = image_dpi)
 ```
 
-producing a vector of values that `mutate()` can turn into a new column.
+This results in a vector of values that `mutate()` can turn into a new column.
 
 ```{r echo=FALSE}
 knitr::include_graphics("images/emoticons-mutate-3.png", dpi = image_dpi)
