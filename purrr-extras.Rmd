@@ -1,0 +1,110 @@
+# Other purrr functions
+
+```{r message = FALSE, warning = FALSE}
+library(tidyverse)
+```
+
+
+* [map functions that output tibbles](#map-functions-that-output-tibbles)
+* [Walk](#walk)
+* [Predicate functions](#predicate-functions)
+
+In this reading, you'll learn about two more map variants, `map_dfr()` and `map_dfc()`. Then, you'll learn about `walk()`, as well as some useful purrr functions that work with functions that return either `TRUE` or `FALSE`.
+
+The purrr package contains more functions that we can cover. The [purrr cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/purrr.pdf) is a great way to see an overview of the package or find a helpful function when you encounter a new type of iteration problem.
+
+## map functions that output tibbles
+
+You already know how to choose the appropriate map function ending to produce an atomic vector or list. There are also map function variants that produce a single tibble.
+
+With these map functions, the assembly line worker creates a tibble for each input element, and the output conveyor belt ends up with a collection of tibbles. The worker then combines all the small tibbles into a single, larger tibble. 
+
+There are multiple ways to combine smaller tibbles into a larger tibble. purrr provides two options:
+
+* `map_dfr()` stacks the tibbles on top of each other.
+* `map_dfc()` stacks them side-by-side.
+
+There are `_dfr` and `_dfc` variants of `pmap()` and `map2()` as well.
+
+### `_dfr`
+
+You will often use `map_dfr()` when reading in data. The following code reads in several very simple csv files that contain the names of different dinosaur genera.
+
+```{r, message=FALSE}
+read_csv("data/purrr-extras/file_001.csv")
+
+read_csv("data/purrr-extras/file_002.csv")
+
+read_csv("data/purrr-extras/file_003.csv")
+```
+
+`read_csv()` produces a tibble, and so we can use `map_dfr()` to map over all three file names and bind the resulting individual tibbles into a single tibble.
+
+```{r, message=FALSE}
+files <- str_glue("data/purrr-extras/file_00{1:3}.csv")
+files
+
+files %>% 
+  map_dfr(read_csv)
+```
+
+The result is a tibble with three rows and two columns, because `map_dfr()` aligns the columns of the individual tibbles by name. 
+
+The individual tibbles can have different numbers of rows or columns. `map_dfr()` creates a column for each unique column name. 
+
+```{r, message=FALSE}
+read_csv("data/purrr-extras/file_004.csv")
+
+c(files, "data/purrr-extras/file_004.csv") %>% 
+  map_dfr(read_csv)
+```
+
+If some of the individual tibbles lack a column that others have, `map_dfr()` fills in with `NA` values.
+
+### `_dfc`
+
+`map_dfc()` is typically less useful than `map_dfr()`, because it relies on row position to stack the tibbles side-by-side. Row position is prone to error, and it will often be difficult to check if the data in each row is aligned correctly. However, if you have data with variables in different places and are positive the rows are aligned, `map_dfc()` may be appropriate.
+
+Unfortunately, even if the individual tibbles contain a unique identifier for each row, `map_dfc()` doesn't use the identifiers to verify that the rows are aligned correctly, nor does it combine identically named columns.
+
+```{r, message=FALSE}
+read_csv("data/purrr-extras/file_005.csv")
+
+c("data/purrr-extras/file_001.csv", "data/purrr-extras/file_005.csv") %>% 
+  map_dfc(read_csv)
+```
+
+Instead, you end up with a duplicated column.
+
+Therefore, if you have a unique identifier for each row, it is _much_ better to use the identifier to join them together.
+
+```{r, message=FALSE} 
+left_join(
+  read_csv("data/purrr-extras/file_001.csv"),
+  read_csv("data/purrr-extras/file_005.csv"),
+  by = "id"
+)
+```
+
+Finally, because `map_dfc()` combines tibbles by row position, the tibbles can have different numbers of columns, but must have the same number of rows.
+
+The following files have different numbers of rows, and so `map_dfc()` produces an error.
+
+```{r, message=FALSE, error=TRUE}
+read_csv("data/purrr-extras/file_006.csv")
+
+c("data/purrr-extras/file_001.csv", "data/purrr-extras/file_006.csv") %>% 
+  map_dfc(read_csv)
+```
+
+## Walk
+
+This short section discusses `walk()`. The walk functions work similarly to the map functions, but you use them when you're interested in applying a function that performs an action instead of producing data (e.g., `print()`). 
+
+* [Walk](http://r4ds.had.co.nz/iteration.html#walk) [r4ds-21.8]
+
+## Predicate functions
+
+purrr has some useful functions that work with _predicate functions_, which are functions that return a single `TRUE` or `FALSE`. For example, `keep()` and `discard()` iterate over a vector and keep or discard only those elements for which the predicate function returns `TRUE`.
+
+* [Predicate functions](http://r4ds.had.co.nz/iteration.html#predicate-functions) [r4ds-21.9.1]

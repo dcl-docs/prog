@@ -1,0 +1,11 @@
+# List columns
+
+```{r message = FALSE, warning = FALSE}
+library(tidyverse)
+```
+
+* List-columns [r4ds-25.3]
+
+* Creating list-columns [r4ds-25.4]
+
+* Simplifying list-columns [r4ds-25.5]

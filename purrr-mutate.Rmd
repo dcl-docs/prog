@@ -10,7 +10,7 @@ In the vector functions unit, you learned that `mutate()` creates new columns by
 * Explicitly give `mutate()` a vector with an element for each row in the tibble.
 * Create a vector using a vector function like `+` or `case_when()`.
 
-In this reading, you'll learn about a fourth option: supplying `mutate()` with a vector created by a `map` function.
+The purrr map functions are technically vector functions. They take a vector as input and return a vector of the same length as output. In this reading, we'll show you how to use map functions inside `mutate()` to create a new column.
 
 `emoticons_1()` is a simple scalar function that turns feelings into emoticons.
 
@@ -26,24 +26,19 @@ emoticons_1 <- function(x) {
 }
 ```
 
-Recall that scalar functions fail if you try to give them vectors of values:
+Recall that scalar functions take a single value and return a single value.
 
-```{r}
-two_feelings <- c("happy", "befuddled")
-emoticons_1(two_feelings)
+```{r echo=FALSE}
+knitr::include_graphics("images/emoticons_1-scalar.png", dpi = image_dpi)
 ```
 
-We could turn `emoticons()` into a vector function by rewriting it using `if_else()`, `case_when()`, or `recode()`, but let's say we want to keep it as a scalar function or don't have control over the function source code. In that case, we need a way to apply `emoticons_1()` to each element of `two_feelings`, instead of just the first element. Recall that this is exactly what the map functions do.
+If you try to apply a scalar function to a vector, the scalar function will only process the first element of that vector.
 
-```{r}
-map_chr(two_feelings, emoticons_1)
+```{r echo=FALSE}
+knitr::include_graphics("images/emoticons_1-vector.png", dpi = image_dpi)
 ```
 
-`map_chr()` applies `emoticons_1()` to one element of `two_feelings` at time, so now we have an effective way of applying a scalar function to a vector. 
-
-Now, say we want to use `emoticons_1()` inside `mutate()`.
-
-`df` is a tibble representing some emotions. 
+Let's say we want to use `emoticons_1()` to translate some feelings into emoticons. `df` is a small tibble that represents some feelings.
 
 ```{r}
 df <- 
@@ -52,46 +47,58 @@ df <-
   ) 
 ```
 
-Our tibble column `feeling` is a vector, so `emoticons_1()` will also fail if we try to use it inside `mutate()` to create a new column.
+We can't just use `mutate()` and `emoticons_1()` to add a new column because, like we said, `emoticons_1()` can't handle vectors. 
 
 ```{r}
 df %>% 
   mutate(emoticon = emoticons_1(feeling))
 ```
 
-Instead, we can use a map function to apply `emoticons_1` to each element of the `feeling` column at a time.
+We could change `emoticons_1()` into a vector function by replacing `if` and `else` with `if_else()`, `case_when()`, or `recode()`. However, you often won't have control over the source code of the functions you want to use, and there will be many circumstances when you can't change a scalar function into a vector function.
+
+Instead of turning `emoticons_1()` into a vector function, we'll use `map_chr()` to apply `emoticons_1()` to each element of `feeling`, creating a vector of emoticons.
+
+You already know how to apply map functions to ordinary vectors. Let's pull `feeling` out of `df` to see what happens when we use `map_chr()` to apply `emoticons_1()`.
+
+```{r}
+feeling <- df$feeling
+
+map_chr(feeling, emoticons_1)
+```
+
+Now, we can plug this map statement into `mutate()` to apply `emoticons_1()` to each feeling in `df`.
 
 ```{r}
 df %>% 
   mutate(emoticon = map_chr(feeling, emoticons_1))
 ```
 
-Tibble columns are vectors, so `map_chr()` treats `feeling` just like any other vector.
+`map_chr()` does the same thing inside `mutate()` as it does outside. The `feeling` column is just a vector, so the entire vector of emotions is supplied to `map_chr()`.
 
 ```{r echo=FALSE}
-knitr::include_graphics("images/map-mutate-emoticons-1.png", dpi = image_dpi)
+knitr::include_graphics("images/emoticons-mutate-1.png", dpi = image_dpi)
 ```
 
-`map_chr()` then applies `emoticons_1()` to each element of `feelings`,
+Then, `map_chr()` applies `emoticons_1()` to each element of `feelings` in turn,
 
 ```{r echo=FALSE}
-knitr::include_graphics("images/map-mutate-emoticons-2.png", dpi = image_dpi)
+knitr::include_graphics("images/emoticons-mutate-2.png", dpi = image_dpi)
 ```
 
-producing a vector with an emoticon for each element of `feelings`.
+producing a vector of values that `mutate()` can turn into a new column.
 
 ```{r echo=FALSE}
-knitr::include_graphics("images/map-mutate-emoticons-3.png", dpi = image_dpi )
+knitr::include_graphics("images/emoticons-mutate-3.png", dpi = image_dpi)
 ```
 
-This pattern will work with any scalar function, but remember to think about which map variant to use. If the output type of the scalar function doesn't match the suffix, you'll get an error about coercion.
+You can use a map function inside `mutate()` to apply any scalar function to each element of a column, but remember to think about which map variant you need. If the output type of the scalar function doesn't match the map function suffix, you'll get an error about coercion.
 
-```{r, error=TRUE}
+```{r error=TRUE}
 df %>% 
   mutate(emoticon = map_int(feeling, emoticons_1))
 ```
 
-You can use the map functions inside `mutate()` as you would outside `mutate()`, and so you can still specify additional arguments by listing them after the function.
+The map functions work exactly the same inside `mutate()` as they do outside. You still specify additional arguments by listing them after the function.
 
 ```{r}
 emoticons_2 <- function(x, default = "???") {
@@ -108,9 +115,11 @@ df %>%
   mutate(emoticon = map_chr(feeling, emoticons_2, default = NA_character_))
 ```
 
-You can also still create anonymous functions.
+And you can also still create anonymous functions.
 
 ```{r}
 df %>% 
   mutate(is_happy = map_chr(feeling, ~ str_c("I feel ", emoticons_2(.))))
 ```
+
+Remember that, in purrr functions, you start an anonymous function with `~`. The `.` refers to one element of the `feeling` column at a time. 

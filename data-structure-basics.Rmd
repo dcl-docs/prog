@@ -1,1 +1,158 @@
-# Data structure basics
+# Vectors, lists, and tibbles
+
+It's helpful to know a little bit about how data structures are organised in R. In this chapter, you'll learn about vectors, lists, and tibbles. 
+
+```{r message = FALSE, warning = FALSE}
+library(tidyverse)
+```
+
+## Atomic vectors
+
+The atomic vectors are the "atoms" of R, the simple building blocks upon which all else is built.  There are four types of atomic vector that are important for data analysis:
+
+* __integer__ vectors `<int>` contain integers.
+* __double__ vectors `<dbl>` contain real numbers. 
+* __character__ vector `<chr>` contain strings made with `""`.
+* __logical__ vectors `<lgl>` contain `TRUE` or `FALSE`.
+
+Integer atomic vectors only contain integers, double atomic vectors only contain doubles, and so on.
+
+All vectors can also contain the missing value `NA`. You'll learn more about missing values later on. Collectively integer and double vectors are known as __numeric__ vectors. The difference is rarely important in R.
+
+You create atomic vectors by hand with the `c()` function:
+
+```{r}
+logical <- c(TRUE, FALSE, FALSE)
+
+# The difference between the real number 1 and the integer 1 is not 
+# usually important, but it sometimes comes up. R uses the suffix 
+# "L" to indicate that a number is an integer.
+integer <- c(1L, 2L, 3L)
+
+double <- c(1.5, 2.8, pi)
+
+character <- c("this", "is", "a character", "vector")
+```
+
+### Subsetting
+
+Use `[[` extract a single value out of a vector:
+
+```{r}
+x <- c(5.1, 4.2, 5.3, 1.4)
+x[[2]]
+```
+
+Use `[` to extract multiple values:
+
+```{r}
+# Keep selected locations
+x[c(1, 3)]
+
+# Drop selected locations
+x[-1]
+
+# Select locations where the condition is true
+x[x > 5]
+```
+
+The names of these functions are `[` and `[[` but are used like `x[y]` (pronounced "x square-bracket y") and `x[[y]]` (pronounced "x double-square-bracket y"). You can get help on them with `` ?`[` `` and `` ?`[[` ``.
+
+### Augmented vectors
+
+Augmented vectors are atomic vectors with additional metadata. There are four important augmented vectors:
+
+* __factors__ `<fct>`, which are used to represent categorical variables can take
+  one of a fixed and known set of possible values (called the levels).
+  
+* __ordered factors__ `<ord>`, which are like factors but where the levels have an
+  intrinsic ordering (i.e. it's reasonable to say that one level is "less than"
+  or "greater than" another variable).
+  
+* __dates__ `<dt>`, record a date.
+
+* __date-times__ `<dttm>`, which are also known as POSIXct, record a date
+  and a time.
+
+For now, you just need to recognize these when you encounter them. You'll learn how to create each type of augmented vector later in the course.
+
+## Lists
+
+Unlike atomic vectors, which can only contain a single type, lists can contain any collection of R objects. The following reading will introduce you to lists.
+
+* [Recursive vectors (lists)](https://r4ds.had.co.nz/vectors.html#lists)[r4ds-20.5]
+
+## Tibbles
+
+You can think of tibbles as lists of vectors, where every vector has the same length. There are two ways to create tibbles by hand:
+
+1.  From individual vectors, each representing a column:
+  
+    ```{r}
+    my_tibble <- tibble(
+      x = c(1, 9, 5),
+      y = c(TRUE, FALSE, FALSE),
+      z = c("apple", "pear", "banana")
+    )
+    my_tibble
+    ```
+    
+1.  From individual values, organised in rows:
+
+    ```{r}
+    my_tibble <- tribble(
+      ~x, ~y,    ~z,
+      1,  TRUE,  "apple",
+      9,  FALSE, "pear",
+      5,  FALSE, "banana"
+    )
+    my_tibble
+    ```
+
+Typically it will be obvious whether you need to use `tibble()` or `tribble()`. One representation will either be much shorter or much clearer than the other.
+
+### Dimensions
+
+When you print a tibble it tell you its column names and the overall dimensions:
+
+```{r}
+diamonds
+```
+
+If you want to get access dimensions directly, you have three options:
+
+```{r}
+dim(diamonds)
+nrow(diamonds)
+ncol(diamonds)
+```
+
+To get the variable names, use `names()`:
+
+```{r}
+names(diamonds)
+```
+
+There isn't currently a convenient way to get the variable types, but you can use `purrr::map_chr()` to apply `type_sum()` (short for type summary) to each variable.
+
+```{r}
+type_sum(diamonds)
+map_chr(diamonds, type_sum)
+```
+
+### Variables
+
+You can extract a variable out of a tibble by using `[[` or `$`:
+
+```{r}
+mtcars[["mpg"]]
+mtcars$mpg
+```
+
+For this reason, when we want to be precise about which tibble a variable comes from, we use the syntax `dataset$variablename`.
+
+The dplyr equivalent, which can more easily be used in a pipe, is `pull()`:
+
+```{r}
+mtcars %>% pull(mpg)
+```

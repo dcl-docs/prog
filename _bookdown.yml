@@ -6,16 +6,19 @@ rmd_files: [
   
   "data-structures.Rmd",
   "data-structure-basics.Rmd",
+  "list-columns.Rmd",
   
   "functions.Rmd",
   "function-basics.Rmd",
   "function-vector.Rmd",
   "function-anonymous.Rmd",
+  "function-predicate.Rmd",
   
   "iteration.Rmd",
   "purrr-basics.Rmd",
   "purrr-mutate.Rmd",
-  "purrr-parallel.Rmd"
+  "purrr-parallel.Rmd",
+  "purrr-extras.Rmd"
 ]
 
 before_chapter_script: "_common.R"
