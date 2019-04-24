@@ -12,18 +12,29 @@ The purrr package contains more functions that we can cover. The [purrr cheatshe
 
 You already know how to choose the appropriate map function ending to produce an atomic vector or list. There are also map function variants that produce a single tibble.
 
-With these map functions, the assembly line worker creates a tibble for each input element, and the output conveyor belt ends up with a collection of tibbles. The worker then combines all the small tibbles into a single, larger tibble. 
+With these map functions, the assembly line worker creates a tibble for each input element, and the output conveyor belt ends up with a collection of tibbles. 
 
-There are multiple ways to combine smaller tibbles into a larger tibble. purrr provides two options:
+```{r echo=FALSE}
+knitr::include_graphics("images/map_df.png", dpi = image_dpi)
+```
 
-* `map_dfr()` stacks the tibbles on top of each other.
-* `map_dfc()` stacks them side-by-side.
+The worker then combines all the small tibbles into a single, larger tibble. There are multiple ways to combine smaller tibbles into a larger tibble. `map_dfr()` (*r* for *rows*) stacks the smaller tibbles on top of each other. 
+
+```{r echo=FALSE}
+knitr::include_graphics("images/map_dfr.png", dpi = image_dpi)
+```
+
+`map_dfc()` (*c* for *columns*) stacks them side-by-side.
+
+```{r echo=FALSE}
+knitr::include_graphics("images/map_dfc.png", dpi = image_dpi)
+```
 
 There are `_dfr` and `_dfc` variants of `pmap()` and `map2()` as well.
 
 ### `_dfr`
 
-You will often use `map_dfr()` when reading in data. The following code reads in several very simple csv files that contain the names of different dinosaur genera.
+`map_dfr()` is useful when you want to read in data from multiple files. The following code reads in several very simple csv files that contain the names of different dinosaur genera.
 
 ```{r, message=FALSE}
 read_csv("data/purrr-extras/file_001.csv")
@@ -69,9 +80,9 @@ c("data/purrr-extras/file_001.csv", "data/purrr-extras/file_005.csv") %>%
   map_dfc(read_csv)
 ```
 
-Instead, you end up with a duplicated column.
+Instead, you end up with a duplicated column (`id` and `id1`).
 
-Therefore, if you have a unique identifier for each row, it is _much_ better to use the identifier to join them together.
+If you have a unique identifier for each row, it is much better to join on that identifier.
 
 ```{r, message=FALSE} 
 left_join(
