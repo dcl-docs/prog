@@ -1,5 +1,5 @@
 
-# purrr basics
+# Basic map functions
 
 ```{r message = FALSE, warning = FALSE}
 library(tidyverse)

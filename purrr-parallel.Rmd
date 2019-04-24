@@ -1,5 +1,5 @@
 
-# purrr map with multiple inputs
+# Map with multiple inputs
 
 ```{r message = FALSE, warning = FALSE}
 library(tidyverse)
@@ -8,7 +8,7 @@ library(tidyverse)
 
 In the previous purrr units, you learned how to use the `map()` functions to iterate over a single vector and apply a function to each element. `purrr` also contains functions that can iterate over several vectors in parallel, supplying the first elements of each vector to a given function, then the second, then the third, etc.
 
-`purrr`'s parallel mapping functions allow the assembly line to have multiple, syncronized input conveyor belts. Our factory worker uses the nth item from each input conveyor belt to create a new object that becomes the nth item on the output conveyor belt.
+`purrr`'s parallel mapping functions allow the assembly line to have multiple, synchronized input conveyor belts. Our factory worker uses the nth item from each input conveyor belt to create a new object that becomes the nth item on the output conveyor belt.
 
 Below, you'll learn about the `map2()` functions, which can handle two input vectors, and the `pmap()` functions, which can handle any number of input vectors. 
 
@@ -50,31 +50,56 @@ map2_chr(x, y, ~ str_glue("The minimum of {.x} and {.y} is {min(.x, .y)}."))
 
 If you don't create an anonymous function and use a named function instead, the first vector will be supplied as the first argument to the function and the second vector will be supplied as the second argument. 
 
-## `pmap()`
-
-There are no `map3()` or `map4()` functions. Instead, you can use a `pmap()` ("p" for parallel) function to map over more than two vectors.
-
-The `pmap()` functions work slightly differently than the `map()` and `map2()` functions. In `map()` and `map2()` functions, you specify the vector(s) to supply to the function. In `pmap()` functions, however, you specify a single list that contains all the vectors that you want to supply to your function.
-
-```{r echo=FALSE}
-knitr::include_graphics("images/pmap.png", dpi = image_dpi)
-```
-
-Earlier, we used `map2_dbl()` to create a vector to apply `min()` to parallel elements of the vectors `x` and `y`. Now, let's say we want to do the same, but for three vectors instead of two. 
+Remember that tibble columns are vectors, so you can use `map2()` inside `mutate()` to alter tibble columns.
 
 ```{r}
-x <- c(1, 2, 4)
-y <- c(6, 5, 3)
+df <-
+  tibble(
+    a = c(1, 2, 4),
+    b = c(6, 5, 3)
+  )
+
+df %>% 
+  mutate(min = map2_dbl(a, b, min))
+```
+
+## `pmap()`
+
+There are no `map3()` or `map4()` functions. Instead, you can use a `pmap()` (*p* for parallel) function to map over more than two vectors.
+
+The `pmap()` functions work slightly differently than the `map()` and `map2()` functions. In `map()` and `map2()` functions, you specify the vector(s) to supply to the function. In `pmap()` functions, you specify a single list that contains all the vectors (or lists) that you want to supply to your function.
+
+```{r echo=FALSE}
+knitr::include_graphics("images/pmap-list.png", dpi = image_dpi)
+```
+
+Flipping the list diagram makes it easier to see that `pmap()` is basically just a generalized version of `map2()`.
+
+```{r echo=FALSE}
+knitr::include_graphics("images/pmap-flipped.png", dpi = image_dpi)
+```
+
+The only difference is that `map2()` lets you specify each vector as a separate argument. In `pmap()`, you have to store all your input vectors in a single list. This functionality allows `pmap()` to handle any number of input vectors. Here's our earlier `map2()` statement.
+
+```{r}
+map2_dbl(x, y, min)
+```
+
+To do this in `pmap()`, just create a list out of `x` and `y`.
+
+```{r}
+pmap_dbl(list(x, y), min)
+```
+
+If you only have two input vectors, though, use `map2()`. If we want to apply `min()` to parallel elements of *three* vectors, we'll need to use `pmap()`.
+
+`z` is a third vector.
+
+```{r}
 z <- c(100, 15, 1)
 ```
 
-We'll have to use `pmap_dbl()` instead of `map2_dbl()`. However, the following doesn't work.
-
-```{r error=TRUE}
-pmap_dbl(x, y, z, min)
-```
-
-`pmap()` requires that all the input elements are combined into a single list.
+Again, we need to combine all the individual vectors into a single list in order to use `pmap()`.
 
 ```{r}
 pmap_dbl(list(x, y, z), min)
@@ -93,8 +118,9 @@ tibble(
 
 ### Anonymous functions
 
-When using an anonymous function in `pmap()`, use `..1`, `..2`, `..3`, etc. to refer to the different vectors.
+`pmap()` can involve any number of input vectors, so we need a new way of referring to each vector in an anonymous function. Instead of using `.`, `.x`, or `.y`, use `..1`., `..2`, '..3`, etc. to refer to the different vectors.
 
+`state_animals` is a tibble with some information on the official animals of different states.
 ```{r}
 state_animals <- 
   tribble(
@@ -105,18 +131,24 @@ state_animals <-
     "Maine", "crustacean", "lobster", "Homarus americanus" 
   )
 
+state_animals
+```
+
+We can use `pmap()` to write short descriptions for each state. 
+
+```{r}
 state_animals %>% 
   pmap_chr(~ str_glue("The {..1} state {..2} is the {..3}."))
 ```
 
-`..1` refers to the first variable (here, `state`), `..2` to the second, and so on.
+`..1` refers to the first variable (`state`), `..2` to the second (`type`), and `..2` to the third (`animal`).
 
 ### Named functions
 
-For named functions, `pmap()` will match the names of the input list or tibble with the names of the function arguments. This can result in elegant code. But for this to work, it's important that:
+If you supply `pmap()` a named function, it will match the names of the input list with the names of the function arguments. This can result in elegant code. But for this to work, it's important that:
 
 * The list or tibble input variable names match those of the function arguments.
-* You must have __the same number of input variables as function arguments__.
+* You have __the same number of input variables as function arguments__.
 
 Let's start with an example of what doesn't work. First, we'll create a named function.
 
@@ -135,7 +167,7 @@ state_animals %>%
 
 `state_animals` has four variables, but `state_sentence` is expecting three. The number of input variables must match the number of function arguments.
 
-You can fix the problem by simply getting rid of the unused variable.
+The easiest way to fix the problem is to just get rid of the unused variable.
 
 ```{r}
 state_animals %>% 
