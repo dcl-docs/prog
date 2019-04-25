@@ -1,7 +1,7 @@
 ---
 knitr: bookdown::render_book
 title: "Functional Programming"
-author: "Sara Altman, Bill Behrman"
+author: "Sara Altman, Bill Behrman, Hadley Wickham"
 date: "`r Sys.Date()`"
 description: "This book is a practical introduction to functional programming using the tidyverse."
 url: 'https\://datalab.stanford.edu/dcl-docs/prog'

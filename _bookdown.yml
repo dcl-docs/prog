@@ -6,10 +6,8 @@ rmd_files: [
   
   "data-structures.Rmd",
   "data-structure-basics.Rmd",
-  "list-columns.Rmd",
   
   "functions.Rmd",
-  "function-basics.Rmd",
   "function-vector.Rmd",
   "function-anonymous.Rmd",
   "function-predicate.Rmd",
