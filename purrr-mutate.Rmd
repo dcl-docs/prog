@@ -121,11 +121,33 @@ df %>%
   mutate(emoticon = map_chr(feeling, emoticons_2, default = NA_character_))
 ```
 
-And you can also still create anonymous functions.
+You can also still create anonymous functions.
 
 ```{r}
 df %>% 
-  mutate(is_happy = map_chr(feeling, ~ str_c("I feel ", emoticons_2(.))))
+  mutate(statement = map_chr(feeling, ~ str_c("I feel ", emoticons_2(.))))
 ```
 
 Remember that, in purrr functions, you start an anonymous function with `~`. The `.` refers to one element of the `feeling` column at a time. 
+
+In the previous chapter, we demonstrated a strategy for creating anonymous functions. We'll show you how to apply this strategy when working with purrr functions inside `mutate()`.
+
+The first step is still to assign an element of your input vector to `.`. Now, the input vector is a tibble column, so you'll need to first pull out the tibble column before accessing the first element.
+
+```{r}
+. <- df$feeling[[1]]
+```
+
+Next, you can build and test your function on `.`.
+
+```{r}
+str_c("I feel ", emoticons_2(.))
+```
+
+Finally, just copy and paste your function after a `~` inside your map call.
+
+```{r}
+df %>% 
+  mutate(statement = map_chr(feeling, ~ str_c("I feel ", emoticons_2(.))))
+```
+
