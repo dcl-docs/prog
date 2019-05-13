@@ -105,12 +105,75 @@ c("data/purrr-extras/file_001.csv", "data/purrr-extras/file_006.csv") %>%
 
 ## Walk
 
-This short section discusses `walk()`. The walk functions work similarly to the map functions, but you use them when you're interested in applying a function that performs an action instead of producing data (e.g., `print()`). 
+The walk functions work similarly to the map functions, but you use them when you're interested in applying a function that performs an action instead of producing data (e.g., `print()`). 
 
-* [Walk](http://r4ds.had.co.nz/iteration.html#walk) [r4ds-21.8]
+The walk functions are useful for performing actions like writing files and printing plots. For example, say we used purrr to generate a list of plots.
+
+```{r message=FALSE}
+plot_rnorm <- function(sd) {
+  tibble(x = rnorm(n = 1000, mean = 0, sd = sd)) %>% 
+    ggplot(aes(x)) +
+    geom_histogram(bins = 40) +
+    geom_vline(xintercept = 0, color = "blue")
+}
+
+plots <-
+  c(5, 1, 9) %>% 
+  map(plot_rnorm)
+```
+
+We can now use `walk()` to print them out.
+
+```{r}
+plots %>% 
+  walk(print)
+```
+
+The walk functions look like they don't return anything, but they actually return their input *invisibly*. When functions return something invisibly, it just means they don't print it out when you call them. This functionality makes the walk functions useful in pipes. You can call a walk function to perform an action, get your input back, and continue operating on that input. 
 
 ## Predicate functions
 
-purrr has some useful functions that work with _predicate functions_, which are functions that return a single `TRUE` or `FALSE`. For example, `keep()` and `discard()` iterate over a vector and keep or discard only those elements for which the predicate function returns `TRUE`.
+In Chapter 6, we introduced _predicate functions_, which are functions that return a single `TRUE` or `FALSE`. purrr includes several useful functions that work with predicate functions. 
 
-* [Predicate functions](http://r4ds.had.co.nz/iteration.html#predicate-functions) [r4ds-21.9.1]
+`keep()` and `discard()` iterate over a vector and keep or discard only those elements for which the predicate function returns `TRUE`. 
+
+```{r}
+x <-
+  list(
+    a = c(1, 2),
+    b = c(4, 5, 6),
+    c = c("a", "z")
+  )
+
+x %>% 
+  discard(is.character)
+```
+
+This is useful when working with tibbles. You can use `keep()` and `discard()` to select columns that meet a certain condition.
+
+```{r}
+mpg %>% 
+  keep(is.numeric)
+```
+
+```{r}
+mpg %>% 
+  discard(is.numeric)
+```
+
+`some()` looks at the entire input vector and returns `TRUE` if the predicate is true for any element of the vector and `FAlSE` otherwise.
+
+```{r}
+mpg %>% 
+  some(is.numeric)
+```
+
+For `every()` to return `TRUE`, every element of the vector must meet the predicate.
+
+```{r}
+mpg %>% 
+  every(is.numeric)
+```
+
+Other useful purrr functions that use predicate functions include `head_while()`, `compact()`, `has_element()`, and `detect()`. Take a look at the [purrr cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/purrr.pdf) for details. 
+
