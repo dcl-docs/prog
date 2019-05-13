@@ -16,7 +16,10 @@ rmd_files: [
   "purrr-basics.Rmd",
   "purrr-mutate.Rmd",
   "purrr-parallel.Rmd",
-  "purrr-extras.Rmd"
+  "purrr-extras.Rmd",
+  
+  "tidy-eval-section.Rmd",
+  "tidy-eval.Rmd"
 ]
 
 before_chapter_script: "_common.R"
