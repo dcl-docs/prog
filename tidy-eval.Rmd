@@ -59,10 +59,10 @@ df$var
 
 Unfortunately there's no way to do this with base R. 
 
-|          | Quoted             | Evaluated                 |
-|----------|--------------------|---------------------------|
-| Direct   | `df$y`             | `df[["y"]]`               |
-| Indirect | `r emo::ji("cry")` | `var <- "y"; df[[var]]`   |
+|          | Quoted                       | Evaluated                 |
+|----------|------------------------------|---------------------------|
+| Direct   | `df$y`                       | `df[["y"]]`               |
+| Indirect | `r emo::ji("no_entry_sign")` | `var <- "y"; df[[var]]`   |
 
 The tidyverse, however, supports __unquoting__ which makes it possible to evaluate arguments that would otherwise be automatically quoted. This gives the concision of automatically quoted arguments, while still allowing us to use indirection. Take `pull()`, the dplyr equivalent to `$`. If we use it naively, it works like `$`:
 
