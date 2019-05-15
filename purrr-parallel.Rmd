@@ -118,7 +118,7 @@ tibble(
 
 ### Anonymous functions
 
-`pmap()` can involve any number of input vectors, so we need a new way of referring to each vector in an anonymous function. Instead of using `.`, `.x`, or `.y`, use `..1`., `..2`, '..3`, etc. to refer to the different vectors.
+`pmap()` can involve any number of input vectors, so we need a new way of referring to each vector in an anonymous function. Instead of using `.`, `.x`, or `.y`, use `..1`., `..2`, `..3`, etc. to refer to the different vectors.
 
 `state_animals` is a tibble with some information on the official animals of different states.
 ```{r}
@@ -141,7 +141,7 @@ state_animals %>%
   pmap_chr(~ str_glue("The {..1} state {..2} is the {..3}."))
 ```
 
-`..1` refers to the first variable (`state`), `..2` to the second (`type`), and `..2` to the third (`animal`).
+`..1` refers to the first variable (`state`), `..2` to the second (`type`), and `..3` to the third (`animal`).
 
 ### Named functions
 
