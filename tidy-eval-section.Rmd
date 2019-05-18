@@ -3,4 +3,46 @@
 
 # Introduction
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+```{r message = FALSE, warning = FALSE}
+library(tidyverse)
+```
+
+At some point, you might have realized you were copy-and-pasting the same dplyr code over and over again. For example, the following code uses `group_by()` and `summarize()` to take the mean of different columns from different data sets. 
+
+```{r eval=FALSE}
+mpg %>% 
+  group_by(manufacturer) %>% 
+  summarize(mean = mean(cty))
+
+diamonds %>% 
+  group_by(color) %>% 
+  summarize(mean = mean(carat))
+
+mpg %>% 
+  group_by(model) %>% 
+  summarize(mean = mean(hwy))
+```
+
+We can write a function to cut down on duplicated code. Here's a first pass:
+
+```{r}
+grouped_mean <- function(df, group_var, summary_var) {
+  df %>% 
+    group_by(group_var) %>% 
+    summarize(mean = mean(summary_var))
+}
+```
+
+`grouped_mean()` takes a tibble and the names of two tibble columns as arguments. 
+
+```{r, error = TRUE}
+grouped_mean(mpg, group_var = manufacturer, summary_var = cty)
+```
+
+Our function doesn't work because dplyr verbs work differently than many other R functions. In this section, you'll learn exactly what makes dplyr verbs different, as well as a set of techniques that will make functions like `grouped_mean()` work. The underlying idea that makes this all possible is called __tidy evaluation__.
+
+Tidy evaluation is a complicated subject. Luckily, you don't need to understand all the theory or the under-the-hood mechanics to use tidy evaluation. The _Summary_ chapter is a high-level, practical overview of the basic tidy evaluation use-cases. The goal of the chapter is to show you what to do without explaining how it works. The second chapter, _Tidy evaluation_, dives a bit deeper and discusses what's really going on. However, we still can't cover everything there is to know about tidy evaluation. If  you're curious and want to learn more, the following are useful resources:
+
+* [Programming with dplyr](https://dplyr.tidyverse.org/articles/programming.html) vignette
+* [Tidy evaluation with rlang](https://github.com/rstudio/cheatsheets/blob/master/tidyeval.pdf) cheat sheet
+* Ian Lyttle’s [Tidyeval interactive tutorial](https://ijlyttle.shinyapps.io/tidyeval/)
