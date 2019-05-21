@@ -5,7 +5,7 @@
 library(tidyverse)
 ```
 
-Tidy evaluation is a complex subject, but you don't really need to understand how it works to start using it i your functions. The following is a brief, practical summary of the most common use-cases. 
+Tidy evaluation is a complex subject, but you don't really need to understand how it works to start using it in your functions. The following is a brief, practical summary of the most common use cases. 
 
 ## Passing full expressions with `...`
 
@@ -46,7 +46,7 @@ mpg_select(car = model, drivetrain = drv)
 
 Sometimes, `...` won't work because you'll want to supply your function with named arguments.
 
-In the introduction, we wrote the following function that doesn't work:
+In the introduction, we noted the following function that doesn't work:
 
 ```{r error=TRUE}
 grouped_mean <- function(df, group_var, summary_var) {
@@ -58,7 +58,7 @@ grouped_mean <- function(df, group_var, summary_var) {
 grouped_mean(df = mpg, group_var = manufacturer, summary_var = cty)
 ```
 
-Use `enquo()` and `!!` to create a function that works. 
+We can create a function that works by by using `enquo()` and `!!`. 
 
 ```{r}
 grouped_mean <- function(df, group_var, summary_var) {
@@ -66,8 +66,8 @@ grouped_mean <- function(df, group_var, summary_var) {
   summary_var <- enquo(summary_var)
   
   df %>% 
-    group_by(!!group_var) %>% 
-    summarize(mean = mean(!!summary_var))
+    group_by(!! group_var) %>% 
+    summarize(mean = mean(!! summary_var))
 }
 
 grouped_mean(df = mpg, group_var = manufacturer, summary_var = cty)
@@ -88,7 +88,7 @@ grouped_mean_2 <- function(df, summary_var, ...) {
   
   df %>% 
     group_by(...) %>% 
-    summarize(mean = mean(!!summary_var))
+    summarize(mean = mean(!! summary_var))
 }
 
 grouped_mean_2(df = mpg, summary_var = cty, year, drv)
@@ -114,7 +114,7 @@ summary_mean <- function(df, summary_var, summary_name) {
   summary_name <- enquo(summary_name)
   
   df %>% 
-    summarize(!!summary_name := mean(!!summary_var))
+    summarize(!! summary_name := mean(!! summary_var))
 }
 
 summary_mean(df = mpg, summary_var = cty, summary_name = cty_mean)
@@ -128,6 +128,6 @@ summary_mean(df = mpg, summary_var = cty, summary_name = cty_mean)
 recode_drv <- c("f" = "front", "r" = "rear", "4" = "four")
 
 mpg %>% 
-  mutate(drv = recode(drv, !!!recode_drv))
+  mutate(drv = recode(drv, !!! recode_drv))
 ```
 

@@ -1,43 +1,3 @@
-```{r include=FALSE, cache=FALSE}
-set.seed(2466)
-
-options(
-  digits = 3,
-  dplyr.print_max = 6,
-  dplyr.print_min = 6
-)
-
-knitr::opts_chunk$set(
-  cache = TRUE,
-  collapse = TRUE,
-  comment = "#>",
-  fig.align = 'center',
-  fig.asp = 0.618,  # 1 / phi
-  fig.show = "hold"
-)
-
-image_dpi <- 125
-
-# Stamps plots with a tag 
-# Idea from Claus Wilke's "Data Visualization" https://serialmentor.com/dataviz/
-stamp <- function(
-  tag = "Bad", tag_color = "#B33A3A", tag_size = 16, tag_padding = 1
-)
-{
-  list(
-    theme(
-      plot.tag = element_text(color = tag_color, size = tag_size),
-      plot.tag.position = "topright"
-    ),
-    labs(
-      tag =
-        str_pad(tag, width = str_length(tag) + tag_padding, side = "left")
-    )
-  )
-}
-
-```
-
 # Tidy evaluation
 
 ```{r message = FALSE, warning = FALSE}
@@ -98,7 +58,7 @@ Evaluated arguments are what you might think of as "normal." Here's an example o
 log(2)
 ```
 
-We can refer to 2 in any way we want and get the same answer.
+We can also save 2 as a variable and get the same answer.
 
 ```{r}
 x <- 2
@@ -106,7 +66,7 @@ x <- 2
 log(x)
 ```
 
-Code in an evaluated argument executes the same regardless of whether or not its in a function argument. So `x` evaluates to 2 whether it's outside `log()`
+Code in an evaluated argument executes the same regardless of whether or not it's in a function argument. So `x` evaluates to 2 whether it's outside `log()`
 
 ```{r}
 x
@@ -136,7 +96,7 @@ cty
 
 No. R doesn't know what `cty` refers to, because `cty`, unlike `x`, doesn't exist in the global environment. It only exists as an element of `mpg`. 
 
-To make this point even more explicit, let's assign a random number to `cty`.
+To make this point even more explicit, let's assign a number to `cty`.
 
 ```{r}
 cty <- 3
@@ -151,7 +111,7 @@ mpg %>%
   select(cty)
 ```
 
-Arguments like `cty` are __quoted__. Instead of immediately evaluating `cty` before operating, `select()` and the other dplyr verbs hold on to what was literally supplied as an argument. Here, that's just "cty," but in other cases can be more complicated. Quoting allows `select()` and the other dplyr verbs to use their input as they want without worrying about how that input evaluates in the global environment. In our example, quoting its argument allows `select()` to look for `cty` inside the `mpg` tibble, without worrying about `cty` referring to `3` in the global environment.
+Arguments like `cty` are __quoted__. Instead of immediately evaluating `cty` before operating, `select()` and the other dplyr verbs hold on to what was literally supplied as an argument. Here, that's just "cty", but other cases can be more complicated. Quoting allows `select()` and the other dplyr verbs to use their input as they want without worrying about how that input evaluates in the global environment. In our example, quoting its argument allows `select()` to look for `cty` inside the `mpg` tibble, without worrying about `cty` referring to `3` in the global environment.
 
 Note that dplyr verbs only quote the arguments that supply column names. They do not quote the argument that refers to the data you pipe in, or non-column-name arguments like `count()`'s `sort` argument or `top_n()`'s `n` argument.
 
@@ -213,9 +173,7 @@ species <- function(my_species) {
 species("human")
 ```
 
-The `{}`s tell `str_glue()` to evaluate `my_species` before constructing the string. 
-
-This situation is similar to our `grouped_mean()` conundrum. Unfortunately, we can't just use `{}` to get dplyr verbs to evaluate the arguments we want. We'll need to figure out an equivalent to to `{}` inside dplyr function calls.
+The `{}` tells `str_glue()` to evaluate `my_species` before constructing the string. Unfortunately, we can't just use `{}` to get dplyr verbs to evaluate the arguments we want. We'll need to figure out an equivalent to `{}` for dplyr function calls.
 
 ### Quosures 
 
@@ -384,7 +342,7 @@ filter_var <- function(var, value) {
 filter_var(class, "minivan")
 ```
 
-The `enquo()` and `!!` strategy is incredibly useful, and you don't need to fully understand the theory behind it in order to write successful functions. If some of the earlier explanation is still confusing, don't worry about it too much. Tidy evaluation is a complicated subject, and it takes a while to really grasp what's going on behind the `enquo()` and `!!`'s.
+The `enquo()` and `!!` strategy is incredibly useful, and you don't need to fully understand the theory behind it in order to write successful functions. If some of the earlier explanation is still confusing, don't worry about it too much. Tidy evaluation is a complicated subject, and it takes a while to really grasp what's going on behind `enquo()` and `!!`.
 
 In summary, to build a function that takes an argument to a dplyr verb, use the following template:
 
@@ -491,7 +449,7 @@ Success!!
 
 ## Passing vectors with `!!!`
 
-Here's one more common tidy evaluation use-case. 
+Here's one more common tidy evaluation use case. 
 
 Say you want to use `recode()` to recode a variable. 
 
@@ -521,7 +479,7 @@ mpg %>%
 
 ```{r, error=TRUE}
 mpg %>% 
-  mutate(drv = recode(drv, !!drv_recode)) %>% 
+  mutate(drv = recode(drv, !! drv_recode)) %>% 
   select(drv)
 ```
 
@@ -529,7 +487,7 @@ mpg %>%
 
 ```{r}
 mpg %>% 
-  mutate(drv = recode(drv, !!!drv_recode)) %>% 
+  mutate(drv = recode(drv, !!! drv_recode)) %>% 
   select(drv)
 ```
 
