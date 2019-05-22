@@ -76,6 +76,45 @@ stamp <- function(
 }
 
 ```
+```{r include=FALSE, cache=FALSE}
+set.seed(2466)
+
+options(
+  digits = 3,
+  dplyr.print_max = 6,
+  dplyr.print_min = 6
+)
+
+knitr::opts_chunk$set(
+  cache = TRUE,
+  collapse = TRUE,
+  comment = "#>",
+  fig.align = 'center',
+  fig.asp = 0.618,  # 1 / phi
+  fig.show = "hold"
+)
+
+image_dpi <- 125
+
+# Stamps plots with a tag 
+# Idea from Claus Wilke's "Data Visualization" https://serialmentor.com/dataviz/
+stamp <- function(
+  tag = "Bad", tag_color = "#B33A3A", tag_size = 16, tag_padding = 1
+)
+{
+  list(
+    theme(
+      plot.tag = element_text(color = tag_color, size = tag_size),
+      plot.tag.position = "topright"
+    ),
+    labs(
+      tag =
+        str_pad(tag, width = str_length(tag) + tag_padding, side = "left")
+    )
+  )
+}
+
+```
 
 # R scripts on a remote machine
 
@@ -107,39 +146,68 @@ __Windows__
 
 If you have a Windows machine, install [MobaXterm](https://mobaxterm.mobatek.net/). Stanford's FarmShare wiki has [additional instructions](https://web.stanford.edu/group/farmshare/cgi-bin/wiki/index.php/Mobaxterm) for using MobaXterm that may be useful. 
 
-### Create a rice login alias 
+### Install Kerberos
 
-You can log into rice by running 
+Logging into rice requies your SUNet password and two-step authentication. We'll show you how to simplify authentication by using Kerberos. 
 
-`%local ssh -Y [SUNet ID]@rice.stanford.edu` 
+Download and install Kerberos from [Stanford IT website](https://uit.stanford.edu/software/kerberos). You'll also need Kerberos for AFS, which we'll discuss later. 
 
-from the command line. The `Y` option sets up X-windows forewarding, which allows you to view and control whatever is happening on rice from your own computer. That's a lot to type each time, so it's a good idea to make an alias for the command.
+### Create aliases
 
-Aliases live in your .bash_profile. You can edit your .bash_profile in RStudio by running 
+Now, we'll create aliases for logging into Kerberos and rice. Aliases live in your .bash_profile. You can edit your .bash_profile in RStudio by running 
 
 `usethis::edit_file("~/.bash_profile")`
 
-`edit_file()` will open your .bash_profile file in a new RStudio tab.
+`edit_file()` will open your .bash_profile file in a new RStudio tab. 
 
 Now, add the following line to the alias section of your .bash_profile. We recommend listing your aliases in alphabetical order.
 
+`alias kt='kinit [SUNet ID]; aklog'` 
+
+This creates an alias for logging into Kerberos. The `k` is for Kerberos, and the `t` is for token.
+
+Next, create an alias for logging into rice.
+
 `alias xr='ssh -Y [SUNet ID]@rice.stanford.edu'`
 
-This creates the alias `xr` for the full rice login command. The `x` is for X-windows, and the `r` is for rice, but you don't have to name it `xr` if you already have an `xr` alias.
+The `x` is for X-windows, and the `r` is for rice, but you don't have to name it `xr` if you already have an `xr` alias.
+
+### Edit .ssh/config
+
+To configure Kerberos, you'll also need to edit your .ssh/config file. You can edit it in RStudio by running 
+
+`usethis::edit_file("~/.ssh/config")`
+
+Then, copy-and-paste the following lines into your .ssh/config file
+
+```
+Host rice rice.stanford.edu rice?? rice??.stanford.edu
+  GSSAPIDelegateCredentials yes
+  GSSAPIAuthentication yes
+  ControlMaster auto
+  ControlPath ~/.ssh/%r@%h:%p
+  ControlPersist yes
+```
 
 ### Source your .bash_profile
 
-In order for your changes to take effect, you have to source your .bash_profile. Run
+In order for your changes to your .bash_profile to take effect, you need to source the file. Run
 
 `%local source ~/.bash_profile`
 
 ### Log into rice
 
-Log into rice from the command line by running
+First, log into Kerberos from the command line by running
+
+`%local kt`
+
+You'll be prompted for your SUNet password.
+
+Now, log into rice by running
 
 `%local xr` 
 
-Enter your password when prompted and proceed with two-step authentication. After you've authenticated, you should see a message telling you that you're logged into rice. If you see a message about a broken pipe, something went wrong. Try logging in again. 
+You'll be prompted to two-step authenticate. After you've authenticated, you should see a message telling you that you're logged into rice. If you see a message about a broken pipe, something went wrong. Try logging in again. 
 
 If you successfully logged into rice, you will now have access to the rice command line. Later on, you'll want to copy some files from your local computer to rice, and so will need access to your local command line. We recommend opening up a command line tab (in Terminal, you can open a new tab with _Cmd + T_). Now, you can control rice from one tab and your local computer from the other.
 
@@ -179,17 +247,17 @@ You can copy multiple files or folders by separating them with a space.
 
 __Copy the contents of a folder__
 
-To copy the entire contents, including sub-folder, of a folder, use the `-r` option.
+To copy the entire contents, including sub-folders, of a folder, use the `-r` option. The `r` stands for recursive.
 
 `scp -r [folder path] [copy to path]`
 
 __Copy to rice from local computer__
 
-`scp [local file path] [SUNet ID]@rice.stanford.edu:[path on rice]`
+`%local scp [local file path] [SUNet ID]@rice.stanford.edu:[path on rice]`
 
 __Copy from rice to local computer__
 
-`scp [SUNet ID]@rice.stanford.edu:[path on rice] [local path]`
+`%local scp [SUNet ID]@rice.stanford.edu:[path on rice] [local path]`
 
 ### Copy your script to rice
 
@@ -223,57 +291,7 @@ Your data (or whatever your script produced) now lives on rice. You need to copy
 
 `%local scp [SUNet ID]@rice.stanford.edu:[file path] [local path]`
 
-Again, if you want to copy the contents of an entire folder, you can use the `-r` option.
+For example, say we want to copy the file `exciting_data.rds` back to our local computer. We would run
 
-`%local scp -r [SUNet ID]@rice.stanford.edu:[file path] [local path]`
+`%local scp -r [SUNet ID]@rice.stanford.edu:very-exciting-project/data/exciting_data.rds very-exciting-project/data/`
 
-For example, say we want to copy the contents of our `data` folder back to our local computer. We would run
-
-`%local scp -r [SUNet ID]@rice.stanford.edu:very-exciting-project/data very-exciting-project/data`
-
-## Stay logged into rice
-
-When you used `scp` to copy files from or to rice, you had to log into rice again. If you wanted to open up a new rice command line, you would also have to log in again. We'll show you how to get around all this repetitive logging in and two-step authenticating. 
-
-First, download and install Kerberos from the [Stanford IT website](https://uit.stanford.edu/software/kerberos). You'll also need Kerberos for AFS, which we'll discuss later. 
-
-After you've installed Kerberos, add the following alias to your .bash_profile
-
-`alias kt='kinit [SUNet ID]; aklog'` 
-
-Remember, you can edit your .bash_profile in RStudio by running 
-
-`usethis::edit_file("~/.bash_profile")`
-
-(Make sure you're running this line from your local RStudio instance, not the RStudio instance that's running on rice.)
-
-Then, source your .bash_profile.
-
-`%local source ~/.bash_profile`
-
-The alias `kt` will now log you into Kerberos. 
-
-Now, you have to edit your .ssh/config file. You can edit it in RStudio by running 
-
-`usethis::edit_file("~/.ssh/config")`
-
-Copy-and-paste the following lines into your .ssh/config file
-
-```
-Host rice rice.stanford.edu rice?? rice??.stanford.edu
-  GSSAPIDelegateCredentials yes
-  GSSAPIAuthentication yes
-  ControlMaster auto
-  ControlPath ~/.ssh/%r@%h:%p
-  ControlPersist yes
-```
-
-Now, when you want to use rice, first run
-
-`%local kt`
-
-and log into Kerberos. Then, log into rice with 
-
-`%local xr`
-
-You'll have to enter your password and two-step authenticate. Now, you should be able to `scp` and sign into rice in new windows without logging in again.
