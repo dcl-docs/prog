@@ -172,6 +172,12 @@ Next, create an alias for logging into rice.
 
 The `x` is for X-windows, and the `r` is for rice, but you don't have to name it `xr` if you already have an `xr` alias.
 
+### Source your .bash_profile
+
+In order for your changes to your .bash_profile to take effect, you need to source the file. Run
+
+`%local source ~/.bash_profile`
+
 ### Edit .ssh/config
 
 To configure Kerberos, you'll also need to edit your .ssh/config file. You can edit it in RStudio by running 
@@ -188,12 +194,6 @@ Host rice rice.stanford.edu rice?? rice??.stanford.edu
   ControlPath ~/.ssh/%r@%h:%p
   ControlPersist yes
 ```
-
-### Source your .bash_profile
-
-In order for your changes to your .bash_profile to take effect, you need to source the file. Run
-
-`%local source ~/.bash_profile`
 
 ### Log into rice
 
