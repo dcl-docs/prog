@@ -273,7 +273,7 @@ Then, you can edit the file path to copy your files into this new folder. Rememb
 
 `%local scp -r my-exciting-project [SUNet ID]@rice.stanford.edu:a-new-folder`
 
-When you copy files either from or to rice, you'll be prompted for your password and required to two-step authenticate. At the end of this chapter, we'll show you how to remain logged into rice so you don't have to log in each time you try to copy files.
+If you didn't log into Kerberos first, you would have to log into rice every time you use `scp` to copy to or from rice.
 
 ### Run your script
 
