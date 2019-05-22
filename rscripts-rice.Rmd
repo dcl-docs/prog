@@ -1,17 +1,105 @@
+```{r include=FALSE, cache=FALSE}
+set.seed(2466)
 
-# Rscripts on a remote machine
+options(
+  digits = 3,
+  dplyr.print_max = 6,
+  dplyr.print_min = 6
+)
+
+knitr::opts_chunk$set(
+  cache = TRUE,
+  collapse = TRUE,
+  comment = "#>",
+  fig.align = 'center',
+  fig.asp = 0.618,  # 1 / phi
+  fig.show = "hold"
+)
+
+image_dpi <- 125
+
+# Stamps plots with a tag 
+# Idea from Claus Wilke's "Data Visualization" https://serialmentor.com/dataviz/
+stamp <- function(
+  tag = "Bad", tag_color = "#B33A3A", tag_size = 16, tag_padding = 1
+)
+{
+  list(
+    theme(
+      plot.tag = element_text(color = tag_color, size = tag_size),
+      plot.tag.position = "topright"
+    ),
+    labs(
+      tag =
+        str_pad(tag, width = str_length(tag) + tag_padding, side = "left")
+    )
+  )
+}
+
+```
+```{r include=FALSE, cache=FALSE}
+set.seed(2466)
+
+options(
+  digits = 3,
+  dplyr.print_max = 6,
+  dplyr.print_min = 6
+)
+
+knitr::opts_chunk$set(
+  cache = TRUE,
+  collapse = TRUE,
+  comment = "#>",
+  fig.align = 'center',
+  fig.asp = 0.618,  # 1 / phi
+  fig.show = "hold"
+)
+
+image_dpi <- 125
+
+# Stamps plots with a tag 
+# Idea from Claus Wilke's "Data Visualization" https://serialmentor.com/dataviz/
+stamp <- function(
+  tag = "Bad", tag_color = "#B33A3A", tag_size = 16, tag_padding = 1
+)
+{
+  list(
+    theme(
+      plot.tag = element_text(color = tag_color, size = tag_size),
+      plot.tag.position = "topright"
+    ),
+    labs(
+      tag =
+        str_pad(tag, width = str_length(tag) + tag_padding, side = "left")
+    )
+  )
+}
+
+```
+
+# R scripts on a remote machine
 
 In this chapter, we'll show you how to run an R script on rice. This is useful if you want to use an R script to read and wrangle large data files. 
+
+If you follow the steps in this chapter, you'll open up two command lines: the rice command line and your local command line. To distinguish between commands to give to rice and commands to give to your local computer, we'll use
+
+`%local [command]` 
+
+for local commands and 
+
+`%rice [command]`
+
+for rice commands. Note that your command line prompts will not actually say `%local` or `%rice`. If you want to copy-and-paste the commands, make sure not to copy `%local` or `%rice`.
 
 ## Setup
 
 ### Install XQuartz / MobaXterm
 
-Eventually, you'll want to run RStudio on rice, but operate it from your own computer. To remotely operate applications like RStudio that have a graphical user-interface, you'll need special display software, such as X11.
+Eventually, you'll want to run RStudio on rice, but operate it from your own computer. To remotely operate applications that have a graphical user-interface, like RStudio, you'll need special display software, such as X-windows (also called X11).
 
 __Mac__
 
-If you have a Mac, install XQuartz to use X11. You can check if you already have XQuartz by looking in _Applications / Utilities_ for XQuartz. 
+If you have a Mac, install XQuartz to use X-windows. You can check if you already have XQuartz by looking in _Applications / Utilities_ for XQuartz. 
 
 If you don't already have XQuartz, download and install XQuartz from the [download site](https://www.xquartz.org/).
 
@@ -23,9 +111,9 @@ If you have a Windows machine, install [MobaXterm](https://mobaxterm.mobatek.net
 
 You can log into rice by running 
 
-`ssh -Y [SUNet ID]@rice.stanford.edu` 
+`%local ssh -Y [SUNet ID]@rice.stanford.edu` 
 
-from the command line. The `Y` option sets up X11 forewarding. That's a lot to type each time, so it's a good idea to make an alias for the command.
+from the command line. The `Y` option sets up X-windows forewarding, which allows you to view and control whatever is happening on rice from your own computer. That's a lot to type each time, so it's a good idea to make an alias for the command.
 
 Aliases live in your .bash_profile. You can edit your .bash_profile in RStudio by running 
 
@@ -37,21 +125,23 @@ Now, add the following line to the alias section of your .bash_profile. We recom
 
 `alias xr='ssh -Y [SUNet ID]@rice.stanford.edu'`
 
-This creates the alias `xr` for the full rice login command. Note that the `xr` isn't important. If you already have an `xr` alias, you can name it anything you want. 
+This creates the alias `xr` for the full rice login command. The `x` is for X-windows, and the `r` is for rice, but you don't have to name it `xr` if you already have an `xr` alias.
 
 ### Source your .bash_profile
 
-In order for your changes to take effect, you have to source your .bash_profile. From the command line, run
+In order for your changes to take effect, you have to source your .bash_profile. Run
 
-`source ~/.bash_profile`
+`%local source ~/.bash_profile`
 
 ### Log into rice
 
 Log into rice from the command line by running
 
-`xr` 
+`%local xr` 
 
-You should now be prompted for your password. Enter your password and proceed with two-step authentication. After you've authenticated, you should see a message telling you that you're logged into rice. If you see a message about a broken pipe, something went wrong. Try logging in again. 
+Enter your password when prompted and proceed with two-step authentication. After you've authenticated, you should see a message telling you that you're logged into rice. If you see a message about a broken pipe, something went wrong. Try logging in again. 
+
+If you successfully logged into rice, you will now have access to the rice command line. Later on, you'll want to copy some files from your local computer to rice, and so will need access to your local command line. We recommend opening up a command line tab (in Terminal, you can open a new tab with _Cmd + T_). Now, you can control rice from one tab and your local computer from the other.
 
 ### Install R packages
 
@@ -59,67 +149,131 @@ In order to run your script, you'll likely need some R packages. It's easiest to
 
 To run RStudio on rice, run
 
-`module load rstudio`
+`%rice module load rstudio`
 
 Then, to use X11 to operate RStudio remotely, run
 
-`rstudio &`
+`%rice rstudio &`
 
-Without the `&`, you won't be able to use the rice command line. The `&` makes RStudio run in the background, freeing up the rice command line.
+Without the `&`, you won't be able to use the rice command line. The `&` allows RStudio to run in the background, freeing up the rice command line.
 
-XQuartz / MobaXterm should open, and you should see the RStudio interface.
-
-Use RStudio to install any R packages that your script requires. You'll probably at least need `tidyverse` and `vroom`.
+XQuartz / MobaXterm should open, and you should see the RStudio interface. Use this RStudio window to install any R packages required by your script. You'll probably need at least `tidyverse` and `vroom`. From the RStudio console, run
 
 `install.packages(c("tidyverse", "vroom"))`
 
-## Running scripts with Rscript
+## Run scripts with Rscript
+
+### `scp`
+
+Later on, we'll show you how to AFS so that you can access your files from rice, your local computer, or any other computer you might use. For now, we'll show you how to copy files from your local computer to rice, and then from rice back to your local computer. We'll use `scp` (secure copy) to copy files from and to rice. Here are some templates for `scp` commands.
+
+__Copy a single file__
+
+`scp [copy from path] [copy to path]`
+
+__Copy multiple files__
+
+You can copy multiple files or folders by separating them with a space.
+
+`scp [copy from path 1] [copy from path 2] [copy to path]`
+
+__Copy the contents of a folder__
+
+To copy the entire contents, including sub-folder, of a folder, use the `-r` option.
+
+`scp -r [folder path] [copy to path]`
+
+__Copy to rice from local computer__
+
+`scp [local file path] [SUNet ID]@rice.stanford.edu:[path on rice]`
+
+__Copy from rice to local computer__
+
+`scp [SUNet ID]@rice.stanford.edu:[path on rice] [local path]`
 
 ### Copy your script to rice
 
-If you don't already have your R script written, write it locally in RStudio so that you can easily save it to your computer. 
+Now, you can copy your script and any additional files you need over to rice. It will likely be easiest to just copy over your entire project directory. Say your project directory is called `very-exciting-project`. The command to copy over from your local computer to rice would be
 
-In order to run your R script on rice, you'll need to copy the script from your local computer to rice. If your script reads downloaded data, you'll also need to copy over the data. If your script reads data directly from the internet, you don't need to copy over any data.
+`%local scp -r very-exciting-project [SUNet ID]@rice.stanford.edu`
 
-Decide where you want to copy your script and data (if you have it) to on rice. If you've never used rice before, you'll probably only have two folders: `afs-home` and `R`. `afs-home` is the home directory for your AFS space. Later on, we'll show you how to use AFS. You have an `R` folder because you just installed some R packages from RStudio.
+This will copy over your entire project folder to your home directory on rice. If you want, you can use the command `mkdir` to create a new folder on rice.
 
-From the rice command line, create a new folder by running
+`%rice mkdir a-new-folder`
 
-`mkdir [your folder name]`
+Then, you can edit the file path to copy your files into this new folder. Remember to add a `:` after `rice.stanford.edu`.
 
-From your local command line, navigate to the folder where script lives locally. To copy over to rice, we'll use the `scp` (secure copy) command. The syntax for `scp` is 
+`%local scp -r my-exciting-project [SUNet ID]@rice.stanford.edu:a-new-folder`
 
-`scp [path of the file to copy] [new location path]`
-
-To give a path on rice, use 
-
-`[SUNet ID]@rice.stanford.edu:[path]`
-
-Here's an example command that copies an script over to a folder on rice named `birds`
-
-`scp birds.R skaltman@rice.stanford.edu:birds`
-
-You can copy multiple files at once by separating each file name with a space.
-
-`scp [file_1] [file_2] [new location path]`
-
-You can also recursively copy the contents of a folder by adding `-r` after `scp`.
-
-`scp -r [folder] [new location path]`
+When you copy files either from or to rice, you'll be prompted for your password and required to two-step authenticate. At the end of this chapter, we'll show you how to remain logged into rice so you don't have to log in each time you try to copy files.
 
 ### Run your script
 
-Now, you can run your R script. From the rice command line
+Now, you can run your R script on rice. From the rice command line, run
 
-`Rscript [path to your script]`
+`%rice Rscript [path to your script]`
 
-### Copy results to your computer
+Note that you can change directories on rice just as you would on your local computer. If you want to navigate into your project folder, for example, you can run
+
+`%rice cd [project folder name]`
+
+### Copy results from rice 
 
 Your data (or whatever your script produced) now lives on rice. You need to copy the data back to your local computer. From your local command line, run
 
-`scp [SUNet ID]@rice.stanford.edu:[file path] [local path]`
+`%local scp [SUNet ID]@rice.stanford.edu:[file path] [local path]`
 
-For example, the following command copies the output of `birds.R`, `birds.rds`, to the local folder _GitHub/birds_.
+Again, if you want to copy the contents of an entire folder, you can use the `-r` option.
 
-`scp skaltman@rice.stanford.edu:birds/birds.rds ~/GitHub/birds`
+`%local scp -r [SUNet ID]@rice.stanford.edu:[file path] [local path]`
 
+For example, say we want to copy the contents of our `data` folder back to our local computer. We would run
+
+`%local scp -r [SUNet ID]@rice.stanford.edu:very-exciting-project/data very-exciting-project/data`
+
+## Stay logged into rice
+
+When you used `scp` to copy files from or to rice, you had to log into rice again. If you wanted to open up a new rice command line, you would also have to log in again. We'll show you how to get around all this repetitive logging in and two-step authenticating. 
+
+First, download and install Kerberos from the [Stanford IT website](https://uit.stanford.edu/software/kerberos). You'll also need Kerberos for AFS, which we'll discuss later. 
+
+After you've installed Kerberos, add the following alias to your .bash_profile
+
+`alias kt='kinit [SUNet ID]; aklog'` 
+
+Remember, you can edit your .bash_profile in RStudio by running 
+
+`usethis::edit_file("~/.bash_profile")`
+
+(Make sure you're running this line from your local RStudio instance, not the RStudio instance that's running on rice.)
+
+Then, source your .bash_profile.
+
+`%local source ~/.bash_profile`
+
+The alias `kt` will now log you into Kerberos. 
+
+Now, you have to edit your .ssh/config file. You can edit it in RStudio by running 
+
+`usethis::edit_file("~/.ssh/config")`
+
+Copy-and-paste the following lines into your .ssh/config file
+
+```
+Host rice rice.stanford.edu rice?? rice??.stanford.edu
+  GSSAPIDelegateCredentials yes
+  GSSAPIAuthentication yes
+  ControlMaster auto
+  ControlPath ~/.ssh/%r@%h:%p
+  ControlPersist yes
+```
+
+Now, when you want to use rice, first run
+
+`%local kt`
+
+and log into Kerberos. Then, log into rice with 
+
+`%local xr`
+
+You'll have to enter your password and two-step authenticate. Now, you should be able to `scp` and sign into rice in new windows without logging in again.
