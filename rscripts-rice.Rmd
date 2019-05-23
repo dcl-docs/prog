@@ -1,120 +1,3 @@
-```{r include=FALSE, cache=FALSE}
-set.seed(2466)
-
-options(
-  digits = 3,
-  dplyr.print_max = 6,
-  dplyr.print_min = 6
-)
-
-knitr::opts_chunk$set(
-  cache = TRUE,
-  collapse = TRUE,
-  comment = "#>",
-  fig.align = 'center',
-  fig.asp = 0.618,  # 1 / phi
-  fig.show = "hold"
-)
-
-image_dpi <- 125
-
-# Stamps plots with a tag 
-# Idea from Claus Wilke's "Data Visualization" https://serialmentor.com/dataviz/
-stamp <- function(
-  tag = "Bad", tag_color = "#B33A3A", tag_size = 16, tag_padding = 1
-)
-{
-  list(
-    theme(
-      plot.tag = element_text(color = tag_color, size = tag_size),
-      plot.tag.position = "topright"
-    ),
-    labs(
-      tag =
-        str_pad(tag, width = str_length(tag) + tag_padding, side = "left")
-    )
-  )
-}
-
-```
-```{r include=FALSE, cache=FALSE}
-set.seed(2466)
-
-options(
-  digits = 3,
-  dplyr.print_max = 6,
-  dplyr.print_min = 6
-)
-
-knitr::opts_chunk$set(
-  cache = TRUE,
-  collapse = TRUE,
-  comment = "#>",
-  fig.align = 'center',
-  fig.asp = 0.618,  # 1 / phi
-  fig.show = "hold"
-)
-
-image_dpi <- 125
-
-# Stamps plots with a tag 
-# Idea from Claus Wilke's "Data Visualization" https://serialmentor.com/dataviz/
-stamp <- function(
-  tag = "Bad", tag_color = "#B33A3A", tag_size = 16, tag_padding = 1
-)
-{
-  list(
-    theme(
-      plot.tag = element_text(color = tag_color, size = tag_size),
-      plot.tag.position = "topright"
-    ),
-    labs(
-      tag =
-        str_pad(tag, width = str_length(tag) + tag_padding, side = "left")
-    )
-  )
-}
-
-```
-```{r include=FALSE, cache=FALSE}
-set.seed(2466)
-
-options(
-  digits = 3,
-  dplyr.print_max = 6,
-  dplyr.print_min = 6
-)
-
-knitr::opts_chunk$set(
-  cache = TRUE,
-  collapse = TRUE,
-  comment = "#>",
-  fig.align = 'center',
-  fig.asp = 0.618,  # 1 / phi
-  fig.show = "hold"
-)
-
-image_dpi <- 125
-
-# Stamps plots with a tag 
-# Idea from Claus Wilke's "Data Visualization" https://serialmentor.com/dataviz/
-stamp <- function(
-  tag = "Bad", tag_color = "#B33A3A", tag_size = 16, tag_padding = 1
-)
-{
-  list(
-    theme(
-      plot.tag = element_text(color = tag_color, size = tag_size),
-      plot.tag.position = "topright"
-    ),
-    labs(
-      tag =
-        str_pad(tag, width = str_length(tag) + tag_padding, side = "left")
-    )
-  )
-}
-
-```
 
 # R scripts on a remote machine
 
@@ -162,15 +45,17 @@ Now, we'll create aliases for logging into Kerberos and rice. Aliases live in yo
 
 Now, add the following line to the alias section of your .bash_profile. We recommend listing your aliases in alphabetical order.
 
-`alias kt='kinit [SUNet ID]; aklog'` 
+`alias k='kinit [SUNet ID] 
 
-This creates an alias for logging into Kerberos. The `k` is for Kerberos, and the `t` is for token.
+This creates an alias for logging into Kerberos. The `k` is for Kerberos.
 
 Next, create an alias for logging into rice.
 
 `alias xr='ssh -Y [SUNet ID]@rice.stanford.edu'`
 
-The `x` is for X-windows, and the `r` is for rice, but you don't have to name it `xr` if you already have an `xr` alias.
+The `x` is for X-windows, and the `r` is for rice.
+
+Note that the exact names of these aliases isn't important. If you already had aliases named `k` and `xr`, you can name your new ones anything you want.
 
 ### Source your .bash_profile
 
@@ -180,7 +65,7 @@ In order for your changes to your .bash_profile to take effect, you need to sour
 
 ### Edit .ssh/config
 
-To configure Kerberos, you'll also need to edit your .ssh/config file. You can edit it in RStudio by running 
+Next, edit your .ssh/config file. You can edit it in RStudio by running 
 
 `usethis::edit_file("~/.ssh/config")`
 
@@ -195,11 +80,13 @@ Host rice rice.stanford.edu rice?? rice??.stanford.edu
   ControlPersist yes
 ```
 
+Without these changes, you would have to login and authenticate each time you wanted to use rice in a new window or carry out tasks like copying files over to rice.
+
 ### Log into rice
 
 First, log into Kerberos from the command line by running
 
-`%local kt`
+`%local k`
 
 You'll be prompted for your SUNet password.
 
