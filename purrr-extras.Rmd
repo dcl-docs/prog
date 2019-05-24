@@ -6,11 +6,11 @@ library(tidyverse)
 
 In this reading, you'll learn about two more map variants, `map_dfr()` and `map_dfc()`. Then, you'll learn about `walk()`, as well as some useful purrr functions that work with functions that return either `TRUE` or `FALSE`.
 
-The purrr package contains more functions that we can cover. The [purrr cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/purrr.pdf) is a great way to see an overview of the package or find a helpful function when you encounter a new type of iteration problem.
+The purrr package contains more functions than we can cover. The [purrr cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/purrr.pdf) is a great way to find helpful functions when you encounter a new type of iteration problem.
 
 ## map functions that output tibbles
 
-You already know how to choose the appropriate map function ending to produce an atomic vector or list. There are also map function variants that produce a single tibble.
+Instead of creating an atomic vector or list, the map variants `map_dfr()` and `map_dfc()` create a tibble. 
 
 With these map functions, the assembly line worker creates a tibble for each input element, and the output conveyor belt ends up with a collection of tibbles. 
 
@@ -30,11 +30,11 @@ knitr::include_graphics("images/map_dfr.png", dpi = image_dpi)
 knitr::include_graphics("images/map_dfc.png", dpi = image_dpi)
 ```
 
-There are `_dfr` and `_dfc` variants of `pmap()` and `map2()` as well.
+There are `_dfr` and `_dfc` variants of `pmap()` and `map2()` as well. In the following sections, we'll cover `map_dfr()` and `map_dfc()` in more detail.
 
 ### `_dfr`
 
-`map_dfr()` is useful when you want to read in data from multiple files. The following code reads in several very simple csv files that contain the names of different dinosaur genera.
+`map_dfr()` is useful when reading in data from multiple files. The following code reads in several very simple csv files, each of which contains the name of a different dinosaur genus.
 
 ```{r, message=FALSE}
 read_csv("data/purrr-extras/file_001.csv")
@@ -56,7 +56,7 @@ files %>%
 
 The result is a tibble with three rows and two columns, because `map_dfr()` aligns the columns of the individual tibbles by name. 
 
-The individual tibbles can have different numbers of rows or columns. `map_dfr()` creates a column for each unique column name. 
+The individual tibbles can have different numbers of rows or columns. `map_dfr()` just creates a column for each unique column name. If some of the individual tibbles lack a column that others have, `map_dfr()` fills in with `NA` values.
 
 ```{r, message=FALSE}
 read_csv("data/purrr-extras/file_004.csv")
@@ -65,11 +65,9 @@ c(files, "data/purrr-extras/file_004.csv") %>%
   map_dfr(read_csv)
 ```
 
-If some of the individual tibbles lack a column that others have, `map_dfr()` fills in with `NA` values.
-
 ### `_dfc`
 
-`map_dfc()` is typically less useful than `map_dfr()`, because it relies on row position to stack the tibbles side-by-side. Row position is prone to error, and it will often be difficult to check if the data in each row is aligned correctly. However, if you have data with variables in different places and are positive the rows are aligned, `map_dfc()` may be appropriate.
+`map_dfc()` is typically less useful than `map_dfr()` because it relies on row position to stack the tibbles side-by-side. Row position is prone to error, and it will often be difficult to check if the data in each row is aligned correctly. However, if you have data with variables in different places and are positive the rows are aligned, `map_dfc()` may be appropriate.
 
 Unfortunately, even if the individual tibbles contain a unique identifier for each row, `map_dfc()` doesn't use the identifiers to verify that the rows are aligned correctly, nor does it combine identically named columns.
 
@@ -92,7 +90,7 @@ left_join(
 )
 ```
 
-Finally, because `map_dfc()` combines tibbles by row position, the tibbles can have different numbers of columns, but must have the same number of rows.
+Also, because `map_dfc()` combines tibbles by row position, the tibbles can have different numbers of columns, but must have the same number of rows.
 
 The following files have different numbers of rows, and so `map_dfc()` produces an error.
 
@@ -129,7 +127,7 @@ plots %>%
   walk(print)
 ```
 
-The walk functions look like they don't return anything, but they actually return their input *invisibly*. When functions return something invisibly, it just means they don't print it out when you call them. This functionality makes the walk functions useful in pipes. You can call a walk function to perform an action, get your input back, and continue operating on that input. 
+The walk functions look like they don't return anything, but they actually return their input *invisibly*. When functions return something invisibly, it just means they don't print their return value out when you call them. This functionality makes the walk functions useful in pipes. You can call a walk function to perform an action, get your input back, and continue operating on that input. 
 
 ## Predicate functions
 
@@ -149,16 +147,16 @@ x %>%
   discard(is.character)
 ```
 
-This is useful when working with tibbles. You can use `keep()` and `discard()` to select columns that meet a certain condition.
+```{r}
+x %>% 
+  keep(~ length(.) == 2)
+```
+
+With tibbles, you can use `keep()` and `discard()` to select columns that meet a certain condition.
 
 ```{r}
 mpg %>% 
   keep(is.numeric)
-```
-
-```{r}
-mpg %>% 
-  discard(is.numeric)
 ```
 
 `some()` looks at the entire input vector and returns `TRUE` if the predicate is true for any element of the vector and `FAlSE` otherwise.
