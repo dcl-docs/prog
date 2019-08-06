@@ -20,7 +20,10 @@ rmd_files: [
   
   "tidy-eval-section.Rmd",
   "tidy-eval-summary.Rmd",
-  "tidy-eval-detailed.Rmd"
+  "tidy-eval-detailed.Rmd",
+  
+  "remote-computing.Rmd",
+  "rscripts-rice.Rmd"
 ]
 
 before_chapter_script: "_common.R"
