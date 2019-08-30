@@ -1,3 +1,42 @@
+```{r include=FALSE, cache=FALSE}
+set.seed(2466)
+
+options(
+  digits = 3,
+  dplyr.print_max = 6,
+  dplyr.print_min = 6
+)
+
+knitr::opts_chunk$set(
+  cache = TRUE,
+  collapse = TRUE,
+  comment = "#>",
+  fig.align = 'center',
+  fig.asp = 0.618,  # 1 / phi
+  fig.show = "hold"
+)
+
+image_dpi <- 125
+
+# Stamps plots with a tag 
+# Idea from Claus Wilke's "Data Visualization" https://serialmentor.com/dataviz/
+stamp <- function(
+  tag = "Bad", tag_color = "#B33A3A", tag_size = 16, tag_padding = 1
+)
+{
+  list(
+    theme(
+      plot.tag = element_text(color = tag_color, size = tag_size),
+      plot.tag.position = "topright"
+    ),
+    labs(
+      tag =
+        str_pad(tag, width = str_length(tag) + tag_padding, side = "left")
+    )
+  )
+}
+
+```
 
 # (PART) Functions {-}
 
@@ -5,4 +44,4 @@
 
 R is well-suited to a functional style of programming, which means you'll often find yourself solving problems by applying various functions. For example, think about how you manipulate a tibble by applying a series of dplyr verbs until you arrive at the result you want. 
 
-Because of these, it's important to understand how functions work in R. The following chapters assume you already have experience writing functions in R, and immediately dive into some different types of functions: vector, scalar, predicate, and anonymous.
+Because of this, it's important to understand how functions work in R. The following chapters assume you already have experience writing functions in R, and immediately dive into some different types of functions: vector, scalar, predicate, and anonymous.
