@@ -3,4 +3,6 @@
 
 # Introduction
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+R is well-suited to a functional style of programming, which means you'll often find yourself solving problems by applying various functions. For example, think about how you manipulate a tibble by applying a series of dplyr verbs until you arrive at the result you want. 
+
+Because of these, it's important to understand how functions work in R. The following chapters assume you already have experience writing functions in R, and immediately dive into some different types of functions: vector, scalar, predicate, and anonymous.
