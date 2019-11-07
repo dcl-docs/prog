@@ -1,4 +1,4 @@
-# Tidy evaluation
+# Theory
 
 ```{r message = FALSE, warning = FALSE}
 library(tidyverse)

@@ -1,0 +1,188 @@
+
+# Basics
+
+```{r setup, include=FALSE}
+library(tidyverse)
+```
+
+Likely without realizing it, you've been using two types of variables in R. First, there are what we'll call _environment_ variables. When you create an environment variable, you bind a value to a name in the current environment. For example, the following code creates an environment variable named `y` that refers to `1`.
+
+```{r}
+y <- 1
+```
+
+Now, when we call `y`, we get whatever value `y` refers to. 
+
+```{r}
+y
+```
+
+The second type of variable we'll call _data_ variables. Data variables refer to columns in data frames, and only make sense in the context of those data frames. For example, `manufacturer` is a data variable that exists in the context of `mpg`. dplyr, ggplot2, and other tidyverse packages understand this, which is why functions like `select()` behave as you want.
+
+```{r}
+mpg %>% 
+  select(manufacturer)
+```
+
+Instead of figuring out what `manufacturer` refers to in the environment, `select()` looks for a column named "manufacturer" in `mpg`. 
+
+Let's take a look at our failed function again.
+
+```{r, error=TRUE}
+grouped_mean <- function(var_group, var_summary) {
+  mpg %>% 
+    group_by(var_group) %>% 
+    summarize(mean = mean(var_summary))
+}
+
+grouped_mean(var_group = manufacturer, var_summary = cty)
+```
+
+`group_by()` thinks that `var_group` is a data variable, and so it looks inside `mpg` for a column called "var_group", doesn't find it, and so throws an error. 
+
+We actually want `group_var` to behave as a hybrid between an environment variable and a data variable. Like an environment variable, we want it to refer to another value (`manufacturer`). Then, we want `group_by()` to treat that value (`manufacturer`) as a data variable and look inside `mpg` for the matching column.
+
+## Embracing with `{{ }}`
+
+To fix `grouped_mean()`, all we need to do is _embrace_ `var_group` and `var_summary` with the operator `{{ }}` (pronounced "curly curly").
+
+```{r}
+grouped_mean <- function(var_group, var_summary) {
+  mpg %>% 
+    group_by({{var_group}}) %>% 
+    summarize(mean = mean({{var_summary}}))
+}
+
+grouped_mean(var_group = manufacturer, var_summary = cty)
+```
+
+`{{ }}` might remind you of the use of `{ }` in `glue()`, and they fill similar roles. 
+
+Let's look at another example. This doesn't work:
+
+```{r, error=TRUE, fig.show='hide'}
+plot_mpg <- function(var) {
+  mpg %>% 
+    ggplot(aes(var)) +
+    geom_bar()
+}
+
+plot_mpg(drv)
+```
+
+We want `var` to behave as a hybrid environment-data variable, so we need `{{ }}`.
+
+```{r}
+plot_mpg <- function(var) {
+  mpg %>% 
+    ggplot(aes({{var}})) +
+    geom_bar()
+}
+
+plot_mpg(drv)
+```
+
+## Forwarding `...`
+
+You might have noticed that some functions, like scoped verbs and the purrr functions, take `...` as a final argument, allowing you to specify any number of additional arguments. You can use `...` in your own functions. There are two common use-cases.
+
+### Passing full expressions
+
+Functions like `filter()` take expressions, like `year == 1999` or `manufacturer == "audi"`. If you want to build a function that takes full expressions, you can use `...`.
+
+```{r}
+mpg_filter <- function(...) {
+  mpg %>% 
+    filter(...)
+}
+
+mpg_filter(manufacturer == "audi", year == 1999)
+```
+
+`...` can take any number of arguments, so we can filter by an unlimited number of conditions.
+
+```{r}
+mpg_filter(
+  manufacturer == "audi", 
+  year == 1999, 
+  drv == "f", 
+  fl == "p"
+)
+```
+
+`mpg_filter()` _forwards_ `...` to `filter()`, which allows `filter()` to act on the contents of `...` just as it would outside of the function.
+
+Here's another example that uses `select()`.
+
+```{r}
+mpg_select <- function(...) {
+  mpg %>% 
+    select(...)
+}
+
+mpg_select(car = model, drivetrain = drv)
+```
+
+### Additional arguments
+
+Sometimes, you'll want your function to take named arguments, but you'll also want to allow for any number of additional arguments. You can use `{{ }}`, and `...`.
+
+```{r}
+grouped_mean_2 <- function(df, summary_var, ...) {
+  df %>% 
+    group_by(...) %>% 
+    summarize(mean = mean({{summary_var}}))
+}
+
+grouped_mean_2(df = mpg, summary_var = cty, year, drv)
+```
+
+With the `...`, we can pass any number of grouping variables into `group_by()`.
+
+```{r}
+grouped_mean_2(df = mpg, summary_var = cty, year, drv, class)
+```
+
+## Assigning names
+
+When you want to pass the name of a column into your function, you need to:
+
+* Embrace the name with `{{ }}`.
+* Use `:=` instead of `=` to assign the name.
+
+```{r}
+summary_mean <- function(df, summary_var, summary_name){ 
+  df %>% 
+    summarize({{summary_name}} := mean({{summary_var}}))
+}
+
+summary_mean(df = mpg, summary_var = cty, summary_name = cty_mean)
+```
+
+You have to use `:=` instead of just plain `=` because you can't use `{{ }}` on both sides of a `=`.
+
+(`:=` is called the walrus operator because it looks like a sideways walrus.)
+
+## Recoding
+
+Say you want to recode a variable:
+
+```{r}
+mpg %>% 
+  mutate(drv = recode(drv, "f" = "front", "r" = "rear", "4" = "four"))
+```
+
+It's often a good idea to store your recode mapping as a vector in your parameters section. To get this to work, you'll need another tidyeval operator, `!!!`. 
+
+```{r}
+recode_drv <- c(f = "front", r = "rear", `4` = "four")
+
+mpg %>% 
+  mutate(drv = recode(drv, !!! recode_drv))
+```
+
+`!!!` has two tasks:
+
+* Unpack `recode_drv` so that each element is passed as a separate argument to `recode()` (i.e., `"f" = "front", "r" = "rear", "4" = "four"` instead of c(`"f" = "front", "r" = "rear", "4" = "four")`).
+* Make sure that `recode()` treats the individual elements as data variables. 
+

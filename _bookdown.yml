@@ -19,8 +19,8 @@ rmd_files: [
   "purrr-extras.Rmd",
   
   "tidy-eval-section.Rmd",
-  "tidy-eval-summary.Rmd",
-  "tidy-eval-detailed.Rmd",
+  "tidy-eval-basics.Rmd",
+  "tidy-eval-theory.Rmd",
   
   "remote-computing.Rmd",
   "rscripts-rice.Rmd"
