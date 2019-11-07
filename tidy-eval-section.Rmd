@@ -41,13 +41,12 @@ grouped_mean(var_group = manufacturer, var_summary = cty)
 
 dplyr verbs and other tidyverse functions that operate on data frames work differently than many other R functions. In this section, you'll learn what makes these functions different and figure out how to make functions like `grouped_mean()` work. The underlying idea that makes this all possible is called __tidy evaluation__.
 
-Tidy evaluation is a complicated subject. Luckily, you don't need to understand all the theory or the under-the-hood mechanics to use tidy evaluation. The _Basics_ chapter is a high-level, practical overview of the basic tidy evaluation use-cases. The goal of the chapter is to show you what to do without going into much theory. The second chapter, _Theory_, dives a bit deeper and discusses what's really going on. 
+Tidy evaluation is a complicated subject. Luckily, you don't need to understand all the theory or the under-the-hood mechanics to use tidy evaluation. The _Basics_ chapter is a high-level, practical overview of the basic tidy evaluation use-cases. The goal of the chapter is to show you what to do without going into much theory. 
 
-If you're curious tidy evaluation and want to learn more, the following are useful resources:
+If you're curious tidy evaluation and want to learn more, the following are useful resources. Note that the `{{ }}` operator, which you'll learn about in the next chapter, was not implemented when many of these were written. Instead of `{{ }}`, you'll usually see `!!` and `enquo()`.
 
-* [Programming with dplyr](https://dplyr.tidyverse.org/articles/programming.html) vignette
 * [Tidy evaluation book](https://tidyeval.tidyverse.org/)
-* [Quasiquotation vignette](https://rlang.r-lib.org/reference/quasiquotation.html)
+* [Programming with dplyr](https://dplyr.tidyverse.org/articles/programming.html) vignette
 * [Tidy evaluation with rlang](https://github.com/rstudio/cheatsheets/blob/master/tidyeval.pdf) cheat sheet
 * Ian Lyttle’s [Tidyeval interactive tutorial](https://ijlyttle.shinyapps.io/tidyeval/)
 

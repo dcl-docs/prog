@@ -26,7 +26,7 @@ mpg %>%
 
 Instead of figuring out what `manufacturer` refers to in the environment, `select()` looks for a column named "manufacturer" in `mpg`. 
 
-Let's take a look at our failed function again.
+Let's take a look at our failed function from the intro again.
 
 ```{r, error=TRUE}
 grouped_mean <- function(var_group, var_summary) {
@@ -44,7 +44,7 @@ We actually want `group_var` to behave as a hybrid between an environment variab
 
 ## Embracing with `{{ }}`
 
-To fix `grouped_mean()`, all we need to do is _embrace_ `var_group` and `var_summary` with the operator `{{ }}` (pronounced "curly curly").
+To fix `grouped_mean()`, all we need to do is _embrace_ `var_group` and `var_summary` with `{{ }}` (pronounced "curly curly").
 
 ```{r}
 grouped_mean <- function(var_group, var_summary) {
@@ -128,19 +128,19 @@ mpg_select(car = model, drivetrain = drv)
 Sometimes, you'll want your function to take named arguments, but you'll also want to allow for any number of additional arguments. You can use `{{ }}`, and `...`.
 
 ```{r}
-grouped_mean_2 <- function(df, summary_var, ...) {
+grouped_mean_2 <- function(df, var_summary, ...) {
   df %>% 
     group_by(...) %>% 
-    summarize(mean = mean({{summary_var}}))
+    summarize(mean = mean({{var_summary}}))
 }
 
-grouped_mean_2(df = mpg, summary_var = cty, year, drv)
+grouped_mean_2(df = mpg, var_summary = cty, year, drv)
 ```
 
 With the `...`, we can pass any number of grouping variables into `group_by()`.
 
 ```{r}
-grouped_mean_2(df = mpg, summary_var = cty, year, drv, class)
+grouped_mean_2(df = mpg, var_summary = cty, year, drv, class)
 ```
 
 ## Assigning names
@@ -151,12 +151,12 @@ When you want to pass the name of a column into your function, you need to:
 * Use `:=` instead of `=` to assign the name.
 
 ```{r}
-summary_mean <- function(df, summary_var, summary_name){ 
+summary_mean <- function(df, var_summary, name_summary){ 
   df %>% 
-    summarize({{summary_name}} := mean({{summary_var}}))
+    summarize({{name_summary}} := mean({{var_summary}}))
 }
 
-summary_mean(df = mpg, summary_var = cty, summary_name = cty_mean)
+summary_mean(df = mpg, var_summary = cty, name_summary = cty_mean)
 ```
 
 You have to use `:=` instead of just plain `=` because you can't use `{{ }}` on both sides of a `=`.
