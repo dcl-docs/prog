@@ -19,10 +19,7 @@ rmd_files: [
   "purrr-extras.Rmd",
   
   "tidy-eval-section.Rmd",
-  "tidy-eval-basics.Rmd",
-  
-  "remote-computing.Rmd",
-  "rscripts-rice.Rmd"
+  "tidy-eval-basics.Rmd"
 ]
 
 before_chapter_script: "_common.R"
