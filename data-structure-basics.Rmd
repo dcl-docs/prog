@@ -255,7 +255,11 @@ For now, you just need to recognize these when you encounter them. You'll learn 
 
 ## Lists
 
-Unlike atomic vectors, which can only contain a single type, lists can contain any collection of R objects. The following reading will introduce you to lists.
+Unlike atomic vectors, which can only contain a single type, lists can contain any collection of R objects. 
+
+### Basics
+
+The following reading will introduce you to lists.
 
 * [Recursive vectors (lists)](https://r4ds.had.co.nz/vectors.html#lists)[r4ds-20.5]
 
@@ -293,7 +297,7 @@ typeof(mpg)
 
 Every tibble is a list of vectors. 
 
-```{r}
+```{r echo=FALSE}
 knitr::include_graphics(
   "images/data-structure-basics/tibble.png", 
   dpi = image_dpi
