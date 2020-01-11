@@ -4,9 +4,7 @@
 library(tidyverse)
 ```
 
-You'll spend most of your time in R working with three different data structures: atomic vectors, lists, and tibbles. In this reading, you'll learn the differences between the three and how to manipulate each one.
-
-In R, almost every data structure you'll work with is a vector. In this book, we'll often represent vectors like this:
+In R, vectors are the most common data structure. In this book, we'll often represent vectors like this:
 
 ```{r echo=FALSE}
 knitr::include_graphics(
@@ -14,17 +12,20 @@ knitr::include_graphics(
 )
 ```
 
-## Atomic vectors
+Each orange cell represents one element of the vector. As you'll see, different kinds of vectors can hold different kinds of elements.
 
-_Atomic vectors_ are one of two kinds of vectors. _Lists_, as you'll see later on, are the other kind.
+There are two kinds of vectors: _atomic vectors_ and _lists_. _Tibbles_ are a specific kind of list.
 
 ```{r echo=FALSE}
 knitr::include_graphics(
-  "images/data-structure-basics/vector-atomic-list.png", 
+  "images/data-structure-basics/vector-atomic-list-tibble.png", 
   dpi = image_dpi
 )
 ```
 
+In this chapter, we'll cover these three data structures, explaining how they differ and showing you how to manipulate each one.
+
+## Atomic vectors
 
 Atomic vectors are the "atoms" of R---the simple building blocks upon which all else is built. There are four types of atomic vector that are important for data analysis:
 
@@ -33,23 +34,23 @@ Atomic vectors are the "atoms" of R---the simple building blocks upon which all 
 * __character__ vectors (`<chr>`) contain strings made with `""`.
 * __logical__ vectors (`<lgl>`) contain `TRUE` or `FALSE`.
 
-Integer atomic vectors contain only integers, double atomic vectors contain only doubles, and so on. Together, integer and double vectors are known as __numeric__ vectors. All vectors can also contain the missing value `NA`. 
+Integer atomic vectors contain only integers, double atomic vectors contain only doubles, and so on. Together, integer and double vectors are known as _numeric_ vectors. All vectors can also contain the missing value `NA`. 
 
-In R, single numbers, logicals, and strings are just atomic vectors of length 1, which means when you run
+In R, single numbers, logicals, and strings are just atomic vectors of length 1, so
 
 ```{r}
 x <- "a"
 ```
 
-you're creating a character vector. Likewise, 
+creates a character vector. Likewise, 
 
 ```{r}
 y <- 1.1
 ```
 
-is a double vector.
+creates a double vector.
 
-To create atomic vectors with more than one element, use `c()`.
+To create atomic vectors with more than one element, use `c()` to combine values.
 
 ```{r}
 logical <- c(TRUE, FALSE, FALSE)
@@ -69,7 +70,7 @@ Without the `L`s, R will create a vector of doubles.
 
 ### Properties
 
-Vectors (both atomic vectors and lists) all have two key properties: a __type__ and a __length__.
+Vectors (both atomic vectors and lists) all have two key properties: _type_ and _length_.
 
 You can check the type of any vector with `typeof()`.
 
@@ -105,7 +106,9 @@ names(v_named)
 v <- c(1, 2.7, 4, 5)
 ```
 
-We can _subset_ `v` to select specific elements, ignoring the others. The operators `[` and `[[` subset vectors. Use `[` to select multiple elements, and `[[` to select just one. We'll cover four ways to use `[` and then `discuss `[[`. 
+We can _subset_ `v` to select specific elements, ignoring the others. 
+
+The operators `[` and `[[` subset vectors. Use `[` to select multiple elements, and `[[` to select just one. We'll cover four ways to use `[` and then discuss `[[`. 
 
 __Positive integers__
 
@@ -117,23 +120,23 @@ v[c(1, 2)]
 
 Note that, in R, indices start at 1, not 0, so the above code extracts the first two elements of `v`.
 
+You can also use `:` to create a vector of adjacent integers. The following select the first three elements of `v`.
+
+```{r}
+v[1:3]
+```
+
 __Negative integers__
 
-Subset with a vector of negative integers to _exclude_ elements. The following code removes the first and third elements of `v`.
+Subset with a vector of negative integers to exclude elements. The following code removes the first and third elements of `v`.
 
 ```{r}
 v[-c(1, 3)]
 ```
 
-You can also use `:` to create a vector of adjacent integers. The following select the first three elements of `v`.
-
-```{r}
-  v[1:3]
-```
-
 __Names__
 
-If a vector has names, you can also subset with a character vector of names. 
+If a vector has names, you can subset with a character vector. 
 
 ```{r}
 v_named <- c(guava = 2, pineapple = 4, dragonfruit = 1)
@@ -142,7 +145,7 @@ v_named[c("guava", "dragonfruit")]
 
 __Logical vectors__
 
-If you supply a vector of `TRUE`s and `FALSE`s to `[`, it will select the elements that correspond to the `TRUE`s. 
+If you supply a vector of `TRUE`s and `FALSE`s, `[` will select the elements that correspond to the `TRUE`s. 
 
 ```{r echo=FALSE}
 knitr::include_graphics("images/vector-subset.png", dpi = image_dpi)
@@ -151,10 +154,10 @@ knitr::include_graphics("images/vector-subset.png", dpi = image_dpi)
 The following extracts just the first and third elements. 
 
 ```{r}
-  v[c(TRUE, FALSE, TRUE, FALSE)]
+v[c(TRUE, FALSE, TRUE, FALSE)]
 ```
 
-You'll rarely pass a vector of `TRUE`s and `FALSE`s that you created by hand to `[`. Instead, it's much more common to create a logical vector with a function or condition. 
+You'll rarely subset by typing out `TRUE`s and `FALSE`s. Instead, you'll typically create a logical vector with a function or condition.
 
 For example, the following code selects just the elements of `v` greater than 2.
 
@@ -168,9 +171,9 @@ v[v > 2]
 v > 2
 ```
 
-`[` then uses this logical vector to subsets `v`, resulting in just the elements of `v` greater than 2. 
+`[` then uses this logical vector to subset `v`, resulting in just the elements of `v` greater than 2. 
 
-Say we have a vector with `NA`s.
+`v_missing` has `NA`s.
 
 ```{r}
 v_missing <- c(1.1, NA, 5, 6, NA)
@@ -200,7 +203,7 @@ Use `[[` instead of `[` if you want to make it clear that your code only selects
 
 ### Applying functions
 
-Vectors are central to programming in R, and so many (if not most) R functions will work with vectors of any length.
+Vectors are central to programming in R, and so many R functions are designed to work with vectors of any length. 
 
 You already saw how to call `typeof()` to return the type of a vector. 
 
@@ -282,20 +285,13 @@ unlist(z)
 
 ## Tibbles
 
-Tibbles are a specific kind of list. 
+Tibbles are actually lists. 
 
 ```{r}
 typeof(mpg)
 ```
 
-```{r echo=FALSE}
-knitr::include_graphics(
-  "images/data-structure-basics/vector-atomic-list-tibble.png", 
-  dpi = image_dpi
-)
-```
-
-Every tibble is a list of vectors. Each tibble column is its own vector. 
+Every tibble is a list of vectors. 
 
 ```{r}
 knitr::include_graphics(
@@ -303,6 +299,8 @@ knitr::include_graphics(
   dpi = image_dpi
 )
 ```
+
+These vectors form the tibble columns.
 
 Take the tibble `mpg`.
 
@@ -323,6 +321,7 @@ my_tibble <-
   y = c(TRUE, FALSE, FALSE),
   z = c("apple", "pear", "banana")
 )
+
 my_tibble
 ```
 
