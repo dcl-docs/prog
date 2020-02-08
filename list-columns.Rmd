@@ -1,42 +1,3 @@
-```{r include=FALSE, cache=FALSE}
-set.seed(2466)
-
-options(
-  digits = 3,
-  dplyr.print_max = 6,
-  dplyr.print_min = 6
-)
-
-knitr::opts_chunk$set(
-  cache = TRUE,
-  collapse = TRUE,
-  comment = "#>",
-  fig.align = 'center',
-  fig.asp = 0.618,  # 1 / phi
-  fig.show = "hold"
-)
-
-image_dpi <- 125
-
-# Stamps plots with a tag 
-# Idea from Claus Wilke's "Data Visualization" https://serialmentor.com/dataviz/
-stamp <- function(
-  tag = "Bad", tag_color = "#B33A3A", tag_size = 16, tag_padding = 1
-)
-{
-  list(
-    theme(
-      plot.tag = element_text(color = tag_color, size = tag_size),
-      plot.tag.position = "topright"
-    ),
-    labs(
-      tag =
-        str_pad(tag, width = str_length(tag) + tag_padding, side = "left")
-    )
-  )
-}
-
-```
 
 # List columns
 
@@ -105,7 +66,7 @@ knitr::include_graphics(
 )
 ```
 
-Pass `nest()` the name of the column to put into each individual tibble. `nest()` will create one row for each unique value of the remaining variables. For example, say we select just two columns from `countries`
+Pass `nest()` the names of the columns to put into each individual tibble. `nest()` will create one row for each unique value of the remaining variables. For example, say we select just two columns from `countries`
 
 ```{r}
 countries %>% 
@@ -248,7 +209,7 @@ To transform a list column into normal columns, use `unnest()`. Here's our tibbl
 regions
 ```
 
-Supply `unnest()`'s `col` argument with the name of the column to unnest.
+Supply `unnest()`'s `cols` argument with the name of the columns to unnest.
 
 ```{r}
 regions %>% 
@@ -289,9 +250,7 @@ When manipulating list columns, it's often helpful to use the `.` strategy discu
 Then, test out your manipulation on `.`. For example, the following finds the proportion of country names that end in "a."
 
 ```{r}
-count(., ends_in_a = str_detect(name, "a$")) %>% 
-  mutate(prop = n / sum(n)) %>% 
-  filter(ends_in_a) %>% 
+summarize(., prop = sum(str_detect(name, "a$")) / n()) %>% 
   pull(prop)
 ```
 
@@ -303,14 +262,12 @@ regions %>%
     ends_in_a = 
       map_dbl(
         countries, 
-        ~ count(., ends_in_a = str_detect(name, "a$")) %>% 
-          mutate(prop = n / sum(n)) %>% 
-          filter(ends_in_a) %>% 
+        ~ summarize(., prop = sum(str_detect(name, "a$")) / n()) %>% 
           pull(prop)
       )
   ) %>% 
   arrange(desc(ends_in_a))
 ```
 
-Note that `.` does not like to piped into functions, so we couldn't pipe `.` into `count()`. 
+Note that `.` does not like to be piped into functions, so we couldn't pipe `.` into `summarize()`. 
 
