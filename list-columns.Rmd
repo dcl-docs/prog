@@ -1,0 +1,316 @@
+```{r include=FALSE, cache=FALSE}
+set.seed(2466)
+
+options(
+  digits = 3,
+  dplyr.print_max = 6,
+  dplyr.print_min = 6
+)
+
+knitr::opts_chunk$set(
+  cache = TRUE,
+  collapse = TRUE,
+  comment = "#>",
+  fig.align = 'center',
+  fig.asp = 0.618,  # 1 / phi
+  fig.show = "hold"
+)
+
+image_dpi <- 125
+
+# Stamps plots with a tag 
+# Idea from Claus Wilke's "Data Visualization" https://serialmentor.com/dataviz/
+stamp <- function(
+  tag = "Bad", tag_color = "#B33A3A", tag_size = 16, tag_padding = 1
+)
+{
+  list(
+    theme(
+      plot.tag = element_text(color = tag_color, size = tag_size),
+      plot.tag.position = "topright"
+    ),
+    labs(
+      tag =
+        str_pad(tag, width = str_length(tag) + tag_padding, side = "left")
+    )
+  )
+}
+
+```
+
+# List columns
+
+```{r}
+# Libraries
+library(tidyverse)
+library(dcldata)
+```
+
+Recall that tibbles are lists of vectors.
+
+```{r echo=FALSE}
+knitr::include_graphics("images/list-columns/tibble.png", dpi = image_dpi)
+```
+
+Usually, these vectors are _atomic vectors_, so the elements in the columns are single values, like "a" or 1.
+
+```{r echo=FALSE}
+knitr::include_graphics("images/list-columns/tibble-atomic.png", dpi = image_dpi)
+```
+
+Tibbles can also have columns that are lists. These columns are (appropriately) called _list columns_.
+
+```{r echo=FALSE}
+knitr::include_graphics(
+  "images/list-columns/tibble-list-col.png", dpi = image_dpi
+)
+```
+
+List columns are more flexible than normal, atomic vector columns. Lists can contain anything, so a list column can be made up of atomic vectors, other lists, tibbles, etc.
+
+```{r echo=FALSE}
+knitr::include_graphics(
+  "images/list-columns/tibble-list-col-vectors.png", 
+  dpi = image_dpi
+)
+```
+
+As you'll see, this can be a useful way to store data. In this chapter, you'll learn how to create list columns, how to turn list columns back into normal columns, and how to manipulate list columns. 
+
+## Creating
+
+Typically, you'll create list columns by manipulating an existing tibble. There are three primary ways to create list columns:
+
+* `nest()`
+* `summarize()` and `list()`
+* `mutate()` and `map()`
+
+### `nest()`
+
+`countries` is a simplified version of `dcldata::gm_countries`, which contains Gapminder data on 197 countries.
+
+```{r}
+countries <-
+  gm_countries %>% 
+  select(name, region_gm4, un_status, un_admission, income_wb_2017)
+
+countries
+```
+
+The tidyr function `nest()` creates list columns of tibbles. 
+
+```{r echo=FALSE}
+knitr::include_graphics(
+  "images/list-columns/tibble-list-col-tibbles.png", dpi = image_dpi
+)
+```
+
+Pass `nest()` the name of the column to put into each individual tibble. `nest()` will create one row for each unique value of the remaining variables. For example, say we select just two columns from `countries`
+
+```{r}
+countries %>% 
+  select(region_gm4, name) 
+```
+
+and then nest `name`.
+
+```{r}
+regions <-
+  countries %>% 
+  select(region_gm4, name) %>% 
+  nest(countries = name)
+
+regions
+```
+
+`nest()` created one tibble for each `region_gm4`.
+
+```{r echo=FALSE}
+knitr::include_graphics(
+  "images/list-columns/regions.png", 
+  dpi = image_dpi
+)
+```
+
+Each of these tibbles contains all the countries that belong to the continent.
+
+```{r}
+regions$countries[[1]]
+```
+
+The entire column is a list.
+
+```{r}
+typeof(regions$countries)
+```
+
+If we nest multiple variables, the individual tibbles will have multiple columns. 
+
+```{r}
+regions_data <-
+  countries %>% 
+  nest(data = c(name, un_status, un_admission, income_wb_2017))
+
+regions_data
+```
+
+```{r}
+regions_data$data[[1]]
+```
+
+You can specify columns to nest using the same syntax as `select()`.
+
+```{r}
+countries %>% 
+  nest(data = -region_gm4)
+```
+
+You can also create multiple list columns at once.
+
+```{r}
+countries %>% 
+  nest(countries = name, data = c(name, contains("un"), income_wb_2017))
+```
+
+### `summarize()` and `list()`
+
+You're used `group_by()` and `summarize()` collapsing groups into single rows. We can also use `summarize()` to create a list column, where each element is a vector, list, or tibble. 
+
+If you supply `list()` with multiple atomic vectors, it will create a list of atomic vectors.
+
+```{r}
+list(c(1, 2, 3), c("a", "b", "c"))
+```
+
+We can use `summarize()` and `list()`  to create a list of atomic vectors where each vector corresponds to one `region_gm4`. For example, the following creates a list column of countries. 
+
+```{r}
+countries_collapsed <-
+  countries %>% 
+  group_by(region_gm4) %>% 
+  summarize(countries = list(name))
+
+countries_collapsed
+```
+
+The `countries` column is similar to the one  created earlier with `nest()`, except each element is an atomic vector, not a tibble. 
+
+```{r}
+typeof(countries_collapsed$countries[[1]])
+```
+
+What if we want to manipulate each vector before creating the list column? For example, say we want to arrange all country names alphabetically. The following doesn't work:
+
+```{r error=TRUE}
+countries %>% 
+  group_by(region_gm4) %>% 
+  summarize(countries = sort(name))
+```
+
+You need to collect all the atomic vectors into a list.
+
+```{r}
+countries %>% 
+  group_by(region_gm4) %>% 
+  summarize(countries = list(sort(name)))
+```
+
+Here's another example, which only stores countries that begin with "A" in `countries`.
+
+```{r}
+a_countries <-
+  countries %>% 
+  group_by(region_gm4) %>% 
+  summarize(countries = list(str_subset(name, "^A")))
+
+a_countries
+
+a_countries$countries[[1]]
+```
+
+### `mutate()` and `map()`
+
+The third way to create a list column involves functions that take a vector as input and return a list. `map()` is one such function.  
+
+In the following code, `map()` iterates over `name`, generating a vector of random numbers for each country. 
+
+```{r}
+countries %>% 
+  select(name) %>% 
+  mutate(random = map(name, ~ rnorm(n = str_length(.))))
+```
+
+## Unnesting
+
+To transform a list column into normal columns, use `unnest()`. Here's our tibble with a list column of country names.
+
+```{r}
+regions
+```
+
+Supply `unnest()`'s `col` argument with the name of the column to unnest.
+
+```{r}
+regions %>% 
+  unnest(cols = countries)
+```
+
+## Manipulating
+
+To manipulate list columns, you'll need to use purrr. For example, say we want to find the number of countries in each continent. Here's `regions` again.
+
+```{r}
+regions
+```
+
+We can't call `length()` directly on `countries`, because we'll just get the length of the entire column.
+
+```{r}
+regions %>% 
+  mutate(num_countries = length(countries))
+```
+
+Instead, we need to iterate over `countries`, taking the length of each element separately.
+
+```{r}
+regions %>% 
+  mutate(num_countries = map_int(countries, nrow))
+```
+
+Note that we need to use `nrow()` because each element of `countries` is actually a tibble. 
+
+When manipulating list columns, it's often helpful to use the `.` strategy discussed in [Basic map functions](https://dcl-prog.stanford.edu/purrr-basics.html#anonymous-functions-1). Assign the first element of the column to `.`.
+
+```{r}
+. <- regions$countries[[1]]
+.
+```
+
+Then, test out your manipulation on `.`. For example, the following finds the proportion of country names that end in "a."
+
+```{r}
+count(., ends_in_a = str_detect(name, "a$")) %>% 
+  mutate(prop = n / sum(n)) %>% 
+  filter(ends_in_a) %>% 
+  pull(prop)
+```
+
+Then, supply your code to a map function.
+
+```{r}
+regions %>% 
+  mutate(
+    ends_in_a = 
+      map_dbl(
+        countries, 
+        ~ count(., ends_in_a = str_detect(name, "a$")) %>% 
+          mutate(prop = n / sum(n)) %>% 
+          filter(ends_in_a) %>% 
+          pull(prop)
+      )
+  ) %>% 
+  arrange(desc(ends_in_a))
+```
+
+Note that `.` does not like to piped into functions, so we couldn't pipe `.` into `count()`. 
+
