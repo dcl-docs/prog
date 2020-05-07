@@ -40,7 +40,7 @@ grouped_mean(var_group = manufacturer, var_summary = cty)
 
 `group_by()` thinks that `var_group` is a data variable, and so it looks inside `mpg` for a column called "var_group", doesn't find it, and so throws an error. 
 
-We actually want `group_var` to behave as a hybrid between an environment variable and a data variable. Like an environment variable, we want it to refer to another value (`manufacturer`). Then, we want `group_by()` to treat that value (`manufacturer`) as a data variable and look inside `mpg` for the matching column.
+We actually want `var_group` to behave as a hybrid between an environment variable and a data variable. Like an environment variable, we want it to refer to another value (`manufacturer`). Then, we want `group_by()` to treat that value (`manufacturer`) as a data variable and look inside `mpg` for the matching column.
 
 ## Embracing with `{{ }}`
 
