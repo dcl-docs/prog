@@ -222,7 +222,7 @@ moons %>%
 
 ### Anonymous functions
 
-So far in the reading, we've only given map functions **named** functions. Recall that named functions have a name which you can use to call the function. 
+So far in the reading, we've only given map **named** functions. Recall that named functions have a name which you can use to call the function. 
 
 Say we want to convert the moon radii from kilometers to miles. Here's a named function that turns kilometers into miles.
 
