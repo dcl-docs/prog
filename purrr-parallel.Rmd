@@ -63,6 +63,15 @@ df %>%
   mutate(min = map2_dbl(a, b, min))
 ```
 
+By default, `mutate()` uses column-wise operations. `map2_dbl()` produces a column the same length at `a` and `b`. We can accomplish the same calculation using row-wise operations.
+
+```{r}
+df %>% 
+  rowwise() %>% 
+  mutate(min = min(a, b)) %>% 
+  ungroup()
+```
+
 ## `pmap()`
 
 There are no `map3()` or `map4()` functions. Instead, you can use a `pmap()` (*p* for parallel) function to map over more than two vectors.
@@ -171,7 +180,7 @@ The easiest way to fix the problem is to just get rid of the unused variable.
 
 ```{r}
 state_animals %>% 
-  select(-binomial) %>% 
+  select(!binomial) %>% 
   pmap_chr(state_sentence)
 ```
 

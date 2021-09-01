@@ -8,7 +8,7 @@ In this reading, you'll learn about two more map variants, `map_dfr()` and `map_
 
 The purrr package contains more functions than we can cover. The [purrr cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/purrr.pdf) is a great way to find helpful functions when you encounter a new type of iteration problem.
 
-## map functions that output tibbles
+## Map functions that output tibbles
 
 Instead of creating an atomic vector or list, the map variants `map_dfr()` and `map_dfc()` create a tibble. 
 
@@ -78,7 +78,7 @@ c("data/purrr-extras/file_001.csv", "data/purrr-extras/file_005.csv") %>%
   map_dfc(read_csv)
 ```
 
-Instead, you end up with a duplicated column (`id` and `id1`).
+Instead, you end up with a duplicated column (`id...1` and `id...3`).
 
 If you have a unique identifier for each row, it is much better to join on that identifier.
 
@@ -90,16 +90,7 @@ left_join(
 )
 ```
 
-Also, because `map_dfc()` combines tibbles by row position, the tibbles can have different numbers of columns, but must have the same number of rows.
-
-The following files have different numbers of rows, and so `map_dfc()` produces an error.
-
-```{r, message=FALSE, error=TRUE}
-read_csv("data/purrr-extras/file_006.csv")
-
-c("data/purrr-extras/file_001.csv", "data/purrr-extras/file_006.csv") %>% 
-  map_dfc(read_csv)
-```
+Also, because `map_dfc()` combines tibbles by row position, the tibbles can have different numbers of columns, but they should have the same number of rows.
 
 ## Walk
 
@@ -108,8 +99,10 @@ The walk functions work similarly to the map functions, but you use them when yo
 The walk functions are useful for performing actions like writing files and printing plots. For example, say we used purrr to generate a list of plots.
 
 ```{r message=FALSE}
+set.seed(745)
+
 plot_rnorm <- function(sd) {
-  tibble(x = rnorm(n = 1000, mean = 0, sd = sd)) %>% 
+  tibble(x = rnorm(n = 5000, mean = 0, sd = sd)) %>% 
     ggplot(aes(x)) +
     geom_histogram(bins = 40) +
     geom_vline(xintercept = 0, color = "blue")
@@ -131,7 +124,7 @@ The walk functions look like they don't return anything, but they actually retur
 
 ## Predicate functions
 
-In Chapter 6, we introduced _predicate functions_, which are functions that return a single `TRUE` or `FALSE`. purrr includes several useful functions that work with predicate functions. 
+In Chapter 7, we introduced _predicate functions_, which are functions that return a single `TRUE` or `FALSE`. purrr includes several useful functions that work with predicate functions. 
 
 `keep()` and `discard()` iterate over a vector and keep or discard only those elements for which the predicate function returns `TRUE`. 
 

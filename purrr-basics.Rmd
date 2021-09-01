@@ -271,7 +271,7 @@ Just like when you supply `map()` with a named function, `map()` will apply an a
 knitr::include_graphics("images/map-anonymous.png", dpi = image_dpi)
 ```
 
-We recommend always using the syntax shortcut instead of the full anonymous function syntax. We also recommend using anonymous functions instead of named functions, unless you'll use the function again or the function is very long.
+If a named function does not exist for your mapping, we recommend using an anonymous function instead of creating a named function, unless you'll use the function again or the function is very long. We also recommend always using the syntax shortcut instead of the full anonymous function syntax. 
 
 Anonymous functions can be confusing and tricky to get right. If you're struggling to get the syntax correct, try testing your anonymous function on just a single element of your list. Here, we'll explain one strategy for doing so.
 
@@ -282,7 +282,7 @@ First, assign a single element of your list to the variable `.`. This looks stra
 .
 ```
 
-(We picked the third element because Neptune is more interesting than Earth, but it's usually easiest to just pick the first element with `[[1]]`.)
+(We picked the third element because Neptune is more interesting than Earth, but it's usually easiest to simply pick the first element with `[[1]]`.)
 
 Then, figure out how to perform your desired operation on just that element. Check that the output is correct.
 

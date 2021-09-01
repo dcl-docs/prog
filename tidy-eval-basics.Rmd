@@ -1,5 +1,5 @@
 
-# Basics
+# Tidy evaluation basics
 
 ```{r setup, include=FALSE}
 library(tidyverse)
@@ -82,9 +82,9 @@ plot_mpg <- function(var) {
 plot_mpg(drv)
 ```
 
-## Forwarding `...`
+## Forwarding with `...`
 
-You might have noticed that some functions, like scoped verbs and the purrr functions, take `...` as a final argument, allowing you to specify any number of additional arguments. You can use `...` in your own functions. There are two common use-cases.
+You might have noticed that some functions, like the purrr functions, take `...` as a final argument, allowing you to specify any number of additional arguments. You can use `...` in your own functions. There are two common use-cases.
 
 ### Passing full expressions
 
@@ -131,7 +131,8 @@ Sometimes, you'll want your function to take named arguments, but you'll also wa
 grouped_mean_2 <- function(df, var_summary, ...) {
   df %>% 
     group_by(...) %>% 
-    summarize(mean = mean({{var_summary}}))
+    summarize(mean = mean({{var_summary}})) %>% 
+    ungroup()
 }
 
 grouped_mean_2(df = mpg, var_summary = cty, year, drv)
@@ -163,7 +164,7 @@ You have to use `:=` instead of just plain `=` because you can't use `{{ }}` on 
 
 (`:=` is called the walrus operator because it looks like a sideways walrus.)
 
-## Recoding
+## Splicing with `!!!`
 
 Say you want to recode a variable:
 
@@ -175,7 +176,7 @@ mpg %>%
 It's often a good idea to store your recode mapping as a vector in your parameters section. To get this to work, you'll need another tidyeval operator, `!!!`. 
 
 ```{r}
-recode_drv <- c(f = "front", r = "rear", `4` = "four")
+recode_drv <- c(f = "front", r = "rear", "4" = "four")
 
 mpg %>% 
   mutate(drv = recode(drv, !!! recode_drv))

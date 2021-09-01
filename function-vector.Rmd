@@ -90,12 +90,9 @@ Recall that a tibble is a list of vectors. Each column of the tibble is a vector
 If you want, you can actually explicitly give `mutate()` a vector of the correct length. 
 
 ```{r}
-set.seed(523)
+set.seed(128)
 
-df <- 
-  tibble(
-    temperature = sample(x = -15:110, size = 5, replace = TRUE)
-  )
+df <- tibble(temperature = sample(x = -15:110, size = 5, replace = TRUE))
 
 df %>% 
   mutate(new_column = c(1, 2, 3, 4, 5))
@@ -117,30 +114,30 @@ df %>%
 
 `mutate()` doesn't know how to turn a length 2 vector into a vector that has a value for each row in the tibble.
 
-As you already know, you usually create new columns by applying functions to existing ones. Say we want to convert our temperatures from Fahrenheit to Celcius.
+As you already know, you usually create new columns by applying functions to existing ones. Say we want to convert our temperatures from Fahrenheit to Celsius.
 
 ```{r}
-fahrenheit_to_celcius <- function(degrees_fahrenheit) {
+fahrenheit_to_celsius <- function(degrees_fahrenheit) {
   (degrees_fahrenheit - 32) * (5 / 9)
 }
 
 df %>% 
-  mutate(temperature_celcius = fahrenheit_to_celcius(temperature))
+  mutate(temperature_celsius = fahrenheit_to_celsius(temperature))
 ```
 
-When you reference a column inside `mutate()`, you reference the entire vector. So when we pass `temperature` to `fahrenheit_to_celcius()`, we pass the entire `temperature` vector.
+When you reference a column inside `mutate()`, you reference the entire vector. So when we pass `temperature` to `fahrenheit_to_celsius()`, we pass the entire `temperature` vector.
 
 ```{r echo=FALSE}
 knitr::include_graphics("images/mutate.png", dpi = image_dpi)
 ```
 
-Mathematical operations are vectorized, so `fahrenheit_to_celcius()` takes the `temperature` vector and return a vector of the same length.
+Mathematical operations are vectorized, so `fahrenheit_to_celsius()` takes the `temperature` vector and return a vector of the same length.
 
 ```{r echo=FALSE}
 knitr::include_graphics("images/mutate-2.png", dpi = image_dpi)
 ```
 
-`mutate()` then takes this new vector and succesfully adds a column to the tibble.
+`mutate()` then takes this new vector and successfully adds a column to the tibble.
 
 ```{r echo=FALSE}
 knitr::include_graphics("images/mutate-3.png", dpi = image_dpi)
@@ -198,4 +195,4 @@ df %>%
   mutate(recommendation = recommendation_2(temperature))
 ```
 
-For other helpful vector functions, take a look at the "Vector Functions" section of the [dplyr cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf).
+For other helpful vector functions, take a look at the _Vector Functions_ section of the [dplyr cheat sheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf).

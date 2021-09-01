@@ -123,7 +123,7 @@ You can specify columns to nest using the same syntax as `select()`.
 
 ```{r}
 countries %>% 
-  nest(data = -region_gm4)
+  nest(data = !region_gm4)
 ```
 
 You can also create multiple list columns at once.
@@ -135,7 +135,7 @@ countries %>%
 
 ### `summarize()` and `list()`
 
-You're used `group_by()` and `summarize()` collapsing groups into single rows. We can also use `summarize()` to create a list column, where each element is a vector, list, or tibble. 
+You've used `group_by()` and `summarize()` to collapse groups into single rows. We can also use `summarize()` to create a list column, where each element is a vector, list, or tibble. 
 
 If you supply `list()` with multiple atomic vectors, it will create a list of atomic vectors.
 
@@ -176,7 +176,7 @@ countries %>%
   summarize(countries = list(sort(name)))
 ```
 
-Here's another example, which only stores countries that begin with "A" in `countries`.
+Here's another example, which only stores in `countries` only the countries that begin with "A".
 
 ```{r}
 a_countries <-
@@ -189,16 +189,16 @@ a_countries
 a_countries$countries[[1]]
 ```
 
-### `mutate()` and `map()`
+### `mutate()`
 
-The third way to create a list column involves functions that take a vector as input and return a list. `map()` is one such function.  
-
-In the following code, `map()` iterates over `name`, generating a vector of random numbers for each country. 
+The third way to create a list column is use to `rowwise()` and `mutate()`. For example, the following creates a list column where the element for each country is a vector of random numbers.
 
 ```{r}
 countries %>% 
   select(name) %>% 
-  mutate(random = map(name, ~ rnorm(n = str_length(.))))
+  rowwise() %>% 
+  mutate(random = list(rnorm(n = str_length(name)))) %>% 
+  ungroup()
 ```
 
 ## Unnesting
@@ -209,7 +209,7 @@ To transform a list column into normal columns, use `unnest()`. Here's our tibbl
 regions
 ```
 
-Supply `unnest()`'s `cols` argument with the name of the columns to unnest.
+Supply the `cols` argument of `unnest()` with the name of the columns to unnest.
 
 ```{r}
 regions %>% 
@@ -218,7 +218,7 @@ regions %>%
 
 ## Manipulating
 
-To manipulate list columns, you'll need to use purrr. For example, say we want to find the number of countries in each continent. Here's `regions` again.
+To manipulate list columns, you'll often find it helpful to use row-wise operations. For example, say we want to find the number of countries in each continent. Here's `regions` again.
 
 ```{r}
 regions
@@ -231,43 +231,26 @@ regions %>%
   mutate(num_countries = length(countries))
 ```
 
-Instead, we need to iterate over `countries`, taking the length of each element separately.
+Instead, we need to iterate over each element or row of `countries` separately.
 
 ```{r}
 regions %>% 
-  mutate(num_countries = map_int(countries, nrow))
+  rowwise() %>% 
+  mutate(num_countries = nrow(countries)) %>% 
+  ungroup()
 ```
 
-Note that we need to use `nrow()` because each element of `countries` is actually a tibble. 
+Note that we need to use `nrow()` because each element of `countries` is actually a tibble.
 
-When manipulating list columns, it's often helpful to use the `.` strategy discussed in [Basic map functions](https://dcl-prog.stanford.edu/purrr-basics.html#anonymous-functions-1). Assign the first element of the column to `.`.
-
-```{r}
-. <- regions$countries[[1]]
-.
-```
-
-Then, test out your manipulation on `.`. For example, the following finds the proportion of country names that end in "a."
-
-```{r}
-summarize(., prop = sum(str_detect(name, "a$")) / n()) %>% 
-  pull(prop)
-```
-
-Then, supply your code to a map function.
+This code finds the proportion of a region's country names that end in "a".
 
 ```{r}
 regions %>% 
+  rowwise() %>% 
   mutate(
-    ends_in_a = 
-      map_dbl(
-        countries, 
-        ~ summarize(., prop = sum(str_detect(name, "a$")) / n()) %>% 
-          pull(prop)
-      )
+    ends_in_a = sum(str_detect(countries$name, "a$")) / nrow(countries)
   ) %>% 
+  ungroup() %>% 
   arrange(desc(ends_in_a))
 ```
-
-Note that `.` does not like to be piped into functions, so we couldn't pipe `.` into `summarize()`. 
 

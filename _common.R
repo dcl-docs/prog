@@ -7,7 +7,6 @@ options(
 )
 
 knitr::opts_chunk$set(
-  cache = TRUE,
   collapse = TRUE,
   comment = "#>",
   fig.align = 'center',

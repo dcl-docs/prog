@@ -76,6 +76,7 @@ You can check the type of any vector with `typeof()`.
 
 ```{r}
 typeof(c(1.5, 2.8, pi))
+
 typeof(c(1L, 3L, 4L))
 ```
 
@@ -85,7 +86,7 @@ Use `length()` to find a vector's length.
 length(c("a", "b", "c"))
 ```
 
-Atomic vectors can also have names. 
+Vector can also have named elements. 
 
 ```{r}
 v_named <- c(guava = 2, pineapple = 4, dragonfruit = 1)
@@ -106,11 +107,13 @@ names(v_named)
 v <- c(1, 2.7, 4, 5)
 ```
 
-We can _subset_ `v` to select specific elements, ignoring the others. 
+You can _subset_ `v` to create a new vector with selected elements, ignoring the others.
 
-The operators `[` and `[[` subset vectors. Use `[` to select multiple elements, and `[[` to select just one. We'll cover four ways to use `[` and then discuss `[[`. 
+#### The `[` operator {-}
 
-__Positive integers__
+Here are four ways to subset `v` using the `[` operator.
+
+##### Positive integers {-}
 
 Subset with a vector of positive integers to extract elements by position. 
 
@@ -126,7 +129,7 @@ You can also use `:` to create a vector of adjacent integers. The following sele
 v[1:3]
 ```
 
-__Negative integers__
+##### Negative integers {-}
 
 Subset with a vector of negative integers to exclude elements. The following code removes the first and third elements of `v`.
 
@@ -134,16 +137,15 @@ Subset with a vector of negative integers to exclude elements. The following cod
 v[-c(1, 3)]
 ```
 
-__Names__
+##### Names {-}
 
 If a vector has names, you can subset with a character vector. 
 
 ```{r}
-v_named <- c(guava = 2, pineapple = 4, dragonfruit = 1)
 v_named[c("guava", "dragonfruit")]
 ```
 
-__Logical vectors__
+##### Logical vectors {-}
 
 If you supply a vector of `TRUE`s and `FALSE`s, `[` will select the elements that correspond to the `TRUE`s. 
 
@@ -185,9 +187,9 @@ We can pass `!is.na(v_missing)` into `[` to extract out just the non-`NA` elemen
 v_missing[!is.na(v_missing)]
 ```
 
-__Select single values with `[[`__
+#### The `[[` operator {-}
 
-Unlike `[`, `[[` can only extract single elements. 
+You can extract single elements from a vector with the `[[` operator.
 
 ```{r}
 v[[2]]
@@ -199,11 +201,23 @@ You'll get an error if you try to use `[[` to select more than one element.
 v[[2:3]]
 ```
 
-Use `[[` instead of `[` if you want to make it clear that your code only selects one item. As you'll see in the [Lists](https://dcl-prog.stanford.edu/data-structure-basics.html#lists) section, the distinction between `[[` and `[` is more important for lists than for atomic vectors. 
+For named vectors, the `[` operator creates a subset of the original vector with the specified elements.
+
+```{r}
+v_named["guava"]
+```
+
+The `[[` operator returns only the extracted element.
+
+```{r}
+v_named[["guava"]]
+```
+
+As you'll see in the [Lists](#lists) section that the distinction between `[` and `[[` becomes more important with lists and tibbles. 
 
 ### Applying functions
 
-Vectors are central to programming in R, and so many R functions are designed to work with vectors of any length. 
+Vectors are central to programming in R, and many R functions are designed to work with vectors. 
 
 You already saw how to call `typeof()` to return the type of a vector. 
 
@@ -221,6 +235,7 @@ You can use `sum()` with both numeric (i.e., double and integer) vectors, as wel
 
 ```{r}
 logical <- c(TRUE, TRUE, FALSE)
+
 sum(logical)
 ```
 
@@ -230,10 +245,11 @@ When applied to a logical vector, `sum()` returns the number of `TRUE`s.
 
 ```{r}
 mean(v)
+
 mean(logical)
 ```
 
-The [Base R Cheat Sheet](https://rstudio.com/wp-content/uploads/2016/05/base-r.pdf) has some other basic helpful functions, particularly under the _Vector Functions_ and _Maths Functions_ sections. 
+The [Base R Cheat Sheet](https://github.com/dcl-docs/prog/blob/master/data/data-structure-basics/Cheat_sheet_base_R.pdf) has some other basic helpful functions, particularly under the _Vector Functions_ and _Math Functions_ sections. 
 
 ### Augmented vectors
 
@@ -244,7 +260,7 @@ Augmented vectors are atomic vectors with additional metadata. There are four im
   
 * __ordered factors__ `<ord>`, which are like factors but where the levels have an
   intrinsic ordering (i.e. it's reasonable to say that one level is "less than"
-  or "greater than" another variable).
+  or "greater than" another level).
   
 * __dates__ `<dt>`, record a date.
 
@@ -259,9 +275,9 @@ Unlike atomic vectors, which can only contain a single type, lists can contain a
 
 ### Basics
 
-The following reading will introduce you to lists.
+The following reading will introduce you to lists:
 
-* [Recursive vectors (lists)](https://r4ds.had.co.nz/vectors.html#lists)[r4ds-20.5]
+* [Recursive vectors (lists)](https://r4ds.had.co.nz/vectors.html#lists)
 
 ### Flattening
 
@@ -295,7 +311,7 @@ Tibbles are actually lists.
 typeof(mpg)
 ```
 
-Every tibble is a list of vectors. 
+Every tibble is a named list of vectors, each of the same length.
 
 ```{r echo=FALSE}
 knitr::include_graphics(
@@ -312,7 +328,7 @@ Take the tibble `mpg`.
 mpg
 ```
 
-Each variable in `mpg` (`manufacturer`, `model`, `displ`, etc.) is a vector. `manufacturer` is a character vector, `displ` is a double vector, and so on. 
+Each variable in `mpg` (`manufacturer`, `model`, `displ`, etc.) is a vector. `manufacturer` is a character vector, `displ` is a double vector, and so on. Each vector has length `r nrow(ggplot2::mpg)`.
 
 ### Creation
 
@@ -336,23 +352,24 @@ Second, you can use `tribble()`.
 ```{r}
 my_tibble <- 
   tribble(
-    ~x, ~y,    ~z,
-    1,  TRUE,  "apple",
-    9,  FALSE, "pear",
-    5,  FALSE, "banana"
+    ~x,  ~y,    ~z,
+     1,  TRUE,  "apple",
+     9,  FALSE, "pear",
+     5,  FALSE, "banana"
   )
     
 my_tibble
 ```
 
-Typically, it will be obvious whether it's better to use `tibble()` or `tribble()`. One representation will either be much easier to type or much clearer than the other. 
+For small datasets, `tribble()` is likely to be less error prone, since the values for each row are next to each other.
 
-### Variables
+### Subsetting
 
-There are several ways to extract variables out of tibbles. Tibbles are lists, so `[[` and `$` still work.
+There are several ways to extract variables out of tibbles. Tibbles are lists, so `[[` and `$` work.
 
 ```{r}
 my_tibble[["x"]]
+
 my_tibble$x
 ```
 
@@ -363,19 +380,22 @@ my_tibble %>%
   pull(x)
 ```
 
-Note that `pull()`, like `[[` and `$`, will return just the vector of values for a given column,
+Note that `pull()`, like `[[` and `$`, returns just the vector of values for a given variable.
+
+`[` also works with tibbles.
 
 ```{r}
-my_tibble %>% 
-  pull(x)
+my_tibble["x"]
 ```
 
-while `select()` returns a tibble.
+For a pipe, use the dplyr function `select()`.
 
 ```{r}
 my_tibble %>% 
   select(x)
 ```
+
+Whereas `pull()` returns a vector, `select()` returns a tibble.
 
 ### Dimensions
 
@@ -389,7 +409,9 @@ To access the dimensions directly, you have three options:
 
 ```{r}
 dim(diamonds)
+
 nrow(diamonds)
+
 ncol(diamonds)
 ```
 

@@ -45,10 +45,8 @@ Tidy evaluation is a complicated subject. Luckily, you don't need to understand 
 
 If you're curious tidy evaluation and want to learn more, the following are useful resources. Note that the `{{ }}` operator, which you'll learn about in the next chapter, was not implemented when many of these were written. Instead of `{{ }}`, you'll usually see `!!` and `enquo()`.
 
-* [Tidy evaluation book](https://tidyeval.tidyverse.org/)
 * [Programming with dplyr](https://dplyr.tidyverse.org/articles/programming.html) vignette
 * [Tidy evaluation with rlang](https://github.com/rstudio/cheatsheets/blob/master/tidyeval.pdf) cheat sheet
-* Ian Lyttle’s [Tidyeval interactive tutorial](https://ijlyttle.shinyapps.io/tidyeval/)
 
 And if you really want to go back to the beginning:
 

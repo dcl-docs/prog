@@ -33,4 +33,5 @@ You can call anonymous functions, although you have to wrap the entire function 
 (function(word) str_glue("{str_to_upper(word)}!!!"))("pinecones")
 ```
 
-Fortunately, the tidyverse includes shortcuts for creating anonymous functions that make them much easier to read. You'll learn about these shortcuts in the sections on scoped verbs and purrr.
+Fortunately, the tidyverse includes shortcuts for creating anonymous functions that make them much easier to read. You'll learn about these shortcuts in the sections on purrr.
+
