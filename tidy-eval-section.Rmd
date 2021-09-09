@@ -43,7 +43,7 @@ dplyr verbs and other tidyverse functions that operate on data frames work diffe
 
 Tidy evaluation is a complicated subject. Luckily, you don't need to understand all the theory or the under-the-hood mechanics to use tidy evaluation. The _Basics_ chapter is a high-level, practical overview of the basic tidy evaluation use-cases. The goal of the chapter is to show you what to do without going into much theory. 
 
-If you're curious tidy evaluation and want to learn more, the following are useful resources. Note that the `{{ }}` operator, which you'll learn about in the next chapter, was not implemented when many of these were written. Instead of `{{ }}`, you'll usually see `!!` and `enquo()`.
+If you're curious tidy evaluation and want to learn more, the following are useful resources. Note that the `{{ }}` operator, which you'll learn about in the next chapter, was not implemented when some of these were written. Instead of `{{ }}`, you'll usually see `!!` and `enquo()`.
 
 * [Programming with dplyr](https://dplyr.tidyverse.org/articles/programming.html) vignette
 * [Tidy evaluation with rlang](https://github.com/rstudio/cheatsheets/blob/master/tidyeval.pdf) cheat sheet

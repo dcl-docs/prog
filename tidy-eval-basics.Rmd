@@ -49,8 +49,8 @@ To fix `grouped_mean()`, all we need to do is _embrace_ `var_group` and `var_sum
 ```{r}
 grouped_mean <- function(var_group, var_summary) {
   mpg %>% 
-    group_by({{var_group}}) %>% 
-    summarize(mean = mean({{var_summary}}))
+    group_by({{ var_group }}) %>% 
+    summarize(mean = mean({{ var_summary }}))
 }
 
 grouped_mean(var_group = manufacturer, var_summary = cty)
@@ -75,7 +75,7 @@ We want `var` to behave as a hybrid environment-data variable, so we need `{{ }}
 ```{r}
 plot_mpg <- function(var) {
   mpg %>% 
-    ggplot(aes({{var}})) +
+    ggplot(aes({{ var }})) +
     geom_bar()
 }
 
@@ -131,7 +131,7 @@ Sometimes, you'll want your function to take named arguments, but you'll also wa
 grouped_mean_2 <- function(df, var_summary, ...) {
   df %>% 
     group_by(...) %>% 
-    summarize(mean = mean({{var_summary}})) %>% 
+    summarize(mean = mean({{ var_summary }})) %>% 
     ungroup()
 }
 
@@ -154,7 +154,7 @@ When you want to pass the name of a column into your function, you need to:
 ```{r}
 summary_mean <- function(df, var_summary, name_summary){ 
   df %>% 
-    summarize({{name_summary}} := mean({{var_summary}}))
+    summarize({{ name_summary }} := mean({{ var_summary }}))
 }
 
 summary_mean(df = mpg, var_summary = cty, name_summary = cty_mean)
