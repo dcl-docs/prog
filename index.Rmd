@@ -2,7 +2,6 @@
 knitr: bookdown::render_book
 title: "Functional Programming"
 author: "Sara Altman, Bill Behrman, Hadley Wickham"
-date: "`r Sys.Date()`"
 description: "This book is a practical introduction to functional programming using the tidyverse."
 url: 'https\://dcl-prog.stanford.edu'
 github-repo: dcl-docs/prog
@@ -15,6 +14,19 @@ link-citations: true
 # Welcome {-}
 
 This book is a practical introduction to functional programming using the tidyverse.
+
+In the following, we used these packages:
+
+```{r echo=FALSE}
+sessioninfo::package_info(
+  pkgs = c("dcldata", "nycflights13", "tidyverse"),
+  dependencies = FALSE
+) |> 
+  tibble::as_tibble() |> 
+  dplyr::mutate(Source = stringr::str_remove(source, "@\\w*")) |> 
+  dplyr::select(Package = package, Version = ondiskversion, Source) |> 
+  knitr::kable()
+```
 
 ## An evolving book {-}
 
