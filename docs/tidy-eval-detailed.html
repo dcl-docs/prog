@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>14 Tidy evaluation | Functional Programming</title>
+  <meta name="description" content="This book is a practical introduction to functional programming using the tidyverse.">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+
+  <meta property="og:title" content="14 Tidy evaluation | Functional Programming" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://datalab.stanford.edu/dcl-docs/prog" />
+  
+  <meta property="og:description" content="This book is a practical introduction to functional programming using the tidyverse." />
+  <meta name="github-repo" content="dcl-docs/prog" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="14 Tidy evaluation | Functional Programming" />
+  
+  <meta name="twitter:description" content="This book is a practical introduction to functional programming using the tidyverse." />
+  
+
+<meta name="author" content="Sara Altman, Bill Behrman, Hadley Wickham">
+
+
+<meta name="date" content="2019-05-18">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="tidy-eval-summary.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Functional Programming</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#an-evolving-book"><i class="fa fa-check"></i>An evolving book</a></li>
+</ul></li>
+<li class="part"><span><b>I Data Structures</b></span></li>
+<li class="chapter" data-level="1" data-path="data-structures.html"><a href="data-structures.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="data-structure-basics.html"><a href="data-structure-basics.html"><i class="fa fa-check"></i><b>2</b> Vectors, lists, and tibbles</a><ul>
+<li class="chapter" data-level="2.1" data-path="data-structure-basics.html"><a href="data-structure-basics.html#atomic-vectors"><i class="fa fa-check"></i><b>2.1</b> Atomic vectors</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="data-structure-basics.html"><a href="data-structure-basics.html#subsetting"><i class="fa fa-check"></i><b>2.1.1</b> Subsetting</a></li>
+<li class="chapter" data-level="2.1.2" data-path="data-structure-basics.html"><a href="data-structure-basics.html#augmented-vectors"><i class="fa fa-check"></i><b>2.1.2</b> Augmented vectors</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="data-structure-basics.html"><a href="data-structure-basics.html#lists"><i class="fa fa-check"></i><b>2.2</b> Lists</a></li>
+<li class="chapter" data-level="2.3" data-path="data-structure-basics.html"><a href="data-structure-basics.html#tibbles"><i class="fa fa-check"></i><b>2.3</b> Tibbles</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="data-structure-basics.html"><a href="data-structure-basics.html#dimensions"><i class="fa fa-check"></i><b>2.3.1</b> Dimensions</a></li>
+<li class="chapter" data-level="2.3.2" data-path="data-structure-basics.html"><a href="data-structure-basics.html#variables"><i class="fa fa-check"></i><b>2.3.2</b> Variables</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>II Functions</b></span></li>
+<li class="chapter" data-level="3" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>3</b> Introduction</a></li>
+<li class="chapter" data-level="4" data-path="function-vector.html"><a href="function-vector.html"><i class="fa fa-check"></i><b>4</b> Vector functions</a><ul>
+<li class="chapter" data-level="4.1" data-path="function-vector.html"><a href="function-vector.html#temperature-recommendations"><i class="fa fa-check"></i><b>4.1</b> Temperature recommendations</a></li>
+<li class="chapter" data-level="4.2" data-path="function-vector.html"><a href="function-vector.html#vector-functions-and-mutate"><i class="fa fa-check"></i><b>4.2</b> Vector functions and <code>mutate()</code></a></li>
+<li class="chapter" data-level="4.3" data-path="function-vector.html"><a href="function-vector.html#vectorizing-if-else-statements"><i class="fa fa-check"></i><b>4.3</b> Vectorizing if-else statements</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="function-anonymous.html"><a href="function-anonymous.html"><i class="fa fa-check"></i><b>5</b> Anonymous functions</a></li>
+<li class="chapter" data-level="6" data-path="function-predicate.html"><a href="function-predicate.html"><i class="fa fa-check"></i><b>6</b> Predicate functions</a></li>
+<li class="part"><span><b>III Iteration</b></span></li>
+<li class="chapter" data-level="7" data-path="iteration.html"><a href="iteration.html"><i class="fa fa-check"></i><b>7</b> Introduction</a></li>
+<li class="chapter" data-level="8" data-path="purrr-basics.html"><a href="purrr-basics.html"><i class="fa fa-check"></i><b>8</b> Basic map functions</a><ul>
+<li class="chapter" data-level="8.1" data-path="purrr-basics.html"><a href="purrr-basics.html#iteration-as-an-assembly-line"><i class="fa fa-check"></i><b>8.1</b> Iteration as an assembly line</a></li>
+<li class="chapter" data-level="8.2" data-path="purrr-basics.html"><a href="purrr-basics.html#the-map-functions"><i class="fa fa-check"></i><b>8.2</b> The map functions</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="purrr-basics.html"><a href="purrr-basics.html#extra-arguments"><i class="fa fa-check"></i><b>8.2.1</b> Extra arguments</a></li>
+<li class="chapter" data-level="8.2.2" data-path="purrr-basics.html"><a href="purrr-basics.html#anonymous-functions-1"><i class="fa fa-check"></i><b>8.2.2</b> Anonymous functions</a></li>
+<li class="chapter" data-level="8.2.3" data-path="purrr-basics.html"><a href="purrr-basics.html#tibbles-1"><i class="fa fa-check"></i><b>8.2.3</b> Tibbles</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="purrr-mutate.html"><a href="purrr-mutate.html"><i class="fa fa-check"></i><b>9</b> purrr inside mutate</a></li>
+<li class="chapter" data-level="10" data-path="purrr-parallel.html"><a href="purrr-parallel.html"><i class="fa fa-check"></i><b>10</b> Map with multiple inputs</a><ul>
+<li class="chapter" data-level="10.1" data-path="purrr-parallel.html"><a href="purrr-parallel.html#map2"><i class="fa fa-check"></i><b>10.1</b> <code>map2()</code></a></li>
+<li class="chapter" data-level="10.2" data-path="purrr-parallel.html"><a href="purrr-parallel.html#pmap"><i class="fa fa-check"></i><b>10.2</b> <code>pmap()</code></a><ul>
+<li class="chapter" data-level="10.2.1" data-path="purrr-parallel.html"><a href="purrr-parallel.html#anonymous-functions-2"><i class="fa fa-check"></i><b>10.2.1</b> Anonymous functions</a></li>
+<li class="chapter" data-level="10.2.2" data-path="purrr-parallel.html"><a href="purrr-parallel.html#named-functions"><i class="fa fa-check"></i><b>10.2.2</b> Named functions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="purrr-extras.html"><a href="purrr-extras.html"><i class="fa fa-check"></i><b>11</b> Other purrr functions</a><ul>
+<li class="chapter" data-level="11.1" data-path="purrr-extras.html"><a href="purrr-extras.html#map-functions-that-output-tibbles"><i class="fa fa-check"></i><b>11.1</b> map functions that output tibbles</a><ul>
+<li class="chapter" data-level="11.1.1" data-path="purrr-extras.html"><a href="purrr-extras.html#dfr"><i class="fa fa-check"></i><b>11.1.1</b> <code>_dfr</code></a></li>
+<li class="chapter" data-level="11.1.2" data-path="purrr-extras.html"><a href="purrr-extras.html#dfc"><i class="fa fa-check"></i><b>11.1.2</b> <code>_dfc</code></a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="purrr-extras.html"><a href="purrr-extras.html#walk"><i class="fa fa-check"></i><b>11.2</b> Walk</a></li>
+<li class="chapter" data-level="11.3" data-path="purrr-extras.html"><a href="purrr-extras.html#predicate-functions-1"><i class="fa fa-check"></i><b>11.3</b> Predicate functions</a></li>
+</ul></li>
+<li class="part"><span><b>IV Tidy evaluation</b></span></li>
+<li class="chapter" data-level="12" data-path="tidy-eval-section.html"><a href="tidy-eval-section.html"><i class="fa fa-check"></i><b>12</b> Introduction</a></li>
+<li class="chapter" data-level="13" data-path="tidy-eval-summary.html"><a href="tidy-eval-summary.html"><i class="fa fa-check"></i><b>13</b> Summary</a><ul>
+<li class="chapter" data-level="13.1" data-path="tidy-eval-summary.html"><a href="tidy-eval-summary.html#passing-full-expressions-with-..."><i class="fa fa-check"></i><b>13.1</b> Passing full expressions with <code>...</code></a></li>
+<li class="chapter" data-level="13.2" data-path="tidy-eval-summary.html"><a href="tidy-eval-summary.html#named-arguments"><i class="fa fa-check"></i><b>13.2</b> Named arguments</a></li>
+<li class="chapter" data-level="13.3" data-path="tidy-eval-summary.html"><a href="tidy-eval-summary.html#named-arguments-and-any-number-of-additional-arguments"><i class="fa fa-check"></i><b>13.3</b> Named arguments and any number of additional arguments</a></li>
+<li class="chapter" data-level="13.4" data-path="tidy-eval-summary.html"><a href="tidy-eval-summary.html#assigning-names"><i class="fa fa-check"></i><b>13.4</b> Assigning names</a></li>
+<li class="chapter" data-level="13.5" data-path="tidy-eval-summary.html"><a href="tidy-eval-summary.html#recoding"><i class="fa fa-check"></i><b>13.5</b> Recoding</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="tidy-eval-detailed.html"><a href="tidy-eval-detailed.html"><i class="fa fa-check"></i><b>14</b> Tidy evaluation</a><ul>
+<li class="chapter" data-level="14.1" data-path="tidy-eval-detailed.html"><a href="tidy-eval-detailed.html#quoting-functions"><i class="fa fa-check"></i><b>14.1</b> Quoting functions</a><ul>
+<li class="chapter" data-level="14.1.1" data-path="tidy-eval-detailed.html"><a href="tidy-eval-detailed.html#quoted-arguments"><i class="fa fa-check"></i><b>14.1.1</b> Quoted arguments</a></li>
+<li class="chapter" data-level="14.1.2" data-path="tidy-eval-detailed.html"><a href="tidy-eval-detailed.html#strings-and-glue"><i class="fa fa-check"></i><b>14.1.2</b> Strings and <code>glue()</code></a></li>
+<li class="chapter" data-level="14.1.3" data-path="tidy-eval-detailed.html"><a href="tidy-eval-detailed.html#quosures"><i class="fa fa-check"></i><b>14.1.3</b> Quosures</a></li>
+</ul></li>
+<li class="chapter" data-level="14.2" data-path="tidy-eval-detailed.html"><a href="tidy-eval-detailed.html#wrapping-quoting-functions"><i class="fa fa-check"></i><b>14.2</b> Wrapping quoting functions</a><ul>
+<li class="chapter" data-level="14.2.1" data-path="tidy-eval-detailed.html"><a href="tidy-eval-detailed.html#enquo-and"><i class="fa fa-check"></i><b>14.2.1</b> <code>enquo()</code> and <code>!!</code></a></li>
+<li class="chapter" data-level="14.2.2" data-path="tidy-eval-detailed.html"><a href="tidy-eval-detailed.html#passing-..."><i class="fa fa-check"></i><b>14.2.2</b> Passing <code>...</code></a></li>
+<li class="chapter" data-level="14.2.3" data-path="tidy-eval-detailed.html"><a href="tidy-eval-detailed.html#assigning-names-1"><i class="fa fa-check"></i><b>14.2.3</b> Assigning names</a></li>
+</ul></li>
+<li class="chapter" data-level="14.3" data-path="tidy-eval-detailed.html"><a href="tidy-eval-detailed.html#passing-vectors-with"><i class="fa fa-check"></i><b>14.3</b> Passing vectors with <code>!!!</code></a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Functional Programming</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="tidy-evaluation" class="section level1">
+<h1><span class="header-section-number">14</span> Tidy evaluation</h1>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)</code></pre>
+<p>Now, we’ll go into some more detail about tidy evaluation. We’ll explain when and why you need tidy evaluation, and what’s going on with <code>enquo()</code>, <code>!!</code>, and <code>!!!</code>.</p>
+<p>You don’t always need tidy evaluation when programming with dplyr. For example, the following function works just fine.</p>
+<pre class="sourceCode r"><code class="sourceCode r">filter_fun_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="cf">function</span>(df, value) {
+  df <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">filter</span>(model <span class="op">==</span><span class="st"> </span>value) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">nrow</span>()
+}
+
+<span class="kw">filter_fun_1</span>(<span class="dt">df =</span> mpg, <span class="dt">value =</span> <span class="st">&quot;corvette&quot;</span>)
+<span class="co">#&gt; [1] 5</span></code></pre>
+<p>But if we want to make this function more general by adding an argument to specify a column, we’ll run into trouble.</p>
+<pre class="sourceCode r"><code class="sourceCode r">filter_fun_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="cf">function</span>(df, var, value) {
+  df <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">filter</span>(var <span class="op">==</span><span class="st"> </span>value) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">nrow</span>()
+}
+
+<span class="kw">filter_fun_2</span>(<span class="dt">df =</span> mpg, <span class="dt">var =</span> model, <span class="dt">value =</span> <span class="st">&quot;corvette&quot;</span>)
+<span class="co">#&gt; Error: object &#39;model&#39; not found</span></code></pre>
+<p>You need tidy evaluation if you want to build a function that passes the names of tibble columns into dplyr verbs.</p>
+<p>Here’s another example of a function that doesn’t work:</p>
+<pre class="sourceCode r"><code class="sourceCode r">grouped_mean &lt;-<span class="st"> </span><span class="cf">function</span>(df, group_var, summary_var) {
+  df <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">group_by</span>(group_var) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(summary_var))
+}
+
+<span class="kw">grouped_mean</span>(<span class="dt">df =</span> mpg, <span class="dt">group_var =</span> manufacturer, <span class="dt">summary_var =</span> cty)
+<span class="co">#&gt; Error: Column `group_var` is unknown</span></code></pre>
+<p>In the following sections, we’ll explore why <code>grouped_mean()</code> doesn’t work and show you how to create a function that does.</p>
+<div id="quoting-functions" class="section level2">
+<h2><span class="header-section-number">14.1</span> Quoting functions</h2>
+<div id="quoted-arguments" class="section level3">
+<h3><span class="header-section-number">14.1.1</span> Quoted arguments</h3>
+<p>Before we can explain what’s going wrong in functions like <code>grouped_mean()</code>, we need to lay some groundwork. In R, you can divide function arguments into two classes: <strong>evaluated</strong> and <strong>quoted</strong>.</p>
+<p>Evaluated arguments are what you might think of as “normal.” Here’s an example of a function that evaluates its function arguments.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">log</span>(<span class="dv">2</span>)
+<span class="co">#&gt; [1] 0.693</span></code></pre>
+<p>We can also save 2 as a variable and get the same answer.</p>
+<pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="dv">2</span>
+
+<span class="kw">log</span>(x)
+<span class="co">#&gt; [1] 0.693</span></code></pre>
+<p>Code in an evaluated argument executes the same regardless of whether or not it’s in a function argument. So <code>x</code> evaluates to 2 whether it’s outside <code>log()</code></p>
+<pre class="sourceCode r"><code class="sourceCode r">x
+<span class="co">#&gt; [1] 2</span></code></pre>
+<p>or inside.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">log</span>(x) <span class="op">==</span><span class="st"> </span><span class="kw">log</span>(<span class="dv">2</span>)
+<span class="co">#&gt; [1] TRUE</span></code></pre>
+<p>Because <code>log()</code> evaluates its arguments, it figures out what <code>x</code> refers to before operating on <code>x</code>. In our example, <code>log()</code> figures out that <code>x</code> refers to 2, and then takes the log of 2. For a function like <code>log()</code>, evaluating its argument seems like an obviously good idea. It would be meaningless to take the log of the letter “x”. Sometimes, however, functions don’t want to evaluate their arguments.
+Let’s find out if dplyr functions use evaluated arguments. Here’s a dplyr function.</p>
+<pre class="sourceCode r"><code class="sourceCode r">mpg <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(cty)
+<span class="co">#&gt; # A tibble: 234 x 1</span>
+<span class="co">#&gt;     cty</span>
+<span class="co">#&gt;   &lt;int&gt;</span>
+<span class="co">#&gt; 1    18</span>
+<span class="co">#&gt; 2    21</span>
+<span class="co">#&gt; 3    20</span>
+<span class="co">#&gt; 4    21</span>
+<span class="co">#&gt; 5    16</span>
+<span class="co">#&gt; 6    18</span>
+<span class="co">#&gt; # … with 228 more rows</span></code></pre>
+<p>In this case, let’s just consider the <code>cty</code> argument, even though <code>mpg</code> is technically an argument as well.</p>
+<p>If <code>select()</code> evaluates its argument, then <code>cty</code> should evaluate to the same thing inside <code>select()</code> as it does outside <code>select()</code>. Inside <code>select()</code>, we know that <code>cty</code> somehow refers to a column of <code>mpg</code>. Does it evaluate to a column of <code>mpg</code> outside <code>select()</code>?</p>
+<pre class="sourceCode r"><code class="sourceCode r">cty
+<span class="co">#&gt; Error in eval(expr, envir, enclos): object &#39;cty&#39; not found</span></code></pre>
+<p>No. R doesn’t know what <code>cty</code> refers to, because <code>cty</code>, unlike <code>x</code>, doesn’t exist in the global environment. It only exists as an element of <code>mpg</code>.</p>
+<p>To make this point even more explicit, let’s assign a number to <code>cty</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">cty &lt;-<span class="st"> </span><span class="dv">3</span>
+
+cty
+<span class="co">#&gt; [1] 3</span></code></pre>
+<p>Now, <code>cty</code> evaluates to <code>3</code> outside <code>select()</code>, but <code>select(cty)</code> still works as expected.</p>
+<pre class="sourceCode r"><code class="sourceCode r">mpg <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(cty)
+<span class="co">#&gt; # A tibble: 234 x 1</span>
+<span class="co">#&gt;     cty</span>
+<span class="co">#&gt;   &lt;int&gt;</span>
+<span class="co">#&gt; 1    18</span>
+<span class="co">#&gt; 2    21</span>
+<span class="co">#&gt; 3    20</span>
+<span class="co">#&gt; 4    21</span>
+<span class="co">#&gt; 5    16</span>
+<span class="co">#&gt; 6    18</span>
+<span class="co">#&gt; # … with 228 more rows</span></code></pre>
+<p>Arguments like <code>cty</code> are <strong>quoted</strong>. Instead of immediately evaluating <code>cty</code> before operating, <code>select()</code> and the other dplyr verbs hold on to what was literally supplied as an argument. Here, that’s just “cty”, but other cases can be more complicated. Quoting allows <code>select()</code> and the other dplyr verbs to use their input as they want without worrying about how that input evaluates in the global environment. In our example, quoting its argument allows <code>select()</code> to look for <code>cty</code> inside the <code>mpg</code> tibble, without worrying about <code>cty</code> referring to <code>3</code> in the global environment.</p>
+<p>Note that dplyr verbs only quote the arguments that supply column names. They do not quote the argument that refers to the data you pipe in, or non-column-name arguments like <code>count()</code>’s <code>sort</code> argument or <code>top_n()</code>’s <code>n</code> argument.</p>
+<p>dplyr’s quoting behavior makes it really easy to use. You can supply bare names of columns to dplyr functions and they just work. However, the quoting behavior causes some wrinkles when you want to program with dplyr.</p>
+<p>You might now have a hypothesis about why <code>grouped_mean()</code> didn’t work. Here it is again.</p>
+<pre class="sourceCode r"><code class="sourceCode r">grouped_mean &lt;-<span class="st"> </span><span class="cf">function</span>(df, group_var, summary_var) {
+  df <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">group_by</span>(group_var) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(summary_var))
+}
+
+<span class="kw">grouped_mean</span>(<span class="dt">df =</span> mpg, <span class="dt">group_var =</span> manufacturer, <span class="dt">summary_var =</span> cty)
+<span class="co">#&gt; Error: Column `group_var` is unknown</span></code></pre>
+<p>The error says that the column <code>group_var</code> is unknown. Because <code>group_by()</code> quotes its argument, it didn’t evaluate <code>group_var</code>, find out that it refers to <code>manufacturer</code>, and then look for a column named <code>manufacturer</code>. Instead, it took its input literally and looked for a column named <code>group_var</code>. <code>mpg</code> doesn’t have a column called <code>group_var</code>, so we got an error.</p>
+<p>We want <code>group_by()</code> to understand that <code>group_var</code> refers to <code>manufacturer</code>, so we need to change our function. Before diving into these changes, here’s a summary of the points covered so far:</p>
+<ul>
+<li>Some functions evaluate their arguments and some function quote their arguments.</li>
+<li>If a function quotes its argument, the argument will evaluate differently inside and outside the function.</li>
+<li>dplyr functions quote the arguments that take tibble column names.</li>
+</ul>
+</div>
+<div id="strings-and-glue" class="section level3">
+<h3><span class="header-section-number">14.1.2</span> Strings and <code>glue()</code></h3>
+<p>If we want <code>group_by()</code> to understand that <code>group_var</code> refers to <code>manufacturer</code>, we’re going to have to <em>unquote</em> <code>group_var</code>.</p>
+<p>Before we talk about how to do this with dplyr, let’s take a moment to examine a situation in which you’ve actually already been quoting and unquoting input.</p>
+<p>When you create a string, R doesn’t evaluate its contents. When you type something like:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="st">&quot;y &lt;- 1&quot;</span>
+<span class="co">#&gt; [1] &quot;y &lt;- 1&quot;</span></code></pre>
+<p>R creates a string, not an object named <code>y</code> with a value of 1.</p>
+<p>Sometimes, though, you’ll want to write a function that inserts a variable into a string. For example, say we want to write a function that tells you what species of animal you are.</p>
+<p>You can probably predict that the following function won’t work.</p>
+<pre class="sourceCode r"><code class="sourceCode r">species &lt;-<span class="st"> </span><span class="cf">function</span>(my_species) {
+  <span class="st">&quot;I am a my_species&quot;</span>
+}
+
+<span class="kw">species</span>(<span class="st">&quot;human&quot;</span>)
+<span class="co">#&gt; [1] &quot;I am a my_species&quot;</span></code></pre>
+<p>We need to tell our function that we actually do want to evaluate <code>my_species</code>. As you’ve already learned, you can do this with <code>str_glue</code> and <code>{}</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">species &lt;-<span class="st"> </span><span class="cf">function</span>(my_species) {
+  <span class="kw">str_glue</span>(<span class="st">&quot;I am a {my_species}&quot;</span>)
+}
+
+<span class="kw">species</span>(<span class="st">&quot;human&quot;</span>)
+<span class="co">#&gt; I am a human</span></code></pre>
+<p>The <code>{}</code> tells <code>str_glue()</code> to evaluate <code>my_species</code> before constructing the string. Unfortunately, we can’t just use <code>{}</code> to get dplyr verbs to evaluate the arguments we want. We’ll need to figure out an equivalent to <code>{}</code> for dplyr function calls.</p>
+</div>
+<div id="quosures" class="section level3">
+<h3><span class="header-section-number">14.1.3</span> Quosures</h3>
+<p>One reason we can’t just generalize from our string example and use <code>{}</code> is that when dplyr functions quote their arguments, they don’t quote and create strings. When you quote with quotation marks, as you know, you create a string.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="st">&quot;y &lt;- 1&quot;</span>
+<span class="co">#&gt; [1] &quot;y &lt;- 1&quot;</span></code></pre>
+<p>But when dplyr functions quote their arguments, they create something called a <em>quosure</em>.</p>
+<p>You can create your own quosure with the function <code>quo()</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">quo</span>(y &lt;-<span class="st"> </span><span class="dv">1</span>)
+<span class="co">#&gt; &lt;quosure&gt;</span>
+<span class="co">#&gt; expr: ^y &lt;- 1</span>
+<span class="co">#&gt; env:  global</span></code></pre>
+<p>Our quosure has two parts: the <code>expr</code> (which stands for <em>expression</em>) and the <code>env</code> (which stands for <em>environment</em>).</p>
+<p>You can think of expressions like recipes. A recipe for chocolate chip cookies specifies how to make the cookies, but does not itself create any cookies. Similarly, the expression <code>y &lt;- 1</code> species how to create a variable, but doesn’t actually create that variable. Just as you need to carry out the recipe to create cookies, R needs to evaluate the expression to produce the results.</p>
+<p>Recipes, unfortunately, aren’t sufficient for cookies. You also need a stock of ingredients, like flour and chocolate chips. Similarly, in order to evaluate an expression, R needs an environment that supplies variables. Different types of flour and chocolate chips can create different cookies, and different environments can cause the same expression to be evaluated differently.</p>
+<p>If we place <code>quo(y &lt;- 1)</code> inside a function, the environment will change.</p>
+<pre class="sourceCode r"><code class="sourceCode r">quo_fun &lt;-<span class="st"> </span><span class="cf">function</span>() {
+  <span class="kw">quo</span>(y &lt;-<span class="st"> </span><span class="dv">1</span>)
+}
+
+<span class="kw">quo_fun</span>()
+<span class="co">#&gt; &lt;quosure&gt;</span>
+<span class="co">#&gt; expr: ^y &lt;- 1</span>
+<span class="co">#&gt; env:  0x7f8f88edac08</span></code></pre>
+<p>Quosures are objects and so can be passed around, carrying their environment with them.</p>
+<pre class="sourceCode r"><code class="sourceCode r">more_quo_fun &lt;-<span class="st"> </span><span class="cf">function</span>(my_quosure) {
+  my_quosure
+}
+
+<span class="kw">more_quo_fun</span>(<span class="kw">quo</span>(y &lt;-<span class="st"> </span><span class="dv">1</span>))
+<span class="co">#&gt; &lt;quosure&gt;</span>
+<span class="co">#&gt; expr: ^y &lt;- 1</span>
+<span class="co">#&gt; env:  global</span></code></pre>
+<p>Now you know that:</p>
+<ul>
+<li>dplyr quotes its arguments and creates quosures, which consist of an expression and an environment. An expression is kind of like a recipe, and the environment is what supplies the ingredients you use to carry out that recipe.</li>
+<li>You can create a quosure with <code>quo()</code>.</li>
+</ul>
+</div>
+</div>
+<div id="wrapping-quoting-functions" class="section level2">
+<h2><span class="header-section-number">14.2</span> Wrapping quoting functions</h2>
+<div id="enquo-and" class="section level3">
+<h3><span class="header-section-number">14.2.1</span> <code>enquo()</code> and <code>!!</code></h3>
+<p>Now that we’ve gone over some theory, we can return to the task of fixing <code>grouped_mean()</code>.</p>
+<p>You just learned that dplyr verbs create quosures. In order to make our function work, we’ll need to make our own quosure that captures our desired meaning of <code>group_var</code> and <code>summary_var</code>. Here’s our earlier, unsuccessful function.</p>
+<pre class="sourceCode r"><code class="sourceCode r">grouped_mean &lt;-<span class="st"> </span><span class="cf">function</span>(df, group_var, summarize_var) {
+  df <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">group_by</span>(group_var) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(summarize_var))
+}
+
+<span class="kw">grouped_mean</span>(<span class="dt">df =</span> mpg, <span class="dt">group_var =</span> manufacturer, <span class="dt">summarize_var =</span> cty)
+<span class="co">#&gt; Error: Column `group_var` is unknown</span></code></pre>
+<p>We want to track the environment of <code>group_var</code> so that <code>group_by()</code> knows that it refers to <code>manufacturer</code>. We can do this with <code>quo()</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">grouped_mean &lt;-<span class="st"> </span><span class="cf">function</span>(df, group_var, summarize_var) {
+  <span class="kw">print</span>(group_var)
+  
+  df <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">group_by</span>(group_var) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(summarize_var))
+}
+
+<span class="kw">grouped_mean</span>(
+  <span class="dt">df =</span> mpg, 
+  <span class="dt">group_var =</span> <span class="kw">quo</span>(manufacturer), 
+  <span class="dt">summarize_var =</span> <span class="kw">quo</span>(cty)
+)
+<span class="co">#&gt; &lt;quosure&gt;</span>
+<span class="co">#&gt; expr: ^manufacturer</span>
+<span class="co">#&gt; env:  global</span>
+<span class="co">#&gt; Error: Column `group_var` is unknown</span></code></pre>
+<p>Our <code>print()</code> statement lets us know what <code>group_var</code> looks like inside the function. <code>group_var</code> is a quosure and evaluates to <code>manufacturer,</code> which seems like a step in the right direction.</p>
+<p>However, our function still isn’t giving us what we want. <code>group_by()</code> still quotes <code>group_var</code> and looks for a column called <code>group_var</code>. We’ve already quoted the input with <code>quo()</code>, but <code>group_by()</code> doesn’t know that and so is just carrying on as usual.</p>
+<p>We can tell <code>group_by()</code> not to quote by using <code>!!</code> (pronounced “bang bang”). <code>!!</code> says something like “evaluate me!” or “unquote!”</p>
+<pre class="sourceCode r"><code class="sourceCode r">grouped_mean &lt;-<span class="st"> </span><span class="cf">function</span>(df, group_var, summarize_var) {
+  <span class="kw">print</span>(group_var)
+  
+  df <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="st"> </span>group_var) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(<span class="op">!!</span><span class="st"> </span>summarize_var))
+}
+
+<span class="kw">grouped_mean</span>(
+  <span class="dt">df =</span> mpg, 
+  <span class="dt">group_var =</span> <span class="kw">quo</span>(manufacturer), 
+  <span class="dt">summarize_var =</span> <span class="kw">quo</span>(cty)
+)
+<span class="co">#&gt; &lt;quosure&gt;</span>
+<span class="co">#&gt; expr: ^manufacturer</span>
+<span class="co">#&gt; env:  global</span>
+<span class="co">#&gt; # A tibble: 15 x 2</span>
+<span class="co">#&gt;   manufacturer  mean</span>
+<span class="co">#&gt;   &lt;chr&gt;        &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 audi          17.6</span>
+<span class="co">#&gt; 2 chevrolet     15  </span>
+<span class="co">#&gt; 3 dodge         13.1</span>
+<span class="co">#&gt; 4 ford          14  </span>
+<span class="co">#&gt; 5 honda         24.4</span>
+<span class="co">#&gt; 6 hyundai       18.6</span>
+<span class="co">#&gt; # … with 9 more rows</span></code></pre>
+<p>Success!!</p>
+<p><code>quo()</code> and <code>!!</code> work well, but it’s kind of a hassle to have to <code>quo()</code> our input each time. It would be even better if we could write the function call like this:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">grouped_mean</span>(<span class="dt">df =</span> mpg, <span class="dt">group_var =</span> manufacturer, <span class="dt">summarize_var =</span> cty)</code></pre>
+<p>To do so, we’ll take care of the quoting <em>inside</em> our function. We can’t use <code>quo()</code> to quote inside our function.</p>
+<pre class="sourceCode r"><code class="sourceCode r">grouped_mean &lt;-<span class="st"> </span><span class="cf">function</span>(df, group_var, summary_var) {
+  group_var &lt;-<span class="st"> </span><span class="kw">quo</span>(group_var)
+  summary_var &lt;-<span class="st"> </span><span class="kw">quo</span>(summary_var)
+  <span class="kw">print</span>(group_var)
+  
+  df <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="st"> </span>group_var) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(<span class="op">!!</span><span class="st"> </span>summary_var))
+}
+
+<span class="kw">grouped_mean</span>(<span class="dt">df =</span> mpg, <span class="dt">group_var =</span> manufacturer, <span class="dt">summary_var =</span> cty)
+<span class="co">#&gt; &lt;quosure&gt;</span>
+<span class="co">#&gt; expr: ^group_var</span>
+<span class="co">#&gt; env:  0x7f8f88e064c0</span>
+<span class="co">#&gt; Error: Column `group_var` is unknown</span></code></pre>
+<p>The environment of our quosure is wrong. We want R to evaluate <code>group_var</code> using the global environment, not the environment of our function. We’ll need <code>quo()</code>’s cousin, <code>enquo()</code>, in order to capture the correct environment of <code>group_var</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">enquo_fun &lt;-<span class="st"> </span><span class="cf">function</span>(group_var) {
+  <span class="kw">print</span>(<span class="kw">enquo</span>(group_var))
+}
+
+<span class="kw">enquo_fun</span>(<span class="dt">group_var =</span> manufacturer)
+<span class="co">#&gt; &lt;quosure&gt;</span>
+<span class="co">#&gt; expr: ^manufacturer</span>
+<span class="co">#&gt; env:  global</span></code></pre>
+<p>Now, we can rewrite <code>grouped_mean()</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">grouped_mean &lt;-<span class="st"> </span><span class="cf">function</span>(df, group_var, summary_var) {
+  group_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(group_var)
+  summary_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(summary_var)
+
+  df <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="st"> </span>group_var) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(<span class="op">!!</span><span class="st"> </span>summary_var))
+}
+
+<span class="kw">grouped_mean</span>(<span class="dt">df =</span> mpg, <span class="dt">group_var =</span> manufacturer, <span class="dt">summary_var =</span> cty)
+<span class="co">#&gt; # A tibble: 15 x 2</span>
+<span class="co">#&gt;   manufacturer  mean</span>
+<span class="co">#&gt;   &lt;chr&gt;        &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 audi          17.6</span>
+<span class="co">#&gt; 2 chevrolet     15  </span>
+<span class="co">#&gt; 3 dodge         13.1</span>
+<span class="co">#&gt; 4 ford          14  </span>
+<span class="co">#&gt; 5 honda         24.4</span>
+<span class="co">#&gt; 6 hyundai       18.6</span>
+<span class="co">#&gt; # … with 9 more rows</span></code></pre>
+<p>You can use this same technique for any of the dplyr verbs.</p>
+<pre class="sourceCode r"><code class="sourceCode r">filter_var &lt;-<span class="st"> </span><span class="cf">function</span>(var, value) {
+  var &lt;-<span class="st"> </span><span class="kw">enquo</span>(var)
+  
+  mpg <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">filter</span>(<span class="op">!!</span><span class="st"> </span>var <span class="op">==</span><span class="st"> </span>value)
+}
+
+<span class="kw">filter_var</span>(class, <span class="st">&quot;minivan&quot;</span>)
+<span class="co">#&gt; # A tibble: 11 x 11</span>
+<span class="co">#&gt;   manufacturer model  displ  year   cyl trans drv     cty   hwy fl    class</span>
+<span class="co">#&gt;   &lt;chr&gt;        &lt;chr&gt;  &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;</span>
+<span class="co">#&gt; 1 dodge        carav…   2.4  1999     4 auto… f        18    24 r     mini…</span>
+<span class="co">#&gt; 2 dodge        carav…   3    1999     6 auto… f        17    24 r     mini…</span>
+<span class="co">#&gt; 3 dodge        carav…   3.3  1999     6 auto… f        16    22 r     mini…</span>
+<span class="co">#&gt; 4 dodge        carav…   3.3  1999     6 auto… f        16    22 r     mini…</span>
+<span class="co">#&gt; 5 dodge        carav…   3.3  2008     6 auto… f        17    24 r     mini…</span>
+<span class="co">#&gt; 6 dodge        carav…   3.3  2008     6 auto… f        17    24 r     mini…</span>
+<span class="co">#&gt; # … with 5 more rows</span></code></pre>
+<p>The <code>enquo()</code> and <code>!!</code> strategy is incredibly useful, and you don’t need to fully understand the theory behind it in order to write successful functions. If some of the earlier explanation is still confusing, don’t worry about it too much. Tidy evaluation is a complicated subject, and it takes a while to really grasp what’s going on behind <code>enquo()</code> and <code>!!</code>.</p>
+<p>In summary, to build a function that takes an argument to a dplyr verb, use the following template:</p>
+<pre class="sourceCode r"><code class="sourceCode r">my_tidyeval_function &lt;-<span class="st"> </span><span class="cf">function</span>(column_name) {
+  column_name &lt;-<span class="st"> </span><span class="kw">enquo</span>(column_name)
+  
+  df <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">dplyr_verb</span>(<span class="op">!!</span><span class="st"> </span>column_name)
+}</code></pre>
+</div>
+<div id="passing-..." class="section level3">
+<h3><span class="header-section-number">14.2.2</span> Passing <code>...</code></h3>
+<p>Say you want to extend <code>grouped_mean()</code> so that you can group by any number of variables. You might have noticed that some functions, like scoped verbs and the purrr functions, take <code>...</code> as a final argument, allowing you to specify additional arguments. We can use that same functionality here.</p>
+<pre class="sourceCode r"><code class="sourceCode r">grouped_mean_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="cf">function</span>(df, summary_var, ...) {
+  summary_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(summary_var)
+  
+  df <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">group_by</span>(...) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(<span class="op">!!</span><span class="st"> </span>summary_var))
+}
+
+<span class="kw">grouped_mean_2</span>(<span class="dt">df =</span> mpg, <span class="dt">summary_var =</span> cty, manufacturer, model)
+<span class="co">#&gt; # A tibble: 38 x 3</span>
+<span class="co">#&gt; # Groups:   manufacturer [15]</span>
+<span class="co">#&gt;   manufacturer model               mean</span>
+<span class="co">#&gt;   &lt;chr&gt;        &lt;chr&gt;              &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 audi         a4                  18.9</span>
+<span class="co">#&gt; 2 audi         a4 quattro          17.1</span>
+<span class="co">#&gt; 3 audi         a6 quattro          16  </span>
+<span class="co">#&gt; 4 chevrolet    c1500 suburban 2wd  12.8</span>
+<span class="co">#&gt; 5 chevrolet    corvette            15.4</span>
+<span class="co">#&gt; 6 chevrolet    k1500 tahoe 4wd     12.5</span>
+<span class="co">#&gt; # … with 32 more rows</span></code></pre>
+<p>Notice that with …, we didn’t have to use <code>enquo()</code> or <code>!!</code>. <code>...</code> takes care of all the quoting and unquoting for you.</p>
+<p>You can also use <code>...</code> to pass in full expressions to dplyr verbs.</p>
+<pre class="sourceCode r"><code class="sourceCode r">filter_fun &lt;-<span class="st"> </span><span class="cf">function</span>(df, summary_var, ...) {
+  summarize_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(summary_var)
+  
+  df <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">filter</span>(...) 
+}
+
+<span class="kw">filter_fun</span>(mpg, manufacturer <span class="op">==</span><span class="st"> &quot;audi&quot;</span>, model <span class="op">==</span><span class="st"> &quot;a4&quot;</span>)
+<span class="co">#&gt; # A tibble: 7 x 11</span>
+<span class="co">#&gt;   manufacturer model displ  year   cyl trans  drv     cty   hwy fl    class</span>
+<span class="co">#&gt;   &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;</span>
+<span class="co">#&gt; 1 audi         a4      1.8  1999     4 auto(… f        18    29 p     comp…</span>
+<span class="co">#&gt; 2 audi         a4      1.8  1999     4 manua… f        21    29 p     comp…</span>
+<span class="co">#&gt; 3 audi         a4      2    2008     4 manua… f        20    31 p     comp…</span>
+<span class="co">#&gt; 4 audi         a4      2    2008     4 auto(… f        21    30 p     comp…</span>
+<span class="co">#&gt; 5 audi         a4      2.8  1999     6 auto(… f        16    26 p     comp…</span>
+<span class="co">#&gt; 6 audi         a4      2.8  1999     6 manua… f        18    26 p     comp…</span>
+<span class="co">#&gt; # … with 1 more row</span></code></pre>
+</div>
+<div id="assigning-names-1" class="section level3">
+<h3><span class="header-section-number">14.2.3</span> Assigning names</h3>
+<p>Let’s return to our <code>grouped_mean()</code> function. We finally got it working in the last section. Here it is again:</p>
+<pre class="sourceCode r"><code class="sourceCode r">grouped_mean &lt;-<span class="st"> </span><span class="cf">function</span>(df, group_var, summarize_var) {
+  group_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(group_var)
+  summarize_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(summarize_var)
+  
+  df <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="st"> </span>group_var) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(<span class="op">!!</span><span class="st"> </span>summarize_var))
+}</code></pre>
+<p>It would be nice if we could name the <code>mean</code> column something more informative.</p>
+<p>Maybe we can just apply our <code>enquo()</code> and <code>!!</code> strategy?</p>
+<pre class="sourceCode r"><code class="sourceCode r">grouped_mean &lt;-<span class="st"> </span><span class="cf">function</span>(df, group_var, summary_var, summary_name) {
+  group_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(group_var)
+  summary_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(summary_var)
+  summary_name &lt;-<span class="st"> </span><span class="kw">enquo</span>(summary_name)
+  
+  df <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="st"> </span>group_var) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="op">!!</span><span class="st"> </span><span class="dt">summary_name =</span> <span class="kw">mean</span>(<span class="op">!!</span><span class="st"> </span>summary_var))
+}
+
+<span class="kw">grouped_mean</span>(
+  <span class="dt">df =</span> mpg, 
+  <span class="dt">group_var =</span> manufacturer, 
+  <span class="dt">summary_var =</span> hwy, 
+  <span class="dt">summary_name =</span> mean_hwy
+)</code></pre>
+<p>This doesn’t work. It turns out that you can’t use <code>!!</code> on both sides of an <code>=</code>. We have to use a special <code>=</code> that looks like <code>:=</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">grouped_mean &lt;-<span class="st"> </span><span class="cf">function</span>(df, group_var, summary_var, summary_name) {
+  group_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(group_var)
+  summary_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(summary_var)
+  summary_name &lt;-<span class="st"> </span><span class="kw">enquo</span>(summary_name)
+  
+  df <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="st"> </span>group_var) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="op">!!</span><span class="st"> </span><span class="dt">summary_name :=</span> <span class="kw">mean</span>(<span class="op">!!</span><span class="st"> </span>summary_var))
+}
+
+<span class="kw">grouped_mean</span>(
+  <span class="dt">df =</span> mpg, 
+  <span class="dt">group_var =</span> manufacturer, 
+  <span class="dt">summary_var =</span> hwy, 
+  <span class="dt">summary_name =</span> mean_hwy
+)
+<span class="co">#&gt; # A tibble: 15 x 2</span>
+<span class="co">#&gt;   manufacturer mean_hwy</span>
+<span class="co">#&gt;   &lt;chr&gt;           &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 audi             26.4</span>
+<span class="co">#&gt; 2 chevrolet        21.9</span>
+<span class="co">#&gt; 3 dodge            17.9</span>
+<span class="co">#&gt; 4 ford             19.4</span>
+<span class="co">#&gt; 5 honda            32.6</span>
+<span class="co">#&gt; 6 hyundai          26.9</span>
+<span class="co">#&gt; # … with 9 more rows</span></code></pre>
+<p>Success!!</p>
+</div>
+</div>
+<div id="passing-vectors-with" class="section level2">
+<h2><span class="header-section-number">14.3</span> Passing vectors with <code>!!!</code></h2>
+<p>Here’s one more common tidy evaluation use case.</p>
+<p>Say you want to use <code>recode()</code> to recode a variable.</p>
+<pre class="sourceCode r"><code class="sourceCode r">mpg <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">drv =</span> <span class="kw">recode</span>(drv, <span class="st">&quot;f&quot;</span> =<span class="st"> &quot;front&quot;</span>, <span class="st">&quot;r&quot;</span> =<span class="st"> &quot;rear&quot;</span>, <span class="st">&quot;4&quot;</span> =<span class="st"> &quot;four&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(drv)
+<span class="co">#&gt; # A tibble: 234 x 1</span>
+<span class="co">#&gt;   drv  </span>
+<span class="co">#&gt;   &lt;chr&gt;</span>
+<span class="co">#&gt; 1 front</span>
+<span class="co">#&gt; 2 front</span>
+<span class="co">#&gt; 3 front</span>
+<span class="co">#&gt; 4 front</span>
+<span class="co">#&gt; 5 front</span>
+<span class="co">#&gt; 6 front</span>
+<span class="co">#&gt; # … with 228 more rows</span></code></pre>
+<p>It’s often a good idea to store your recode mapping in a parameter because you might want to change the mapping later on or use it in other locations.</p>
+<p>We can store the mapping in a named character vector.</p>
+<pre class="sourceCode r"><code class="sourceCode r">drv_recode &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;f&quot;</span> =<span class="st"> &quot;front&quot;</span>, <span class="st">&quot;r&quot;</span> =<span class="st"> &quot;rear&quot;</span>, <span class="st">&quot;4&quot;</span> =<span class="st"> &quot;four&quot;</span>)</code></pre>
+<p>However, now <code>recode()</code> doesn’t work.</p>
+<pre class="sourceCode r"><code class="sourceCode r">mpg <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">drv =</span> <span class="kw">recode</span>(drv, drv_recode)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(drv)
+<span class="co">#&gt; Argument 2 must be named, not unnamed</span></code></pre>
+<p><code>recode()</code>, like <code>group_by()</code>, <code>summarize()</code>, and the other dplyr functions, quotes its input. We therefore need to tell <code>recode()</code> to evaluate <code>recode_key</code> immediately. Let’s try <code>!!</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">mpg <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">drv =</span> <span class="kw">recode</span>(drv, <span class="op">!!</span><span class="st"> </span>drv_recode)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(drv)
+<span class="co">#&gt; Argument 2 must be named, not unnamed</span></code></pre>
+<p><code>!!</code> doesn’t work because <code>recode_key</code> is a vector. Not only do we need to immediately evaluate <code>recode_key</code>, we also need to unpack its contents. To do so, we’ll use <code>!!!</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">mpg <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">drv =</span> <span class="kw">recode</span>(drv, <span class="op">!!!</span><span class="st"> </span>drv_recode)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(drv)
+<span class="co">#&gt; # A tibble: 234 x 1</span>
+<span class="co">#&gt;   drv  </span>
+<span class="co">#&gt;   &lt;chr&gt;</span>
+<span class="co">#&gt; 1 front</span>
+<span class="co">#&gt; 2 front</span>
+<span class="co">#&gt; 3 front</span>
+<span class="co">#&gt; 4 front</span>
+<span class="co">#&gt; 5 front</span>
+<span class="co">#&gt; 6 front</span>
+<span class="co">#&gt; # … with 228 more rows</span></code></pre>
+<p>Success!!!</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="tidy-eval-summary.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/dcl-docs/prog/edit/master/tidy-eval-detailed.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

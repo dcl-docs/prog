@@ -1,0 +1,61 @@
+
+# (PART) Tidy evaluation {-}
+
+# Introduction
+
+
+```r
+library(tidyverse)
+```
+
+At some point, you might have found yourself copy-and-pasting the same dplyr code over and over again. For example, the following code uses `group_by()` and `summarize()` to calculate different grouped means of `mpg`. 
+
+
+```r
+mpg %>% 
+  group_by(manufacturer) %>% 
+  summarize(mean = mean(cty))
+
+mpg %>% 
+  group_by(drv) %>% 
+  summarize(mean = mean(cty))
+
+mpg %>% 
+  group_by(model) %>% 
+  summarize(mean = mean(hwy))
+```
+
+A function would cut down on duplicated code. Here's a first pass:
+
+
+```r
+grouped_mean <- function(var_group, var_summary) {
+  mpg %>% 
+    group_by(var_group) %>% 
+    summarize(mean = mean(var_summary))
+}
+```
+
+Unfortunately, it doesn't work.
+
+
+```r
+grouped_mean(var_group = manufacturer, var_summary = cty)
+#> Error: Must group by variables found in `.data`.
+#> * Column `var_group` is not found.
+```
+
+dplyr verbs and other tidyverse functions that operate on data frames work differently than many other R functions. In this section, you'll learn what makes these functions different and figure out how to make functions like `grouped_mean()` work. The underlying idea that makes this all possible is called __tidy evaluation__.
+
+Tidy evaluation is a complicated subject. Luckily, you don't need to understand all the theory or the under-the-hood mechanics to use tidy evaluation. The _Basics_ chapter is a high-level, practical overview of the basic tidy evaluation use-cases. The goal of the chapter is to show you what to do without going into much theory. 
+
+If you're curious tidy evaluation and want to learn more, the following are useful resources. Note that the `{{ }}` operator, which you'll learn about in the next chapter, was not implemented when some of these were written. Instead of `{{ }}`, you'll usually see `!!` and `enquo()`.
+
+* [Programming with dplyr](https://dplyr.tidyverse.org/articles/programming.html) vignette
+* [Tidy evaluation with rlang](https://github.com/rstudio/cheatsheets/blob/master/tidyeval.pdf) cheat sheet
+
+And if you really want to go back to the beginning:
+
+* [Quasi-quotation](https://en.wikipedia.org/wiki/Quasi-quotation)
+
+

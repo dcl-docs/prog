@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>9 Basic map functions | Functional Programming</title>
+  <meta name="description" content="This book is a practical introduction to functional programming using the tidyverse." />
+  <meta name="generator" content="bookdown 0.23 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="9 Basic map functions | Functional Programming" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://dcl-prog.stanford.edu" />
+  
+  <meta property="og:description" content="This book is a practical introduction to functional programming using the tidyverse." />
+  <meta name="github-repo" content="dcl-docs/prog" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="9 Basic map functions | Functional Programming" />
+  
+  <meta name="twitter:description" content="This book is a practical introduction to functional programming using the tidyverse." />
+  
+
+<meta name="author" content="Sara Altman, Bill Behrman, Hadley Wickham" />
+
+
+<meta name="date" content="2021-09-09" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="iteration.html"/>
+<link rel="next" href="purrr-parallel.html"/>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Functional Programming</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#an-evolving-book"><i class="fa fa-check"></i>An evolving book</a></li>
+</ul></li>
+<li class="part"><span><b>I Data Structures</b></span></li>
+<li class="chapter" data-level="1" data-path="data-structures.html"><a href="data-structures.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="data-structure-basics.html"><a href="data-structure-basics.html"><i class="fa fa-check"></i><b>2</b> Vectors, lists, and tibbles</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="data-structure-basics.html"><a href="data-structure-basics.html#atomic-vectors"><i class="fa fa-check"></i><b>2.1</b> Atomic vectors</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="data-structure-basics.html"><a href="data-structure-basics.html#properties"><i class="fa fa-check"></i><b>2.1.1</b> Properties</a></li>
+<li class="chapter" data-level="2.1.2" data-path="data-structure-basics.html"><a href="data-structure-basics.html#subsetting"><i class="fa fa-check"></i><b>2.1.2</b> Subsetting</a></li>
+<li class="chapter" data-level="2.1.3" data-path="data-structure-basics.html"><a href="data-structure-basics.html#applying-functions"><i class="fa fa-check"></i><b>2.1.3</b> Applying functions</a></li>
+<li class="chapter" data-level="2.1.4" data-path="data-structure-basics.html"><a href="data-structure-basics.html#augmented-vectors"><i class="fa fa-check"></i><b>2.1.4</b> Augmented vectors</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="data-structure-basics.html"><a href="data-structure-basics.html#lists"><i class="fa fa-check"></i><b>2.2</b> Lists</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="data-structure-basics.html"><a href="data-structure-basics.html#basics"><i class="fa fa-check"></i><b>2.2.1</b> Basics</a></li>
+<li class="chapter" data-level="2.2.2" data-path="data-structure-basics.html"><a href="data-structure-basics.html#flattening"><i class="fa fa-check"></i><b>2.2.2</b> Flattening</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="data-structure-basics.html"><a href="data-structure-basics.html#tibbles"><i class="fa fa-check"></i><b>2.3</b> Tibbles</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="data-structure-basics.html"><a href="data-structure-basics.html#creation"><i class="fa fa-check"></i><b>2.3.1</b> Creation</a></li>
+<li class="chapter" data-level="2.3.2" data-path="data-structure-basics.html"><a href="data-structure-basics.html#subsetting-1"><i class="fa fa-check"></i><b>2.3.2</b> Subsetting</a></li>
+<li class="chapter" data-level="2.3.3" data-path="data-structure-basics.html"><a href="data-structure-basics.html#dimensions"><i class="fa fa-check"></i><b>2.3.3</b> Dimensions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="list-columns.html"><a href="list-columns.html"><i class="fa fa-check"></i><b>3</b> List columns</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="list-columns.html"><a href="list-columns.html#creating"><i class="fa fa-check"></i><b>3.1</b> Creating</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="list-columns.html"><a href="list-columns.html#nest"><i class="fa fa-check"></i><b>3.1.1</b> <code>nest()</code></a></li>
+<li class="chapter" data-level="3.1.2" data-path="list-columns.html"><a href="list-columns.html#summarize-and-list"><i class="fa fa-check"></i><b>3.1.2</b> <code>summarize()</code> and <code>list()</code></a></li>
+<li class="chapter" data-level="3.1.3" data-path="list-columns.html"><a href="list-columns.html#mutate"><i class="fa fa-check"></i><b>3.1.3</b> <code>mutate()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="list-columns.html"><a href="list-columns.html#unnesting"><i class="fa fa-check"></i><b>3.2</b> Unnesting</a></li>
+<li class="chapter" data-level="3.3" data-path="list-columns.html"><a href="list-columns.html#manipulating"><i class="fa fa-check"></i><b>3.3</b> Manipulating</a></li>
+</ul></li>
+<li class="part"><span><b>II Functions</b></span></li>
+<li class="chapter" data-level="4" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>4</b> Introduction</a></li>
+<li class="chapter" data-level="5" data-path="function-vector.html"><a href="function-vector.html"><i class="fa fa-check"></i><b>5</b> Vector functions</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="function-vector.html"><a href="function-vector.html#temperature-recommendations"><i class="fa fa-check"></i><b>5.1</b> Temperature recommendations</a></li>
+<li class="chapter" data-level="5.2" data-path="function-vector.html"><a href="function-vector.html#vector-functions-and-mutate"><i class="fa fa-check"></i><b>5.2</b> Vector functions and <code>mutate()</code></a></li>
+<li class="chapter" data-level="5.3" data-path="function-vector.html"><a href="function-vector.html#vectorizing-if-else-statements"><i class="fa fa-check"></i><b>5.3</b> Vectorizing if-else statements</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="function-anonymous.html"><a href="function-anonymous.html"><i class="fa fa-check"></i><b>6</b> Anonymous functions</a></li>
+<li class="chapter" data-level="7" data-path="function-predicate.html"><a href="function-predicate.html"><i class="fa fa-check"></i><b>7</b> Predicate functions</a></li>
+<li class="part"><span><b>III Iteration</b></span></li>
+<li class="chapter" data-level="8" data-path="iteration.html"><a href="iteration.html"><i class="fa fa-check"></i><b>8</b> Introduction</a></li>
+<li class="chapter" data-level="9" data-path="purrr-basics.html"><a href="purrr-basics.html"><i class="fa fa-check"></i><b>9</b> Basic map functions</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="purrr-basics.html"><a href="purrr-basics.html#iteration-as-an-assembly-line"><i class="fa fa-check"></i><b>9.1</b> Iteration as an assembly line</a></li>
+<li class="chapter" data-level="9.2" data-path="purrr-basics.html"><a href="purrr-basics.html#the-map-functions"><i class="fa fa-check"></i><b>9.2</b> The map functions</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="purrr-basics.html"><a href="purrr-basics.html#extra-arguments"><i class="fa fa-check"></i><b>9.2.1</b> Extra arguments</a></li>
+<li class="chapter" data-level="9.2.2" data-path="purrr-basics.html"><a href="purrr-basics.html#anonymous-functions-1"><i class="fa fa-check"></i><b>9.2.2</b> Anonymous functions</a></li>
+<li class="chapter" data-level="9.2.3" data-path="purrr-basics.html"><a href="purrr-basics.html#tibbles-1"><i class="fa fa-check"></i><b>9.2.3</b> Tibbles</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="purrr-parallel.html"><a href="purrr-parallel.html"><i class="fa fa-check"></i><b>10</b> Map with multiple inputs</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="purrr-parallel.html"><a href="purrr-parallel.html#map2"><i class="fa fa-check"></i><b>10.1</b> <code>map2()</code></a></li>
+<li class="chapter" data-level="10.2" data-path="purrr-parallel.html"><a href="purrr-parallel.html#pmap"><i class="fa fa-check"></i><b>10.2</b> <code>pmap()</code></a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="purrr-parallel.html"><a href="purrr-parallel.html#anonymous-functions-2"><i class="fa fa-check"></i><b>10.2.1</b> Anonymous functions</a></li>
+<li class="chapter" data-level="10.2.2" data-path="purrr-parallel.html"><a href="purrr-parallel.html#named-functions"><i class="fa fa-check"></i><b>10.2.2</b> Named functions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="purrr-extras.html"><a href="purrr-extras.html"><i class="fa fa-check"></i><b>11</b> Other purrr functions</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="purrr-extras.html"><a href="purrr-extras.html#map-functions-that-output-tibbles"><i class="fa fa-check"></i><b>11.1</b> Map functions that output tibbles</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="purrr-extras.html"><a href="purrr-extras.html#dfr"><i class="fa fa-check"></i><b>11.1.1</b> <code>_dfr</code></a></li>
+<li class="chapter" data-level="11.1.2" data-path="purrr-extras.html"><a href="purrr-extras.html#dfc"><i class="fa fa-check"></i><b>11.1.2</b> <code>_dfc</code></a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="purrr-extras.html"><a href="purrr-extras.html#walk"><i class="fa fa-check"></i><b>11.2</b> Walk</a></li>
+<li class="chapter" data-level="11.3" data-path="purrr-extras.html"><a href="purrr-extras.html#predicate-functions-1"><i class="fa fa-check"></i><b>11.3</b> Predicate functions</a></li>
+</ul></li>
+<li class="part"><span><b>IV Tidy evaluation</b></span></li>
+<li class="chapter" data-level="12" data-path="tidy-eval-section.html"><a href="tidy-eval-section.html"><i class="fa fa-check"></i><b>12</b> Introduction</a></li>
+<li class="chapter" data-level="13" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html"><i class="fa fa-check"></i><b>13</b> Tidy evaluation basics</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html#embracing-with"><i class="fa fa-check"></i><b>13.1</b> Embracing with <code>{{ }}</code></a></li>
+<li class="chapter" data-level="13.2" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html#forwarding-with-..."><i class="fa fa-check"></i><b>13.2</b> Forwarding with <code>...</code></a>
+<ul>
+<li class="chapter" data-level="13.2.1" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html#passing-full-expressions"><i class="fa fa-check"></i><b>13.2.1</b> Passing full expressions</a></li>
+<li class="chapter" data-level="13.2.2" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html#additional-arguments"><i class="fa fa-check"></i><b>13.2.2</b> Additional arguments</a></li>
+</ul></li>
+<li class="chapter" data-level="13.3" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html#assigning-names"><i class="fa fa-check"></i><b>13.3</b> Assigning names</a></li>
+<li class="chapter" data-level="13.4" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html#splicing-with"><i class="fa fa-check"></i><b>13.4</b> Splicing with <code>!!!</code></a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Functional Programming</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="basic-map-functions" class="section level1" number="9">
+<h1><span class="header-section-number">9</span> Basic map functions</h1>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="purrr-basics.html#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<div id="iteration-as-an-assembly-line" class="section level2" number="9.1">
+<h2><span class="header-section-number">9.1</span> Iteration as an assembly line</h2>
+<p>You’ll often need to apply the same function to each element of a list or atomic vector. As an example, take <code>moons</code>, a list of vectors.</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="purrr-basics.html#cb91-1" aria-hidden="true" tabindex="-1"></a>moons <span class="ot">&lt;-</span></span>
+<span id="cb91-2"><a href="purrr-basics.html#cb91-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(</span>
+<span id="cb91-3"><a href="purrr-basics.html#cb91-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">earth =</span> <span class="fl">1737.1</span>,</span>
+<span id="cb91-4"><a href="purrr-basics.html#cb91-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">mars =</span> <span class="fu">c</span>(<span class="fl">11.3</span>, <span class="fl">6.2</span>),</span>
+<span id="cb91-5"><a href="purrr-basics.html#cb91-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">neptune =</span> </span>
+<span id="cb91-6"><a href="purrr-basics.html#cb91-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="fl">60.4</span>, <span class="fl">81.4</span>, <span class="dv">156</span>, <span class="fl">174.8</span>, <span class="dv">194</span>, <span class="fl">34.8</span>, <span class="dv">420</span>, <span class="fl">2705.2</span>, <span class="dv">340</span>, <span class="dv">62</span>, <span class="dv">44</span>, <span class="dv">42</span>, <span class="dv">40</span>, <span class="dv">60</span>)</span>
+<span id="cb91-7"><a href="purrr-basics.html#cb91-7" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p>(This data is from the Wikipedia pages on <a href="https://en.wikipedia.org/wiki/Moon">Earth’s Moon</a>, <a href="https://en.wikipedia.org/wiki/Moons_of_Mars">Mars’s moons</a>, and <a href="https://en.wikipedia.org/wiki/Moons_of_Neptune">Neptune’s moons</a>).</p>
+<p>Each vector in <code>moons</code> represents a planet. The elements of each vector represent the radii of that planet’s moons, in kilometers. (Note that some moons are irregularly shaped, so these are average radii.)</p>
+<p>Say we want to figure out the number of moons that belong to each planet by taking the length of each vector. We can’t just apply <code>length()</code> to <code>moons</code>.</p>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="purrr-basics.html#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(moons)</span>
+<span id="cb92-2"><a href="purrr-basics.html#cb92-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 3</span></span></code></pre></div>
+<p><code>length(moons)</code> returns the number of planets in <code>moons</code>. Instead, we need to apply <code>length()</code> to each vector in <code>moons</code>. We could find the length of each vector by individually pulling out each one and then applying <code>length()</code>.</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="purrr-basics.html#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(moons<span class="sc">$</span>earth)</span>
+<span id="cb93-2"><a href="purrr-basics.html#cb93-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb93-3"><a href="purrr-basics.html#cb93-3" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(moons<span class="sc">$</span>mars)</span>
+<span id="cb93-4"><a href="purrr-basics.html#cb93-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 2</span></span>
+<span id="cb93-5"><a href="purrr-basics.html#cb93-5" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(moons<span class="sc">$</span>neptune)</span>
+<span id="cb93-6"><a href="purrr-basics.html#cb93-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 14</span></span></code></pre></div>
+<p>This strategy is tedious and repetitive, and would be even more tedious and repetitive if <code>moons</code> contained more planets. Fortunately, we can use functions from the purrr package to iterate through vectors and do the same thing to each element. In this reading, you’ll learn about the most basic purrr functions: the map functions.</p>
+<p>Take a look at the <a href="https://github.com/rstudio/cheatsheets/blob/master/purrr.pdf">purrr cheatsheet</a> for an overview of all the purrr functions.</p>
+<p>The map functions are like an assembly line in a factory. One conveyor belt, the <em>input belt</em>, transports various objects to a worker. The worker picks up each object and does something with it, but, importantly, never changes the object itself. For example, she might make a mold of the object, or grab a piece of plastic corresponding to the color of the object. Then, she places her new creation (the mold, piece of plastic, etc.) on the <em>output belt</em>. She does this until there are no new objects to process on the input belt and the conveyor belt stops. The factory then ends up with the same number of output objects as came in on the input belt.</p>
+<p>Imagine the map functions as this factory. You supply the map function with a list or vector (the objects on the input conveyor belt) and a function (what the worker does with each object). Then, the map function makes the conveyor belts run, applying the function to each element in the original vector to create a new vector of the same length, while never changing the original.</p>
+<p>In our <code>moons</code> example, the elements on the input belt are the vectors of moon radii. We want the worker to take the length of each vector by applying <code>length()</code>, producing three numbers on the output belt, each indicating a number of moons. In the next section, we’ll show you exactly how to carry out this operation with the map functions.</p>
+</div>
+<div id="the-map-functions" class="section level2" number="9.2">
+<h2><span class="header-section-number">9.2</span> The map functions</h2>
+<p>We’ll explain the most general map function, <code>map()</code>, first. <code>map()</code>, like all the map functions, takes a list/vector and a function as arguments.</p>
+<p><img src="images/map-step-1.png" width="154" style="display: block; margin: auto;" /></p>
+<p>(All diagrams were adapted from <a href="https://adv-r.hadley.nz/functionals.html" class="uri">https://adv-r.hadley.nz/functionals.html</a>.)</p>
+<p><code>map()</code> then applies that function to each element of the input list/vector.</p>
+<p><img src="images/map-step-2.png" width="314" style="display: block; margin: auto;" /></p>
+<p>Applying the function to each element of the input list/vector results in one output element for each input element.</p>
+<p><img src="images/map.png" width="407" style="display: block; margin: auto;" /></p>
+<p><code>map()</code> then combines all these output elements into a list.</p>
+<p><img src="images/map-output.png" width="345" style="display: block; margin: auto;" /></p>
+<p>In the assembly line metaphor, the input list/vector is the container for the items that go on the conveyor belt. The function specifies what the worker should do with each item. The items on the output conveyor belt make up the list that <code>map()</code> returns once it’s done.</p>
+<p>In our example, <code>moons</code> is our input. We want to apply <code>length()</code> to each element of <code>moons</code>, so <code>length</code> is the function.</p>
+<p><img src="images/map-length.png" width="551" style="display: block; margin: auto;" /></p>
+<p>Each call to <code>length()</code> produces an integer, so the result is a list of integers.</p>
+<p><img src="images/length-list.png" width="277" style="display: block; margin: auto;" /></p>
+<p>Here’s what the call to <code>map()</code> looks like:</p>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="purrr-basics.html#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(moons, length)</span>
+<span id="cb94-2"><a href="purrr-basics.html#cb94-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $earth</span></span>
+<span id="cb94-3"><a href="purrr-basics.html#cb94-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb94-4"><a href="purrr-basics.html#cb94-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb94-5"><a href="purrr-basics.html#cb94-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $mars</span></span>
+<span id="cb94-6"><a href="purrr-basics.html#cb94-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 2</span></span>
+<span id="cb94-7"><a href="purrr-basics.html#cb94-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb94-8"><a href="purrr-basics.html#cb94-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $neptune</span></span>
+<span id="cb94-9"><a href="purrr-basics.html#cb94-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 14</span></span></code></pre></div>
+<p>Note that we used <code>length</code>, not <code>length()</code>, to specify which function to use. <code>length()</code> calls the function, while <code>length</code> refers to the function object.</p>
+<p>As we already said, <code>map()</code> returns a list.</p>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="purrr-basics.html#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(<span class="fu">map</span>(moons, length))</span>
+<span id="cb95-2"><a href="purrr-basics.html#cb95-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;list&quot;</span></span></code></pre></div>
+<p>A list of integers is fine, but you’ll often rather have an atomic vector of integers. purrr also contains variants of <code>map()</code> that produce atomic vectors. There is one variant for each type of atomic vector.</p>
+<ul>
+<li><code>map_int()</code> creates an integer vector.</li>
+<li><code>map_dbl()</code> creates a double vector.</li>
+<li><code>map_chr()</code> creates a character vector.</li>
+<li><code>map_lgl()</code> creates a logical vector.</li>
+</ul>
+<p><code>length()</code> returns integers, so we’ll use <code>map_int()</code> to create an integer vector instead of a list.</p>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="purrr-basics.html#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map_int</span>(moons, length)</span>
+<span id="cb96-2"><a href="purrr-basics.html#cb96-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   earth    mars neptune </span></span>
+<span id="cb96-3"><a href="purrr-basics.html#cb96-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       1       2      14</span></span></code></pre></div>
+<p>The result looks similar to the result we got from <code>map()</code>, but is now an integer vector.</p>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="purrr-basics.html#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(<span class="fu">map_int</span>(moons, length))</span>
+<span id="cb97-2"><a href="purrr-basics.html#cb97-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;integer&quot;</span></span></code></pre></div>
+<p><code>map_int()</code> requires that each output element be an integer.</p>
+<p><img src="images/map-int.png" width="430" style="display: block; margin: auto;" /></p>
+<p>If each element is an integer, <code>map_int()</code> can then combine all the elements into a single atomic vector.</p>
+<p><img src="images/map-int-output.png" width="336" style="display: block; margin: auto;" /></p>
+<p>The other variants of <code>map()</code> that produce double, character, and logical vectors work in the same way.</p>
+<p>We could use <code>map()</code> and <code>median()</code> to find the median moon radius for each planet.</p>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="purrr-basics.html#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(moons, median)</span>
+<span id="cb98-2"><a href="purrr-basics.html#cb98-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $earth</span></span>
+<span id="cb98-3"><a href="purrr-basics.html#cb98-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1737</span></span>
+<span id="cb98-4"><a href="purrr-basics.html#cb98-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb98-5"><a href="purrr-basics.html#cb98-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $mars</span></span>
+<span id="cb98-6"><a href="purrr-basics.html#cb98-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 8.75</span></span>
+<span id="cb98-7"><a href="purrr-basics.html#cb98-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb98-8"><a href="purrr-basics.html#cb98-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $neptune</span></span>
+<span id="cb98-9"><a href="purrr-basics.html#cb98-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 71.7</span></span></code></pre></div>
+<p>Or, we could use <code>map_dbl()</code> to produce a vector of doubles.</p>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="purrr-basics.html#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dbl</span>(moons, median)</span>
+<span id="cb99-2"><a href="purrr-basics.html#cb99-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   earth    mars neptune </span></span>
+<span id="cb99-3"><a href="purrr-basics.html#cb99-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1737.10    8.75   71.70</span></span></code></pre></div>
+<p>Mars has very small moons!</p>
+<p>Use <code>map_chr()</code> to create a character vector when using a function that produces characters, and <code>map_lgl()</code> to create logical vectors.</p>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="purrr-basics.html#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map_lgl</span>(moons, is.double)</span>
+<span id="cb100-2"><a href="purrr-basics.html#cb100-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   earth    mars neptune </span></span>
+<span id="cb100-3"><a href="purrr-basics.html#cb100-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    TRUE    TRUE    TRUE</span></span></code></pre></div>
+<p>The map variants that produce atomic vectors will throw an error if your function doesn’t output the correct type.</p>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="purrr-basics.html#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map_int</span>(moons, median)</span>
+<span id="cb101-2"><a href="purrr-basics.html#cb101-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error: Can&#39;t coerce element 1 from a double to a integer</span></span></code></pre></div>
+<p><code>median()</code> returns doubles, but <code>map_int()</code> expects integers, and cannot coerce doubles into integers. If you get a “Can’t coerce” error when working with map functions, you’re likely using the wrong variant.</p>
+<p>Some functions return vectors. For example, <code>sort()</code> returns a sorted version of a vector.</p>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="purrr-basics.html#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(moons<span class="sc">$</span>neptune)</span>
+<span id="cb102-2"><a href="purrr-basics.html#cb102-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1]   34.8   40.0   42.0   44.0   60.0   60.4   62.0   81.4  156.0  174.8</span></span>
+<span id="cb102-3"><a href="purrr-basics.html#cb102-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [11]  194.0  340.0  420.0 2705.2</span></span></code></pre></div>
+<p>Even though <code>sort()</code> returns a vector of doubles, we can’t use <code>map_dbl()</code> to apply <code>sort()</code> to each element of <code>moons</code>.</p>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="purrr-basics.html#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dbl</span>(moons, sort)</span>
+<span id="cb103-2"><a href="purrr-basics.html#cb103-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error: Result 2 must be a single double, not a double vector of length 2</span></span></code></pre></div>
+<p><code>map_dbl()</code> requires that the function return a <em>single</em> double for each element of <code>moons</code> because atomic vectors can’t contain other vectors. <code>sort()</code> returns a vector of doubles for each element, so <code>map_dbl()</code> fails.</p>
+<p>Instead, we have to use <code>map()</code> to combine the individual output vectors into a list.</p>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="purrr-basics.html#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(moons, sort)</span>
+<span id="cb104-2"><a href="purrr-basics.html#cb104-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $earth</span></span>
+<span id="cb104-3"><a href="purrr-basics.html#cb104-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1737</span></span>
+<span id="cb104-4"><a href="purrr-basics.html#cb104-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb104-5"><a href="purrr-basics.html#cb104-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $mars</span></span>
+<span id="cb104-6"><a href="purrr-basics.html#cb104-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1]  6.2 11.3</span></span>
+<span id="cb104-7"><a href="purrr-basics.html#cb104-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb104-8"><a href="purrr-basics.html#cb104-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $neptune</span></span>
+<span id="cb104-9"><a href="purrr-basics.html#cb104-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1]   34.8   40.0   42.0   44.0   60.0   60.4   62.0   81.4  156.0  174.8</span></span>
+<span id="cb104-10"><a href="purrr-basics.html#cb104-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [11]  194.0  340.0  420.0 2705.2</span></span></code></pre></div>
+<p>Because <code>map()</code> creates lists, it’s very flexible. We just used <code>map()</code> to create a list of vectors, but you can also use <code>map()</code> to create lists of lists, lists of lists of lists, lists of tibbles, lists of functions, etc.</p>
+<div id="extra-arguments" class="section level3" number="9.2.1">
+<h3><span class="header-section-number">9.2.1</span> Extra arguments</h3>
+<p>In the previous section, we used <code>sort()</code> to arrange each vector. By default, <code>sort()</code> arranges in increasing order.</p>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="purrr-basics.html#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(moons, sort)</span>
+<span id="cb105-2"><a href="purrr-basics.html#cb105-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $earth</span></span>
+<span id="cb105-3"><a href="purrr-basics.html#cb105-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1737</span></span>
+<span id="cb105-4"><a href="purrr-basics.html#cb105-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb105-5"><a href="purrr-basics.html#cb105-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $mars</span></span>
+<span id="cb105-6"><a href="purrr-basics.html#cb105-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1]  6.2 11.3</span></span>
+<span id="cb105-7"><a href="purrr-basics.html#cb105-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb105-8"><a href="purrr-basics.html#cb105-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $neptune</span></span>
+<span id="cb105-9"><a href="purrr-basics.html#cb105-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1]   34.8   40.0   42.0   44.0   60.0   60.4   62.0   81.4  156.0  174.8</span></span>
+<span id="cb105-10"><a href="purrr-basics.html#cb105-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [11]  194.0  340.0  420.0 2705.2</span></span></code></pre></div>
+<p>To sort in decreasing order, we have to specify <code>decreasing = TRUE</code> inside of <code>sort()</code>. Outside of a map function, we would just put <code>decreasing = TRUE</code> into the function call.</p>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="purrr-basics.html#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(moons<span class="sc">$</span>neptune, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb106-2"><a href="purrr-basics.html#cb106-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] 2705.2  420.0  340.0  194.0  174.8  156.0   81.4   62.0   60.4   60.0</span></span>
+<span id="cb106-3"><a href="purrr-basics.html#cb106-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [11]   44.0   42.0   40.0   34.8</span></span></code></pre></div>
+<p>Inside a map function, you put function arguments directly after the function name.</p>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="purrr-basics.html#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(moons, sort, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb107-2"><a href="purrr-basics.html#cb107-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $earth</span></span>
+<span id="cb107-3"><a href="purrr-basics.html#cb107-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1737</span></span>
+<span id="cb107-4"><a href="purrr-basics.html#cb107-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb107-5"><a href="purrr-basics.html#cb107-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $mars</span></span>
+<span id="cb107-6"><a href="purrr-basics.html#cb107-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 11.3  6.2</span></span>
+<span id="cb107-7"><a href="purrr-basics.html#cb107-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb107-8"><a href="purrr-basics.html#cb107-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $neptune</span></span>
+<span id="cb107-9"><a href="purrr-basics.html#cb107-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] 2705.2  420.0  340.0  194.0  174.8  156.0   81.4   62.0   60.4   60.0</span></span>
+<span id="cb107-10"><a href="purrr-basics.html#cb107-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [11]   44.0   42.0   40.0   34.8</span></span></code></pre></div>
+<p>You can add as many arguments as you like, and <code>map()</code> will automatically supply them to the function.</p>
+<p><img src="images/map-extra-arg.png" width="592" style="display: block; margin: auto;" /></p>
+<p>For example, the following code uses two additional arguments to find the 95th quantile for each planet, excluding missing values.</p>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="purrr-basics.html#cb108-1" aria-hidden="true" tabindex="-1"></a>moons <span class="sc">%&gt;%</span> </span>
+<span id="cb108-2"><a href="purrr-basics.html#cb108-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_dbl</span>(quantile, <span class="at">probs =</span> <span class="fl">0.95</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb108-3"><a href="purrr-basics.html#cb108-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   earth    mars neptune </span></span>
+<span id="cb108-4"><a href="purrr-basics.html#cb108-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    1737      11    1220</span></span></code></pre></div>
+</div>
+<div id="anonymous-functions-1" class="section level3" number="9.2.2">
+<h3><span class="header-section-number">9.2.2</span> Anonymous functions</h3>
+<p>So far in the reading, we’ve only given map <strong>named</strong> functions. Recall that named functions have a name which you can use to call the function.</p>
+<p>Say we want to convert the moon radii from kilometers to miles. Here’s a named function that turns kilometers into miles.</p>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="purrr-basics.html#cb109-1" aria-hidden="true" tabindex="-1"></a>km_to_miles <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb109-2"><a href="purrr-basics.html#cb109-2" aria-hidden="true" tabindex="-1"></a>  x <span class="sc">*</span> <span class="fl">0.62</span></span>
+<span id="cb109-3"><a href="purrr-basics.html#cb109-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Anytime we want to convert kilometers to miles, we can now call <code>km_to_miles()</code>.</p>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="purrr-basics.html#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="fu">km_to_miles</span>(<span class="dv">22</span>)</span>
+<span id="cb110-2"><a href="purrr-basics.html#cb110-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 13.6</span></span></code></pre></div>
+<p>Now, we can use <code>km_to_miles()</code> and <code>map()</code> to convert all moon radii to miles. We have to use <code>map()</code> because <code>km_to_miles()</code> will return a vector for each planet.</p>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="purrr-basics.html#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(moons, km_to_miles)</span>
+<span id="cb111-2"><a href="purrr-basics.html#cb111-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $earth</span></span>
+<span id="cb111-3"><a href="purrr-basics.html#cb111-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1077</span></span>
+<span id="cb111-4"><a href="purrr-basics.html#cb111-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb111-5"><a href="purrr-basics.html#cb111-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $mars</span></span>
+<span id="cb111-6"><a href="purrr-basics.html#cb111-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 7.01 3.84</span></span>
+<span id="cb111-7"><a href="purrr-basics.html#cb111-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb111-8"><a href="purrr-basics.html#cb111-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $neptune</span></span>
+<span id="cb111-9"><a href="purrr-basics.html#cb111-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1]   37.4   50.5   96.7  108.4  120.3   21.6  260.4 1677.2  210.8   38.4</span></span>
+<span id="cb111-10"><a href="purrr-basics.html#cb111-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [11]   27.3   26.0   24.8   37.2</span></span></code></pre></div>
+<p>If we’re not going to use <code>km_to_miles()</code> again, we don’t need to make a named function. It will be less work and more succinct to just create an anonymous function inside <code>map()</code>. Recall that anonymous functions are just functions without names, and the full syntax looks like this:</p>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="purrr-basics.html#cb112-1" aria-hidden="true" tabindex="-1"></a><span class="cf">function</span>(x) x <span class="sc">*</span> <span class="fl">0.62</span></span>
+<span id="cb112-2"><a href="purrr-basics.html#cb112-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; function(x) x * 0.62</span></span></code></pre></div>
+<p>We can copy this anonymous function directly into <code>map()</code>.</p>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="purrr-basics.html#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(moons, <span class="cf">function</span>(x) x <span class="sc">*</span> <span class="fl">0.62</span>)</span>
+<span id="cb113-2"><a href="purrr-basics.html#cb113-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $earth</span></span>
+<span id="cb113-3"><a href="purrr-basics.html#cb113-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1077</span></span>
+<span id="cb113-4"><a href="purrr-basics.html#cb113-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb113-5"><a href="purrr-basics.html#cb113-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $mars</span></span>
+<span id="cb113-6"><a href="purrr-basics.html#cb113-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 7.01 3.84</span></span>
+<span id="cb113-7"><a href="purrr-basics.html#cb113-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb113-8"><a href="purrr-basics.html#cb113-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $neptune</span></span>
+<span id="cb113-9"><a href="purrr-basics.html#cb113-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1]   37.4   50.5   96.7  108.4  120.3   21.6  260.4 1677.2  210.8   38.4</span></span>
+<span id="cb113-10"><a href="purrr-basics.html#cb113-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [11]   27.3   26.0   24.8   37.2</span></span></code></pre></div>
+<p>The full syntax for anonymous functions is clunky, so purrr provides a shortcut. Here’s what the code looks like if we use the shortcut:</p>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="purrr-basics.html#cb114-1" aria-hidden="true" tabindex="-1"></a>moons <span class="sc">%&gt;%</span> </span>
+<span id="cb114-2"><a href="purrr-basics.html#cb114-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(<span class="sc">~</span> . <span class="sc">*</span> <span class="fl">0.62</span>)</span>
+<span id="cb114-3"><a href="purrr-basics.html#cb114-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $earth</span></span>
+<span id="cb114-4"><a href="purrr-basics.html#cb114-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1077</span></span>
+<span id="cb114-5"><a href="purrr-basics.html#cb114-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb114-6"><a href="purrr-basics.html#cb114-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $mars</span></span>
+<span id="cb114-7"><a href="purrr-basics.html#cb114-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 7.01 3.84</span></span>
+<span id="cb114-8"><a href="purrr-basics.html#cb114-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb114-9"><a href="purrr-basics.html#cb114-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $neptune</span></span>
+<span id="cb114-10"><a href="purrr-basics.html#cb114-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1]   37.4   50.5   96.7  108.4  120.3   21.6  260.4 1677.2  210.8   38.4</span></span>
+<span id="cb114-11"><a href="purrr-basics.html#cb114-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [11]   27.3   26.0   24.8   37.2</span></span></code></pre></div>
+<p>The <code>~</code> tells <code>map()</code> that an anonymous function is coming. The <code>.</code> refers to the function argument, taking the place of <code>x</code> from the full anonymous function syntax.</p>
+<p>Just like when you supply <code>map()</code> with a named function, <code>map()</code> will apply an anonymous function to each element of <code>moons</code>. You can think of <code>.</code> as a placeholder, referring to <code>earth</code>, then <code>mars</code>, and then <code>neptune</code> as the conveyor belt delivers the vector of each planet’s moons to the worker.</p>
+<p><img src="images/map-anonymous.png" width="478" style="display: block; margin: auto;" /></p>
+<p>If a named function does not exist for your mapping, we recommend using an anonymous function instead of creating a named function, unless you’ll use the function again or the function is very long. We also recommend always using the syntax shortcut instead of the full anonymous function syntax.</p>
+<p>Anonymous functions can be confusing and tricky to get right. If you’re struggling to get the syntax correct, try testing your anonymous function on just a single element of your list. Here, we’ll explain one strategy for doing so.</p>
+<p>First, assign a single element of your list to the variable <code>.</code>. This looks strange, but means you’ll end up with a function that uses the purrr anonymous function syntax.</p>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="purrr-basics.html#cb115-1" aria-hidden="true" tabindex="-1"></a>. <span class="ot">&lt;-</span> moons[[<span class="dv">3</span>]]</span>
+<span id="cb115-2"><a href="purrr-basics.html#cb115-2" aria-hidden="true" tabindex="-1"></a>.</span>
+<span id="cb115-3"><a href="purrr-basics.html#cb115-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1]   60.4   81.4  156.0  174.8  194.0   34.8  420.0 2705.2  340.0   62.0</span></span>
+<span id="cb115-4"><a href="purrr-basics.html#cb115-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [11]   44.0   42.0   40.0   60.0</span></span></code></pre></div>
+<p>(We picked the third element because Neptune is more interesting than Earth, but it’s usually easiest to simply pick the first element with <code>[[1]]</code>.)</p>
+<p>Then, figure out how to perform your desired operation on just that element. Check that the output is correct.</p>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="purrr-basics.html#cb116-1" aria-hidden="true" tabindex="-1"></a>. <span class="sc">*</span> <span class="fl">0.62</span></span>
+<span id="cb116-2"><a href="purrr-basics.html#cb116-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1]   37.4   50.5   96.7  108.4  120.3   21.6  260.4 1677.2  210.8   38.4</span></span>
+<span id="cb116-3"><a href="purrr-basics.html#cb116-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [11]   27.3   26.0   24.8   37.2</span></span></code></pre></div>
+<p>Now, copy and paste your code into <code>map()</code>. Just remember to put a <code>~</code> at the beginning.</p>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="purrr-basics.html#cb117-1" aria-hidden="true" tabindex="-1"></a>moons <span class="sc">%&gt;%</span> </span>
+<span id="cb117-2"><a href="purrr-basics.html#cb117-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(<span class="sc">~</span> . <span class="sc">*</span> <span class="fl">0.62</span>)</span>
+<span id="cb117-3"><a href="purrr-basics.html#cb117-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $earth</span></span>
+<span id="cb117-4"><a href="purrr-basics.html#cb117-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1077</span></span>
+<span id="cb117-5"><a href="purrr-basics.html#cb117-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb117-6"><a href="purrr-basics.html#cb117-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $mars</span></span>
+<span id="cb117-7"><a href="purrr-basics.html#cb117-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 7.01 3.84</span></span>
+<span id="cb117-8"><a href="purrr-basics.html#cb117-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb117-9"><a href="purrr-basics.html#cb117-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $neptune</span></span>
+<span id="cb117-10"><a href="purrr-basics.html#cb117-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1]   37.4   50.5   96.7  108.4  120.3   21.6  260.4 1677.2  210.8   38.4</span></span>
+<span id="cb117-11"><a href="purrr-basics.html#cb117-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [11]   27.3   26.0   24.8   37.2</span></span></code></pre></div>
+<p>Let’s walk through a more complicated example. Say you want to find the number of large moons that belong to each planet. We’ll define a large moon as a moon with a radius greater than 100 kilometers.</p>
+<p>First, assign an element of your list to <code>.</code>.</p>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="purrr-basics.html#cb118-1" aria-hidden="true" tabindex="-1"></a>. <span class="ot">&lt;-</span> moons[[<span class="dv">3</span>]]</span>
+<span id="cb118-2"><a href="purrr-basics.html#cb118-2" aria-hidden="true" tabindex="-1"></a>.</span>
+<span id="cb118-3"><a href="purrr-basics.html#cb118-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1]   60.4   81.4  156.0  174.8  194.0   34.8  420.0 2705.2  340.0   62.0</span></span>
+<span id="cb118-4"><a href="purrr-basics.html#cb118-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [11]   44.0   42.0   40.0   60.0</span></span></code></pre></div>
+<p>Then, build and test your function just for <code>.</code>.</p>
+<p>First, we need to subset <code>.</code> so that it just includes moon radii greater than 100. Recall the syntax for subsetting vectors. <code>x[x == 1]</code> extracts just the elements of some vector <code>x</code> that are equal to 1. <code>x[x &gt; 2]</code> gives you all the elements of <code>x</code> greater than 2. Use this syntax to extract the moon radii in <code>.</code> that are greater than 100.</p>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="purrr-basics.html#cb119-1" aria-hidden="true" tabindex="-1"></a>.[. <span class="sc">&gt;</span> <span class="dv">100</span>]</span>
+<span id="cb119-2"><a href="purrr-basics.html#cb119-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1]  156  175  194  420 2705  340</span></span></code></pre></div>
+<p>Then, take the length of this new vector to find the number of moons it contains.</p>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="purrr-basics.html#cb120-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(.[. <span class="sc">&gt;</span> <span class="dv">100</span>])</span>
+<span id="cb120-2"><a href="purrr-basics.html#cb120-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 6</span></span></code></pre></div>
+<p>Now, copy and paste your code into a map function after a <code>~</code>. We’ll use <code>map_int()</code> because <code>length()</code> returns integers.</p>
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="purrr-basics.html#cb121-1" aria-hidden="true" tabindex="-1"></a>moons <span class="sc">%&gt;%</span> </span>
+<span id="cb121-2"><a href="purrr-basics.html#cb121-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_int</span>(<span class="sc">~</span> <span class="fu">length</span>(.[. <span class="sc">&gt;</span> <span class="dv">100</span>]))</span>
+<span id="cb121-3"><a href="purrr-basics.html#cb121-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   earth    mars neptune </span></span>
+<span id="cb121-4"><a href="purrr-basics.html#cb121-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       1       0       6</span></span></code></pre></div>
+<p>This strategy makes the purrr anonymous function syntax less abstract and allows you to test your anonymous functions before plugging them into a map function.</p>
+</div>
+<div id="tibbles-1" class="section level3" number="9.2.3">
+<h3><span class="header-section-number">9.2.3</span> Tibbles</h3>
+<p>All the examples so far have used the map function on <code>moons</code>, a list of vectors, but the map functions work on any type of vector or list, including tibbles.</p>
+<p>Tibbles are lists of vectors. Notice that when you create a tibble with <code>tibble()</code>, you create a vector for each column.</p>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="purrr-basics.html#cb122-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> </span>
+<span id="cb122-2"><a href="purrr-basics.html#cb122-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb122-3"><a href="purrr-basics.html#cb122-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">col_1 =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>),</span>
+<span id="cb122-4"><a href="purrr-basics.html#cb122-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">col_2 =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">300</span>),</span>
+<span id="cb122-5"><a href="purrr-basics.html#cb122-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">col_3 =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>)</span>
+<span id="cb122-6"><a href="purrr-basics.html#cb122-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p>Because the elements of a tibble are the vector columns, map functions act on the tibble columns, not the tibble rows.</p>
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="purrr-basics.html#cb123-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dbl</span>(y, median)</span>
+<span id="cb123-2"><a href="purrr-basics.html#cb123-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; col_1 col_2 col_3 </span></span>
+<span id="cb123-3"><a href="purrr-basics.html#cb123-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   2.0 200.0   0.2</span></span></code></pre></div>
+<p>Here’s another example that finds the number of <code>NA</code>’s in each column of <code>nycflights13::flights</code>.</p>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="purrr-basics.html#cb124-1" aria-hidden="true" tabindex="-1"></a>nycflights13<span class="sc">::</span>flights <span class="sc">%&gt;%</span> </span>
+<span id="cb124-2"><a href="purrr-basics.html#cb124-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_int</span>(<span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(.)))</span>
+<span id="cb124-3"><a href="purrr-basics.html#cb124-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           year          month            day       dep_time sched_dep_time </span></span>
+<span id="cb124-4"><a href="purrr-basics.html#cb124-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              0              0              0           8255              0 </span></span>
+<span id="cb124-5"><a href="purrr-basics.html#cb124-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      dep_delay       arr_time sched_arr_time      arr_delay        carrier </span></span>
+<span id="cb124-6"><a href="purrr-basics.html#cb124-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           8255           8713              0           9430              0 </span></span>
+<span id="cb124-7"><a href="purrr-basics.html#cb124-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         flight        tailnum         origin           dest       air_time </span></span>
+<span id="cb124-8"><a href="purrr-basics.html#cb124-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              0           2512              0              0           9430 </span></span>
+<span id="cb124-9"><a href="purrr-basics.html#cb124-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       distance           hour         minute      time_hour </span></span>
+<span id="cb124-10"><a href="purrr-basics.html#cb124-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;              0              0              0              0</span></span></code></pre></div>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="iteration.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="purrr-parallel.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/dcl-docs/prog/edit/master/purrr-basics.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "lunr",
+"options": null
+},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

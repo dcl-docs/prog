@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>10 Map with multiple inputs | Functional Programming</title>
+  <meta name="description" content="This book is a practical introduction to functional programming using the tidyverse." />
+  <meta name="generator" content="bookdown 0.23 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="10 Map with multiple inputs | Functional Programming" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://dcl-prog.stanford.edu" />
+  
+  <meta property="og:description" content="This book is a practical introduction to functional programming using the tidyverse." />
+  <meta name="github-repo" content="dcl-docs/prog" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="10 Map with multiple inputs | Functional Programming" />
+  
+  <meta name="twitter:description" content="This book is a practical introduction to functional programming using the tidyverse." />
+  
+
+<meta name="author" content="Sara Altman, Bill Behrman, Hadley Wickham" />
+
+
+<meta name="date" content="2021-09-09" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="purrr-basics.html"/>
+<link rel="next" href="purrr-extras.html"/>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Functional Programming</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#an-evolving-book"><i class="fa fa-check"></i>An evolving book</a></li>
+</ul></li>
+<li class="part"><span><b>I Data Structures</b></span></li>
+<li class="chapter" data-level="1" data-path="data-structures.html"><a href="data-structures.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="data-structure-basics.html"><a href="data-structure-basics.html"><i class="fa fa-check"></i><b>2</b> Vectors, lists, and tibbles</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="data-structure-basics.html"><a href="data-structure-basics.html#atomic-vectors"><i class="fa fa-check"></i><b>2.1</b> Atomic vectors</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="data-structure-basics.html"><a href="data-structure-basics.html#properties"><i class="fa fa-check"></i><b>2.1.1</b> Properties</a></li>
+<li class="chapter" data-level="2.1.2" data-path="data-structure-basics.html"><a href="data-structure-basics.html#subsetting"><i class="fa fa-check"></i><b>2.1.2</b> Subsetting</a></li>
+<li class="chapter" data-level="2.1.3" data-path="data-structure-basics.html"><a href="data-structure-basics.html#applying-functions"><i class="fa fa-check"></i><b>2.1.3</b> Applying functions</a></li>
+<li class="chapter" data-level="2.1.4" data-path="data-structure-basics.html"><a href="data-structure-basics.html#augmented-vectors"><i class="fa fa-check"></i><b>2.1.4</b> Augmented vectors</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="data-structure-basics.html"><a href="data-structure-basics.html#lists"><i class="fa fa-check"></i><b>2.2</b> Lists</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="data-structure-basics.html"><a href="data-structure-basics.html#basics"><i class="fa fa-check"></i><b>2.2.1</b> Basics</a></li>
+<li class="chapter" data-level="2.2.2" data-path="data-structure-basics.html"><a href="data-structure-basics.html#flattening"><i class="fa fa-check"></i><b>2.2.2</b> Flattening</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="data-structure-basics.html"><a href="data-structure-basics.html#tibbles"><i class="fa fa-check"></i><b>2.3</b> Tibbles</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="data-structure-basics.html"><a href="data-structure-basics.html#creation"><i class="fa fa-check"></i><b>2.3.1</b> Creation</a></li>
+<li class="chapter" data-level="2.3.2" data-path="data-structure-basics.html"><a href="data-structure-basics.html#subsetting-1"><i class="fa fa-check"></i><b>2.3.2</b> Subsetting</a></li>
+<li class="chapter" data-level="2.3.3" data-path="data-structure-basics.html"><a href="data-structure-basics.html#dimensions"><i class="fa fa-check"></i><b>2.3.3</b> Dimensions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="list-columns.html"><a href="list-columns.html"><i class="fa fa-check"></i><b>3</b> List columns</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="list-columns.html"><a href="list-columns.html#creating"><i class="fa fa-check"></i><b>3.1</b> Creating</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="list-columns.html"><a href="list-columns.html#nest"><i class="fa fa-check"></i><b>3.1.1</b> <code>nest()</code></a></li>
+<li class="chapter" data-level="3.1.2" data-path="list-columns.html"><a href="list-columns.html#summarize-and-list"><i class="fa fa-check"></i><b>3.1.2</b> <code>summarize()</code> and <code>list()</code></a></li>
+<li class="chapter" data-level="3.1.3" data-path="list-columns.html"><a href="list-columns.html#mutate"><i class="fa fa-check"></i><b>3.1.3</b> <code>mutate()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="list-columns.html"><a href="list-columns.html#unnesting"><i class="fa fa-check"></i><b>3.2</b> Unnesting</a></li>
+<li class="chapter" data-level="3.3" data-path="list-columns.html"><a href="list-columns.html#manipulating"><i class="fa fa-check"></i><b>3.3</b> Manipulating</a></li>
+</ul></li>
+<li class="part"><span><b>II Functions</b></span></li>
+<li class="chapter" data-level="4" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>4</b> Introduction</a></li>
+<li class="chapter" data-level="5" data-path="function-vector.html"><a href="function-vector.html"><i class="fa fa-check"></i><b>5</b> Vector functions</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="function-vector.html"><a href="function-vector.html#temperature-recommendations"><i class="fa fa-check"></i><b>5.1</b> Temperature recommendations</a></li>
+<li class="chapter" data-level="5.2" data-path="function-vector.html"><a href="function-vector.html#vector-functions-and-mutate"><i class="fa fa-check"></i><b>5.2</b> Vector functions and <code>mutate()</code></a></li>
+<li class="chapter" data-level="5.3" data-path="function-vector.html"><a href="function-vector.html#vectorizing-if-else-statements"><i class="fa fa-check"></i><b>5.3</b> Vectorizing if-else statements</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="function-anonymous.html"><a href="function-anonymous.html"><i class="fa fa-check"></i><b>6</b> Anonymous functions</a></li>
+<li class="chapter" data-level="7" data-path="function-predicate.html"><a href="function-predicate.html"><i class="fa fa-check"></i><b>7</b> Predicate functions</a></li>
+<li class="part"><span><b>III Iteration</b></span></li>
+<li class="chapter" data-level="8" data-path="iteration.html"><a href="iteration.html"><i class="fa fa-check"></i><b>8</b> Introduction</a></li>
+<li class="chapter" data-level="9" data-path="purrr-basics.html"><a href="purrr-basics.html"><i class="fa fa-check"></i><b>9</b> Basic map functions</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="purrr-basics.html"><a href="purrr-basics.html#iteration-as-an-assembly-line"><i class="fa fa-check"></i><b>9.1</b> Iteration as an assembly line</a></li>
+<li class="chapter" data-level="9.2" data-path="purrr-basics.html"><a href="purrr-basics.html#the-map-functions"><i class="fa fa-check"></i><b>9.2</b> The map functions</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="purrr-basics.html"><a href="purrr-basics.html#extra-arguments"><i class="fa fa-check"></i><b>9.2.1</b> Extra arguments</a></li>
+<li class="chapter" data-level="9.2.2" data-path="purrr-basics.html"><a href="purrr-basics.html#anonymous-functions-1"><i class="fa fa-check"></i><b>9.2.2</b> Anonymous functions</a></li>
+<li class="chapter" data-level="9.2.3" data-path="purrr-basics.html"><a href="purrr-basics.html#tibbles-1"><i class="fa fa-check"></i><b>9.2.3</b> Tibbles</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="purrr-parallel.html"><a href="purrr-parallel.html"><i class="fa fa-check"></i><b>10</b> Map with multiple inputs</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="purrr-parallel.html"><a href="purrr-parallel.html#map2"><i class="fa fa-check"></i><b>10.1</b> <code>map2()</code></a></li>
+<li class="chapter" data-level="10.2" data-path="purrr-parallel.html"><a href="purrr-parallel.html#pmap"><i class="fa fa-check"></i><b>10.2</b> <code>pmap()</code></a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="purrr-parallel.html"><a href="purrr-parallel.html#anonymous-functions-2"><i class="fa fa-check"></i><b>10.2.1</b> Anonymous functions</a></li>
+<li class="chapter" data-level="10.2.2" data-path="purrr-parallel.html"><a href="purrr-parallel.html#named-functions"><i class="fa fa-check"></i><b>10.2.2</b> Named functions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="purrr-extras.html"><a href="purrr-extras.html"><i class="fa fa-check"></i><b>11</b> Other purrr functions</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="purrr-extras.html"><a href="purrr-extras.html#map-functions-that-output-tibbles"><i class="fa fa-check"></i><b>11.1</b> Map functions that output tibbles</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="purrr-extras.html"><a href="purrr-extras.html#dfr"><i class="fa fa-check"></i><b>11.1.1</b> <code>_dfr</code></a></li>
+<li class="chapter" data-level="11.1.2" data-path="purrr-extras.html"><a href="purrr-extras.html#dfc"><i class="fa fa-check"></i><b>11.1.2</b> <code>_dfc</code></a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="purrr-extras.html"><a href="purrr-extras.html#walk"><i class="fa fa-check"></i><b>11.2</b> Walk</a></li>
+<li class="chapter" data-level="11.3" data-path="purrr-extras.html"><a href="purrr-extras.html#predicate-functions-1"><i class="fa fa-check"></i><b>11.3</b> Predicate functions</a></li>
+</ul></li>
+<li class="part"><span><b>IV Tidy evaluation</b></span></li>
+<li class="chapter" data-level="12" data-path="tidy-eval-section.html"><a href="tidy-eval-section.html"><i class="fa fa-check"></i><b>12</b> Introduction</a></li>
+<li class="chapter" data-level="13" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html"><i class="fa fa-check"></i><b>13</b> Tidy evaluation basics</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html#embracing-with"><i class="fa fa-check"></i><b>13.1</b> Embracing with <code>{{ }}</code></a></li>
+<li class="chapter" data-level="13.2" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html#forwarding-with-..."><i class="fa fa-check"></i><b>13.2</b> Forwarding with <code>...</code></a>
+<ul>
+<li class="chapter" data-level="13.2.1" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html#passing-full-expressions"><i class="fa fa-check"></i><b>13.2.1</b> Passing full expressions</a></li>
+<li class="chapter" data-level="13.2.2" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html#additional-arguments"><i class="fa fa-check"></i><b>13.2.2</b> Additional arguments</a></li>
+</ul></li>
+<li class="chapter" data-level="13.3" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html#assigning-names"><i class="fa fa-check"></i><b>13.3</b> Assigning names</a></li>
+<li class="chapter" data-level="13.4" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html#splicing-with"><i class="fa fa-check"></i><b>13.4</b> Splicing with <code>!!!</code></a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Functional Programming</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="map-with-multiple-inputs" class="section level1" number="10">
+<h1><span class="header-section-number">10</span> Map with multiple inputs</h1>
+<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="purrr-parallel.html#cb125-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<p>In the previous purrr units, you learned how to use the <code>map()</code> functions to iterate over a single vector and apply a function to each element. <code>purrr</code> also contains functions that can iterate over several vectors in parallel, supplying the first elements of each vector to a given function, then the second, then the third, etc.</p>
+<p><code>purrr</code>’s parallel mapping functions allow the assembly line to have multiple, synchronized input conveyor belts. Our factory worker uses the nth item from each input conveyor belt to create a new object that becomes the nth item on the output conveyor belt.</p>
+<p>Below, you’ll learn about the <code>map2()</code> functions, which can handle two input vectors, and the <code>pmap()</code> functions, which can handle any number of input vectors.</p>
+<div id="map2" class="section level2" number="10.1">
+<h2><span class="header-section-number">10.1</span> <code>map2()</code></h2>
+<p>The <code>map2()</code> functions are very similar to the <code>map()</code> functions you learned about previously, but they take two input vectors instead of one.</p>
+<p><img src="images/map2.png" width="439" style="display: block; margin: auto;" /></p>
+<p>For example, here are two vectors, <code>x</code> and <code>y</code>.</p>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="purrr-parallel.html#cb126-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>)</span>
+<span id="cb126-2"><a href="purrr-parallel.html#cb126-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">3</span>)</span></code></pre></div>
+<p>We can use a <code>map2()</code> variant to iterate along both vectors in parallel. The following code creates a new vector whose first element is the minimum of <code>x[1]</code> and <code>y[1]</code>, second element is the minimum of <code>x[2]</code> and <code>y[2]</code>, and third element is the minimum of <code>x[3]</code> and <code>y[3]</code>.</p>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb127-1"><a href="purrr-parallel.html#cb127-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map2_dbl</span>(x, y, min)</span>
+<span id="cb127-2"><a href="purrr-parallel.html#cb127-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1 2 3</span></span></code></pre></div>
+<p>Since the <code>map2()</code> functions iterate along the two vectors in parallel, they need to be the same length.</p>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="purrr-parallel.html#cb128-1" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>)</span>
+<span id="cb128-2"><a href="purrr-parallel.html#cb128-2" aria-hidden="true" tabindex="-1"></a>y2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">5</span>)</span>
+<span id="cb128-3"><a href="purrr-parallel.html#cb128-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb128-4"><a href="purrr-parallel.html#cb128-4" aria-hidden="true" tabindex="-1"></a><span class="fu">map2_dbl</span>(x2, y2, min)</span>
+<span id="cb128-5"><a href="purrr-parallel.html#cb128-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error: Mapped vectors must have consistent lengths:</span></span>
+<span id="cb128-6"><a href="purrr-parallel.html#cb128-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * `.x` has length 3</span></span>
+<span id="cb128-7"><a href="purrr-parallel.html#cb128-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * `.y` has length 2</span></span></code></pre></div>
+<p>Inside anonymous functions in the <code>map()</code> functions, you refer to each element of the input vector as <code>.</code> . In the <code>map2()</code> functions, you refer to elements of the first vector as <code>.x</code> and elements of the second as <code>.y</code> .</p>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb129-1"><a href="purrr-parallel.html#cb129-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map2_chr</span>(x, y, <span class="sc">~</span> <span class="fu">str_glue</span>(<span class="st">&quot;The minimum of {.x} and {.y} is {min(.x, .y)}.&quot;</span>))</span>
+<span id="cb129-2"><a href="purrr-parallel.html#cb129-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;The minimum of 1 and 6 is 1.&quot; &quot;The minimum of 2 and 5 is 2.&quot;</span></span>
+<span id="cb129-3"><a href="purrr-parallel.html#cb129-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3] &quot;The minimum of 4 and 3 is 3.&quot;</span></span></code></pre></div>
+<p>If you don’t create an anonymous function and use a named function instead, the first vector will be supplied as the first argument to the function and the second vector will be supplied as the second argument.</p>
+<p>Remember that tibble columns are vectors, so you can use <code>map2()</code> inside <code>mutate()</code> to alter tibble columns.</p>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="purrr-parallel.html#cb130-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span></span>
+<span id="cb130-2"><a href="purrr-parallel.html#cb130-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb130-3"><a href="purrr-parallel.html#cb130-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">a =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>),</span>
+<span id="cb130-4"><a href="purrr-parallel.html#cb130-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">b =</span> <span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">3</span>)</span>
+<span id="cb130-5"><a href="purrr-parallel.html#cb130-5" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb130-6"><a href="purrr-parallel.html#cb130-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb130-7"><a href="purrr-parallel.html#cb130-7" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb130-8"><a href="purrr-parallel.html#cb130-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">min =</span> <span class="fu">map2_dbl</span>(a, b, min))</span>
+<span id="cb130-9"><a href="purrr-parallel.html#cb130-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 3</span></span>
+<span id="cb130-10"><a href="purrr-parallel.html#cb130-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       a     b   min</span></span>
+<span id="cb130-11"><a href="purrr-parallel.html#cb130-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb130-12"><a href="purrr-parallel.html#cb130-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1     6     1</span></span>
+<span id="cb130-13"><a href="purrr-parallel.html#cb130-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     2     5     2</span></span>
+<span id="cb130-14"><a href="purrr-parallel.html#cb130-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     4     3     3</span></span></code></pre></div>
+<p>By default, <code>mutate()</code> uses column-wise operations. <code>map2_dbl()</code> produces a column the same length at <code>a</code> and <code>b</code>. We can accomplish the same calculation using row-wise operations.</p>
+<div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb131-1"><a href="purrr-parallel.html#cb131-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">%&gt;%</span> </span>
+<span id="cb131-2"><a href="purrr-parallel.html#cb131-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb131-3"><a href="purrr-parallel.html#cb131-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">min =</span> <span class="fu">min</span>(a, b)) <span class="sc">%&gt;%</span> </span>
+<span id="cb131-4"><a href="purrr-parallel.html#cb131-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb131-5"><a href="purrr-parallel.html#cb131-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 3</span></span>
+<span id="cb131-6"><a href="purrr-parallel.html#cb131-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       a     b   min</span></span>
+<span id="cb131-7"><a href="purrr-parallel.html#cb131-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb131-8"><a href="purrr-parallel.html#cb131-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1     6     1</span></span>
+<span id="cb131-9"><a href="purrr-parallel.html#cb131-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     2     5     2</span></span>
+<span id="cb131-10"><a href="purrr-parallel.html#cb131-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     4     3     3</span></span></code></pre></div>
+</div>
+<div id="pmap" class="section level2" number="10.2">
+<h2><span class="header-section-number">10.2</span> <code>pmap()</code></h2>
+<p>There are no <code>map3()</code> or <code>map4()</code> functions. Instead, you can use a <code>pmap()</code> (<em>p</em> for parallel) function to map over more than two vectors.</p>
+<p>The <code>pmap()</code> functions work slightly differently than the <code>map()</code> and <code>map2()</code> functions. In <code>map()</code> and <code>map2()</code> functions, you specify the vector(s) to supply to the function. In <code>pmap()</code> functions, you specify a single list that contains all the vectors (or lists) that you want to supply to your function.</p>
+<p><img src="images/pmap-list.png" width="569" style="display: block; margin: auto;" /></p>
+<p>Flipping the list diagram makes it easier to see that <code>pmap()</code> is basically just a generalized version of <code>map2()</code>.</p>
+<p><img src="images/pmap-flipped.png" width="569" style="display: block; margin: auto;" /></p>
+<p>The only difference is that <code>map2()</code> lets you specify each vector as a separate argument. In <code>pmap()</code>, you have to store all your input vectors in a single list. This functionality allows <code>pmap()</code> to handle any number of input vectors. Here’s our earlier <code>map2()</code> statement.</p>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="purrr-parallel.html#cb132-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map2_dbl</span>(x, y, min)</span>
+<span id="cb132-2"><a href="purrr-parallel.html#cb132-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1 2 3</span></span></code></pre></div>
+<p>To do this in <code>pmap()</code>, just create a list out of <code>x</code> and <code>y</code>.</p>
+<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb133-1"><a href="purrr-parallel.html#cb133-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pmap_dbl</span>(<span class="fu">list</span>(x, y), min)</span>
+<span id="cb133-2"><a href="purrr-parallel.html#cb133-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1 2 3</span></span></code></pre></div>
+<p>If you only have two input vectors, though, use <code>map2()</code>. If we want to apply <code>min()</code> to parallel elements of <em>three</em> vectors, we’ll need to use <code>pmap()</code>.</p>
+<p><code>z</code> is a third vector.</p>
+<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb134-1"><a href="purrr-parallel.html#cb134-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">15</span>, <span class="dv">1</span>)</span></code></pre></div>
+<p>Again, we need to combine all the individual vectors into a single list in order to use <code>pmap()</code>.</p>
+<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb135-1"><a href="purrr-parallel.html#cb135-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pmap_dbl</span>(<span class="fu">list</span>(x, y, z), min)</span>
+<span id="cb135-2"><a href="purrr-parallel.html#cb135-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1 2 1</span></span></code></pre></div>
+<p>Tibbles are lists, so we could also combine <code>x</code>, <code>y</code>, and <code>z</code> into a tibble.</p>
+<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb136-1"><a href="purrr-parallel.html#cb136-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb136-2"><a href="purrr-parallel.html#cb136-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">a =</span> <span class="fu">c</span>(<span class="dv">50</span>, <span class="dv">60</span>, <span class="dv">70</span>),</span>
+<span id="cb136-3"><a href="purrr-parallel.html#cb136-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">b =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">90</span>, <span class="dv">40</span>),</span>
+<span id="cb136-4"><a href="purrr-parallel.html#cb136-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">c =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">105</span>, <span class="dv">2000</span>)</span>
+<span id="cb136-5"><a href="purrr-parallel.html#cb136-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
+<span id="cb136-6"><a href="purrr-parallel.html#cb136-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pmap_dbl</span>(min)</span>
+<span id="cb136-7"><a href="purrr-parallel.html#cb136-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1]  1 60 40</span></span></code></pre></div>
+<div id="anonymous-functions-2" class="section level3" number="10.2.1">
+<h3><span class="header-section-number">10.2.1</span> Anonymous functions</h3>
+<p><code>pmap()</code> can involve any number of input vectors, so we need a new way of referring to each vector in an anonymous function. Instead of using <code>.</code>, <code>.x</code>, or <code>.y</code>, use <code>..1</code>., <code>..2</code>, <code>..3</code>, etc. to refer to the different vectors.</p>
+<p><code>state_animals</code> is a tibble with some information on the official animals of different states.</p>
+<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb137-1"><a href="purrr-parallel.html#cb137-1" aria-hidden="true" tabindex="-1"></a>state_animals <span class="ot">&lt;-</span> </span>
+<span id="cb137-2"><a href="purrr-parallel.html#cb137-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tribble</span>(</span>
+<span id="cb137-3"><a href="purrr-parallel.html#cb137-3" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span>state, <span class="sc">~</span>type, <span class="sc">~</span>animal, <span class="sc">~</span>binomial,</span>
+<span id="cb137-4"><a href="purrr-parallel.html#cb137-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Alaska&quot;</span>, <span class="st">&quot;land mammal&quot;</span>, <span class="st">&quot;Moose&quot;</span>, <span class="st">&quot;Alces alces&quot;</span>,</span>
+<span id="cb137-5"><a href="purrr-parallel.html#cb137-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Delaware&quot;</span>, <span class="st">&quot;bug&quot;</span>, <span class="st">&quot;7-spotted ladybug&quot;</span>, <span class="st">&quot;Coccinella septempunctata&quot;</span>,</span>
+<span id="cb137-6"><a href="purrr-parallel.html#cb137-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Hawaii&quot;</span>, <span class="st">&quot;fish&quot;</span>, <span class="st">&quot;Humuhumunukunukuāpuaʻa&quot;</span>, <span class="st">&quot;Rhinecanthus rectangulus&quot;</span>,</span>
+<span id="cb137-7"><a href="purrr-parallel.html#cb137-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Maine&quot;</span>, <span class="st">&quot;crustacean&quot;</span>, <span class="st">&quot;lobster&quot;</span>, <span class="st">&quot;Homarus americanus&quot;</span> </span>
+<span id="cb137-8"><a href="purrr-parallel.html#cb137-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb137-9"><a href="purrr-parallel.html#cb137-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb137-10"><a href="purrr-parallel.html#cb137-10" aria-hidden="true" tabindex="-1"></a>state_animals</span>
+<span id="cb137-11"><a href="purrr-parallel.html#cb137-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 × 4</span></span>
+<span id="cb137-12"><a href="purrr-parallel.html#cb137-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   state    type        animal                 binomial                 </span></span>
+<span id="cb137-13"><a href="purrr-parallel.html#cb137-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;       &lt;chr&gt;                  &lt;chr&gt;                    </span></span>
+<span id="cb137-14"><a href="purrr-parallel.html#cb137-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Alaska   land mammal Moose                  Alces alces              </span></span>
+<span id="cb137-15"><a href="purrr-parallel.html#cb137-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Delaware bug         7-spotted ladybug      Coccinella septempunctata</span></span>
+<span id="cb137-16"><a href="purrr-parallel.html#cb137-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Hawaii   fish        Humuhumunukunukuāpuaʻa Rhinecanthus rectangulus </span></span>
+<span id="cb137-17"><a href="purrr-parallel.html#cb137-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 Maine    crustacean  lobster                Homarus americanus</span></span></code></pre></div>
+<p>We can use <code>pmap()</code> to write short descriptions for each state.</p>
+<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="purrr-parallel.html#cb138-1" aria-hidden="true" tabindex="-1"></a>state_animals <span class="sc">%&gt;%</span> </span>
+<span id="cb138-2"><a href="purrr-parallel.html#cb138-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pmap_chr</span>(<span class="sc">~</span> <span class="fu">str_glue</span>(<span class="st">&quot;The {..1} state {..2} is the {..3}.&quot;</span>))</span>
+<span id="cb138-3"><a href="purrr-parallel.html#cb138-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;The Alaska state land mammal is the Moose.&quot;          </span></span>
+<span id="cb138-4"><a href="purrr-parallel.html#cb138-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2] &quot;The Delaware state bug is the 7-spotted ladybug.&quot;    </span></span>
+<span id="cb138-5"><a href="purrr-parallel.html#cb138-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3] &quot;The Hawaii state fish is the Humuhumunukunukuāpuaʻa.&quot;</span></span>
+<span id="cb138-6"><a href="purrr-parallel.html#cb138-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4] &quot;The Maine state crustacean is the lobster.&quot;</span></span></code></pre></div>
+<p><code>..1</code> refers to the first variable (<code>state</code>), <code>..2</code> to the second (<code>type</code>), and <code>..3</code> to the third (<code>animal</code>).</p>
+</div>
+<div id="named-functions" class="section level3" number="10.2.2">
+<h3><span class="header-section-number">10.2.2</span> Named functions</h3>
+<p>If you supply <code>pmap()</code> a named function, it will match the names of the input list with the names of the function arguments. This can result in elegant code. But for this to work, it’s important that:</p>
+<ul>
+<li>The list or tibble input variable names match those of the function arguments.</li>
+<li>You have <strong>the same number of input variables as function arguments</strong>.</li>
+</ul>
+<p>Let’s start with an example of what doesn’t work. First, we’ll create a named function.</p>
+<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb139-1"><a href="purrr-parallel.html#cb139-1" aria-hidden="true" tabindex="-1"></a>state_sentence <span class="ot">&lt;-</span> <span class="cf">function</span>(animal, type, state) {</span>
+<span id="cb139-2"><a href="purrr-parallel.html#cb139-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_glue</span>(<span class="st">&quot;The {state} state {type} is the {animal}.&quot;</span>)</span>
+<span id="cb139-3"><a href="purrr-parallel.html#cb139-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>This does not work:</p>
+<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="purrr-parallel.html#cb140-1" aria-hidden="true" tabindex="-1"></a>state_animals <span class="sc">%&gt;%</span> </span>
+<span id="cb140-2"><a href="purrr-parallel.html#cb140-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pmap_chr</span>(state_sentence)</span>
+<span id="cb140-3"><a href="purrr-parallel.html#cb140-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in .f(state = .l[[1L]][[i]], type = .l[[2L]][[i]], animal = .l[[3L]][[i]], : unused argument (binomial = .l[[4]][[i]])</span></span></code></pre></div>
+<p><code>state_animals</code> has four variables, but <code>state_sentence</code> is expecting three. The number of input variables must match the number of function arguments.</p>
+<p>The easiest way to fix the problem is to just get rid of the unused variable.</p>
+<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb141-1"><a href="purrr-parallel.html#cb141-1" aria-hidden="true" tabindex="-1"></a>state_animals <span class="sc">%&gt;%</span> </span>
+<span id="cb141-2"><a href="purrr-parallel.html#cb141-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span>binomial) <span class="sc">%&gt;%</span> </span>
+<span id="cb141-3"><a href="purrr-parallel.html#cb141-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pmap_chr</span>(state_sentence)</span>
+<span id="cb141-4"><a href="purrr-parallel.html#cb141-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;The Alaska state land mammal is the Moose.&quot;          </span></span>
+<span id="cb141-5"><a href="purrr-parallel.html#cb141-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2] &quot;The Delaware state bug is the 7-spotted ladybug.&quot;    </span></span>
+<span id="cb141-6"><a href="purrr-parallel.html#cb141-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3] &quot;The Hawaii state fish is the Humuhumunukunukuāpuaʻa.&quot;</span></span>
+<span id="cb141-7"><a href="purrr-parallel.html#cb141-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4] &quot;The Maine state crustacean is the lobster.&quot;</span></span></code></pre></div>
+<p>Note that the order of the variables in <code>state_animals</code> is different than the order of the arguments in <code>state_sentence</code>. <code>pmap()</code> matches input variables with function arguments by name, so the orderings don’t matter. However, this means that the two sets of names must be identical.</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="purrr-basics.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="purrr-extras.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/dcl-docs/prog/edit/master/purrr-parallel.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "lunr",
+"options": null
+},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

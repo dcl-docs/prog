@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>13 Tidy evaluation basics | Functional Programming</title>
+  <meta name="description" content="This book is a practical introduction to functional programming using the tidyverse." />
+  <meta name="generator" content="bookdown 0.23 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="13 Tidy evaluation basics | Functional Programming" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://dcl-prog.stanford.edu" />
+  
+  <meta property="og:description" content="This book is a practical introduction to functional programming using the tidyverse." />
+  <meta name="github-repo" content="dcl-docs/prog" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="13 Tidy evaluation basics | Functional Programming" />
+  
+  <meta name="twitter:description" content="This book is a practical introduction to functional programming using the tidyverse." />
+  
+
+<meta name="author" content="Sara Altman, Bill Behrman, Hadley Wickham" />
+
+
+<meta name="date" content="2021-09-09" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="tidy-eval-section.html"/>
+
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Functional Programming</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#an-evolving-book"><i class="fa fa-check"></i>An evolving book</a></li>
+</ul></li>
+<li class="part"><span><b>I Data Structures</b></span></li>
+<li class="chapter" data-level="1" data-path="data-structures.html"><a href="data-structures.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="data-structure-basics.html"><a href="data-structure-basics.html"><i class="fa fa-check"></i><b>2</b> Vectors, lists, and tibbles</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="data-structure-basics.html"><a href="data-structure-basics.html#atomic-vectors"><i class="fa fa-check"></i><b>2.1</b> Atomic vectors</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="data-structure-basics.html"><a href="data-structure-basics.html#properties"><i class="fa fa-check"></i><b>2.1.1</b> Properties</a></li>
+<li class="chapter" data-level="2.1.2" data-path="data-structure-basics.html"><a href="data-structure-basics.html#subsetting"><i class="fa fa-check"></i><b>2.1.2</b> Subsetting</a></li>
+<li class="chapter" data-level="2.1.3" data-path="data-structure-basics.html"><a href="data-structure-basics.html#applying-functions"><i class="fa fa-check"></i><b>2.1.3</b> Applying functions</a></li>
+<li class="chapter" data-level="2.1.4" data-path="data-structure-basics.html"><a href="data-structure-basics.html#augmented-vectors"><i class="fa fa-check"></i><b>2.1.4</b> Augmented vectors</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="data-structure-basics.html"><a href="data-structure-basics.html#lists"><i class="fa fa-check"></i><b>2.2</b> Lists</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="data-structure-basics.html"><a href="data-structure-basics.html#basics"><i class="fa fa-check"></i><b>2.2.1</b> Basics</a></li>
+<li class="chapter" data-level="2.2.2" data-path="data-structure-basics.html"><a href="data-structure-basics.html#flattening"><i class="fa fa-check"></i><b>2.2.2</b> Flattening</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="data-structure-basics.html"><a href="data-structure-basics.html#tibbles"><i class="fa fa-check"></i><b>2.3</b> Tibbles</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="data-structure-basics.html"><a href="data-structure-basics.html#creation"><i class="fa fa-check"></i><b>2.3.1</b> Creation</a></li>
+<li class="chapter" data-level="2.3.2" data-path="data-structure-basics.html"><a href="data-structure-basics.html#subsetting-1"><i class="fa fa-check"></i><b>2.3.2</b> Subsetting</a></li>
+<li class="chapter" data-level="2.3.3" data-path="data-structure-basics.html"><a href="data-structure-basics.html#dimensions"><i class="fa fa-check"></i><b>2.3.3</b> Dimensions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="list-columns.html"><a href="list-columns.html"><i class="fa fa-check"></i><b>3</b> List columns</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="list-columns.html"><a href="list-columns.html#creating"><i class="fa fa-check"></i><b>3.1</b> Creating</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="list-columns.html"><a href="list-columns.html#nest"><i class="fa fa-check"></i><b>3.1.1</b> <code>nest()</code></a></li>
+<li class="chapter" data-level="3.1.2" data-path="list-columns.html"><a href="list-columns.html#summarize-and-list"><i class="fa fa-check"></i><b>3.1.2</b> <code>summarize()</code> and <code>list()</code></a></li>
+<li class="chapter" data-level="3.1.3" data-path="list-columns.html"><a href="list-columns.html#mutate"><i class="fa fa-check"></i><b>3.1.3</b> <code>mutate()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="list-columns.html"><a href="list-columns.html#unnesting"><i class="fa fa-check"></i><b>3.2</b> Unnesting</a></li>
+<li class="chapter" data-level="3.3" data-path="list-columns.html"><a href="list-columns.html#manipulating"><i class="fa fa-check"></i><b>3.3</b> Manipulating</a></li>
+</ul></li>
+<li class="part"><span><b>II Functions</b></span></li>
+<li class="chapter" data-level="4" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>4</b> Introduction</a></li>
+<li class="chapter" data-level="5" data-path="function-vector.html"><a href="function-vector.html"><i class="fa fa-check"></i><b>5</b> Vector functions</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="function-vector.html"><a href="function-vector.html#temperature-recommendations"><i class="fa fa-check"></i><b>5.1</b> Temperature recommendations</a></li>
+<li class="chapter" data-level="5.2" data-path="function-vector.html"><a href="function-vector.html#vector-functions-and-mutate"><i class="fa fa-check"></i><b>5.2</b> Vector functions and <code>mutate()</code></a></li>
+<li class="chapter" data-level="5.3" data-path="function-vector.html"><a href="function-vector.html#vectorizing-if-else-statements"><i class="fa fa-check"></i><b>5.3</b> Vectorizing if-else statements</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="function-anonymous.html"><a href="function-anonymous.html"><i class="fa fa-check"></i><b>6</b> Anonymous functions</a></li>
+<li class="chapter" data-level="7" data-path="function-predicate.html"><a href="function-predicate.html"><i class="fa fa-check"></i><b>7</b> Predicate functions</a></li>
+<li class="part"><span><b>III Iteration</b></span></li>
+<li class="chapter" data-level="8" data-path="iteration.html"><a href="iteration.html"><i class="fa fa-check"></i><b>8</b> Introduction</a></li>
+<li class="chapter" data-level="9" data-path="purrr-basics.html"><a href="purrr-basics.html"><i class="fa fa-check"></i><b>9</b> Basic map functions</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="purrr-basics.html"><a href="purrr-basics.html#iteration-as-an-assembly-line"><i class="fa fa-check"></i><b>9.1</b> Iteration as an assembly line</a></li>
+<li class="chapter" data-level="9.2" data-path="purrr-basics.html"><a href="purrr-basics.html#the-map-functions"><i class="fa fa-check"></i><b>9.2</b> The map functions</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="purrr-basics.html"><a href="purrr-basics.html#extra-arguments"><i class="fa fa-check"></i><b>9.2.1</b> Extra arguments</a></li>
+<li class="chapter" data-level="9.2.2" data-path="purrr-basics.html"><a href="purrr-basics.html#anonymous-functions-1"><i class="fa fa-check"></i><b>9.2.2</b> Anonymous functions</a></li>
+<li class="chapter" data-level="9.2.3" data-path="purrr-basics.html"><a href="purrr-basics.html#tibbles-1"><i class="fa fa-check"></i><b>9.2.3</b> Tibbles</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="purrr-parallel.html"><a href="purrr-parallel.html"><i class="fa fa-check"></i><b>10</b> Map with multiple inputs</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="purrr-parallel.html"><a href="purrr-parallel.html#map2"><i class="fa fa-check"></i><b>10.1</b> <code>map2()</code></a></li>
+<li class="chapter" data-level="10.2" data-path="purrr-parallel.html"><a href="purrr-parallel.html#pmap"><i class="fa fa-check"></i><b>10.2</b> <code>pmap()</code></a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="purrr-parallel.html"><a href="purrr-parallel.html#anonymous-functions-2"><i class="fa fa-check"></i><b>10.2.1</b> Anonymous functions</a></li>
+<li class="chapter" data-level="10.2.2" data-path="purrr-parallel.html"><a href="purrr-parallel.html#named-functions"><i class="fa fa-check"></i><b>10.2.2</b> Named functions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="purrr-extras.html"><a href="purrr-extras.html"><i class="fa fa-check"></i><b>11</b> Other purrr functions</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="purrr-extras.html"><a href="purrr-extras.html#map-functions-that-output-tibbles"><i class="fa fa-check"></i><b>11.1</b> Map functions that output tibbles</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="purrr-extras.html"><a href="purrr-extras.html#dfr"><i class="fa fa-check"></i><b>11.1.1</b> <code>_dfr</code></a></li>
+<li class="chapter" data-level="11.1.2" data-path="purrr-extras.html"><a href="purrr-extras.html#dfc"><i class="fa fa-check"></i><b>11.1.2</b> <code>_dfc</code></a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="purrr-extras.html"><a href="purrr-extras.html#walk"><i class="fa fa-check"></i><b>11.2</b> Walk</a></li>
+<li class="chapter" data-level="11.3" data-path="purrr-extras.html"><a href="purrr-extras.html#predicate-functions-1"><i class="fa fa-check"></i><b>11.3</b> Predicate functions</a></li>
+</ul></li>
+<li class="part"><span><b>IV Tidy evaluation</b></span></li>
+<li class="chapter" data-level="12" data-path="tidy-eval-section.html"><a href="tidy-eval-section.html"><i class="fa fa-check"></i><b>12</b> Introduction</a></li>
+<li class="chapter" data-level="13" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html"><i class="fa fa-check"></i><b>13</b> Tidy evaluation basics</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html#embracing-with"><i class="fa fa-check"></i><b>13.1</b> Embracing with <code>{{ }}</code></a></li>
+<li class="chapter" data-level="13.2" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html#forwarding-with-..."><i class="fa fa-check"></i><b>13.2</b> Forwarding with <code>...</code></a>
+<ul>
+<li class="chapter" data-level="13.2.1" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html#passing-full-expressions"><i class="fa fa-check"></i><b>13.2.1</b> Passing full expressions</a></li>
+<li class="chapter" data-level="13.2.2" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html#additional-arguments"><i class="fa fa-check"></i><b>13.2.2</b> Additional arguments</a></li>
+</ul></li>
+<li class="chapter" data-level="13.3" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html#assigning-names"><i class="fa fa-check"></i><b>13.3</b> Assigning names</a></li>
+<li class="chapter" data-level="13.4" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html#splicing-with"><i class="fa fa-check"></i><b>13.4</b> Splicing with <code>!!!</code></a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Functional Programming</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="tidy-evaluation-basics" class="section level1" number="13">
+<h1><span class="header-section-number">13</span> Tidy evaluation basics</h1>
+<p>Likely without realizing it, you’ve been using two types of variables in R. First, there are what we’ll call <em>environment</em> variables. When you create an environment variable, you bind a value to a name in the current environment. For example, the following code creates an environment variable named <code>y</code> that refers to <code>1</code>.</p>
+<div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb159-1"><a href="tidy-eval-basics.html#cb159-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">1</span></span></code></pre></div>
+<p>Now, when we call <code>y</code>, we get whatever value <code>y</code> refers to.</p>
+<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="tidy-eval-basics.html#cb160-1" aria-hidden="true" tabindex="-1"></a>y</span>
+<span id="cb160-2"><a href="tidy-eval-basics.html#cb160-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1</span></span></code></pre></div>
+<p>The second type of variable we’ll call <em>data</em> variables. Data variables refer to columns in data frames, and only make sense in the context of those data frames. For example, <code>manufacturer</code> is a data variable that exists in the context of <code>mpg</code>. dplyr, ggplot2, and other tidyverse packages understand this, which is why functions like <code>select()</code> behave as you want.</p>
+<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb161-1"><a href="tidy-eval-basics.html#cb161-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb161-2"><a href="tidy-eval-basics.html#cb161-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(manufacturer)</span>
+<span id="cb161-3"><a href="tidy-eval-basics.html#cb161-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 234 × 1</span></span>
+<span id="cb161-4"><a href="tidy-eval-basics.html#cb161-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   manufacturer</span></span>
+<span id="cb161-5"><a href="tidy-eval-basics.html#cb161-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;       </span></span>
+<span id="cb161-6"><a href="tidy-eval-basics.html#cb161-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 audi        </span></span>
+<span id="cb161-7"><a href="tidy-eval-basics.html#cb161-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 audi        </span></span>
+<span id="cb161-8"><a href="tidy-eval-basics.html#cb161-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 audi        </span></span>
+<span id="cb161-9"><a href="tidy-eval-basics.html#cb161-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 audi        </span></span>
+<span id="cb161-10"><a href="tidy-eval-basics.html#cb161-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 audi        </span></span>
+<span id="cb161-11"><a href="tidy-eval-basics.html#cb161-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 audi        </span></span>
+<span id="cb161-12"><a href="tidy-eval-basics.html#cb161-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 228 more rows</span></span></code></pre></div>
+<p>Instead of figuring out what <code>manufacturer</code> refers to in the environment, <code>select()</code> looks for a column named “manufacturer” in <code>mpg</code>.</p>
+<p>Let’s take a look at our failed function from the intro again.</p>
+<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb162-1"><a href="tidy-eval-basics.html#cb162-1" aria-hidden="true" tabindex="-1"></a>grouped_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(var_group, var_summary) {</span>
+<span id="cb162-2"><a href="tidy-eval-basics.html#cb162-2" aria-hidden="true" tabindex="-1"></a>  mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb162-3"><a href="tidy-eval-basics.html#cb162-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(var_group) <span class="sc">%&gt;%</span> </span>
+<span id="cb162-4"><a href="tidy-eval-basics.html#cb162-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">mean =</span> <span class="fu">mean</span>(var_summary))</span>
+<span id="cb162-5"><a href="tidy-eval-basics.html#cb162-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb162-6"><a href="tidy-eval-basics.html#cb162-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb162-7"><a href="tidy-eval-basics.html#cb162-7" aria-hidden="true" tabindex="-1"></a><span class="fu">grouped_mean</span>(<span class="at">var_group =</span> manufacturer, <span class="at">var_summary =</span> cty)</span>
+<span id="cb162-8"><a href="tidy-eval-basics.html#cb162-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error: Must group by variables found in `.data`.</span></span>
+<span id="cb162-9"><a href="tidy-eval-basics.html#cb162-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * Column `var_group` is not found.</span></span></code></pre></div>
+<p><code>group_by()</code> thinks that <code>var_group</code> is a data variable, and so it looks inside <code>mpg</code> for a column called “var_group”, doesn’t find it, and so throws an error.</p>
+<p>We actually want <code>var_group</code> to behave as a hybrid between an environment variable and a data variable. Like an environment variable, we want it to refer to another value (<code>manufacturer</code>). Then, we want <code>group_by()</code> to treat that value (<code>manufacturer</code>) as a data variable and look inside <code>mpg</code> for the matching column.</p>
+<div id="embracing-with" class="section level2" number="13.1">
+<h2><span class="header-section-number">13.1</span> Embracing with <code>{{ }}</code></h2>
+<p>To fix <code>grouped_mean()</code>, all we need to do is <em>embrace</em> <code>var_group</code> and <code>var_summary</code> with <code>{{ }}</code> (pronounced “curly curly”).</p>
+<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="tidy-eval-basics.html#cb163-1" aria-hidden="true" tabindex="-1"></a>grouped_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(var_group, var_summary) {</span>
+<span id="cb163-2"><a href="tidy-eval-basics.html#cb163-2" aria-hidden="true" tabindex="-1"></a>  mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb163-3"><a href="tidy-eval-basics.html#cb163-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>({{ var_group }}) <span class="sc">%&gt;%</span> </span>
+<span id="cb163-4"><a href="tidy-eval-basics.html#cb163-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">mean =</span> <span class="fu">mean</span>({{ var_summary }}))</span>
+<span id="cb163-5"><a href="tidy-eval-basics.html#cb163-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb163-6"><a href="tidy-eval-basics.html#cb163-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb163-7"><a href="tidy-eval-basics.html#cb163-7" aria-hidden="true" tabindex="-1"></a><span class="fu">grouped_mean</span>(<span class="at">var_group =</span> manufacturer, <span class="at">var_summary =</span> cty)</span>
+<span id="cb163-8"><a href="tidy-eval-basics.html#cb163-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 15 × 2</span></span>
+<span id="cb163-9"><a href="tidy-eval-basics.html#cb163-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   manufacturer  mean</span></span>
+<span id="cb163-10"><a href="tidy-eval-basics.html#cb163-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;        &lt;dbl&gt;</span></span>
+<span id="cb163-11"><a href="tidy-eval-basics.html#cb163-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 audi          17.6</span></span>
+<span id="cb163-12"><a href="tidy-eval-basics.html#cb163-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 chevrolet     15  </span></span>
+<span id="cb163-13"><a href="tidy-eval-basics.html#cb163-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 dodge         13.1</span></span>
+<span id="cb163-14"><a href="tidy-eval-basics.html#cb163-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 ford          14  </span></span>
+<span id="cb163-15"><a href="tidy-eval-basics.html#cb163-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 honda         24.4</span></span>
+<span id="cb163-16"><a href="tidy-eval-basics.html#cb163-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 hyundai       18.6</span></span>
+<span id="cb163-17"><a href="tidy-eval-basics.html#cb163-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 9 more rows</span></span></code></pre></div>
+<p><code>{{ }}</code> might remind you of the use of <code>{ }</code> in <code>glue()</code>, and they fill similar roles.</p>
+<p>Let’s look at another example. This doesn’t work:</p>
+<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="tidy-eval-basics.html#cb164-1" aria-hidden="true" tabindex="-1"></a>plot_mpg <span class="ot">&lt;-</span> <span class="cf">function</span>(var) {</span>
+<span id="cb164-2"><a href="tidy-eval-basics.html#cb164-2" aria-hidden="true" tabindex="-1"></a>  mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb164-3"><a href="tidy-eval-basics.html#cb164-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(var)) <span class="sc">+</span></span>
+<span id="cb164-4"><a href="tidy-eval-basics.html#cb164-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>()</span>
+<span id="cb164-5"><a href="tidy-eval-basics.html#cb164-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb164-6"><a href="tidy-eval-basics.html#cb164-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb164-7"><a href="tidy-eval-basics.html#cb164-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_mpg</span>(drv)</span>
+<span id="cb164-8"><a href="tidy-eval-basics.html#cb164-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in FUN(X[[i]], ...): object &#39;drv&#39; not found</span></span></code></pre></div>
+<p>We want <code>var</code> to behave as a hybrid environment-data variable, so we need <code>{{ }}</code>.</p>
+<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="tidy-eval-basics.html#cb165-1" aria-hidden="true" tabindex="-1"></a>plot_mpg <span class="ot">&lt;-</span> <span class="cf">function</span>(var) {</span>
+<span id="cb165-2"><a href="tidy-eval-basics.html#cb165-2" aria-hidden="true" tabindex="-1"></a>  mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb165-3"><a href="tidy-eval-basics.html#cb165-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>({{ var }})) <span class="sc">+</span></span>
+<span id="cb165-4"><a href="tidy-eval-basics.html#cb165-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>()</span>
+<span id="cb165-5"><a href="tidy-eval-basics.html#cb165-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb165-6"><a href="tidy-eval-basics.html#cb165-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb165-7"><a href="tidy-eval-basics.html#cb165-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_mpg</span>(drv)</span></code></pre></div>
+<p><img src="tidy-eval-basics_files/figure-html/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="forwarding-with-..." class="section level2" number="13.2">
+<h2><span class="header-section-number">13.2</span> Forwarding with <code>...</code></h2>
+<p>You might have noticed that some functions, like the purrr functions, take <code>...</code> as a final argument, allowing you to specify any number of additional arguments. You can use <code>...</code> in your own functions. There are two common use-cases.</p>
+<div id="passing-full-expressions" class="section level3" number="13.2.1">
+<h3><span class="header-section-number">13.2.1</span> Passing full expressions</h3>
+<p>Functions like <code>filter()</code> take expressions, like <code>year == 1999</code> or <code>manufacturer == "audi"</code>. If you want to build a function that takes full expressions, you can use <code>...</code>.</p>
+<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb166-1"><a href="tidy-eval-basics.html#cb166-1" aria-hidden="true" tabindex="-1"></a>mpg_filter <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
+<span id="cb166-2"><a href="tidy-eval-basics.html#cb166-2" aria-hidden="true" tabindex="-1"></a>  mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb166-3"><a href="tidy-eval-basics.html#cb166-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(...)</span>
+<span id="cb166-4"><a href="tidy-eval-basics.html#cb166-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb166-5"><a href="tidy-eval-basics.html#cb166-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb166-6"><a href="tidy-eval-basics.html#cb166-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mpg_filter</span>(manufacturer <span class="sc">==</span> <span class="st">&quot;audi&quot;</span>, year <span class="sc">==</span> <span class="dv">1999</span>)</span>
+<span id="cb166-7"><a href="tidy-eval-basics.html#cb166-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 9 × 11</span></span>
+<span id="cb166-8"><a href="tidy-eval-basics.html#cb166-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   manufacturer model      displ  year   cyl trans  drv     cty   hwy fl    class</span></span>
+<span id="cb166-9"><a href="tidy-eval-basics.html#cb166-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;        &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;</span></span>
+<span id="cb166-10"><a href="tidy-eval-basics.html#cb166-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 audi         a4           1.8  1999     4 auto(… f        18    29 p     comp…</span></span>
+<span id="cb166-11"><a href="tidy-eval-basics.html#cb166-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 audi         a4           1.8  1999     4 manua… f        21    29 p     comp…</span></span>
+<span id="cb166-12"><a href="tidy-eval-basics.html#cb166-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 audi         a4           2.8  1999     6 auto(… f        16    26 p     comp…</span></span>
+<span id="cb166-13"><a href="tidy-eval-basics.html#cb166-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 audi         a4           2.8  1999     6 manua… f        18    26 p     comp…</span></span>
+<span id="cb166-14"><a href="tidy-eval-basics.html#cb166-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 audi         a4 quattro   1.8  1999     4 manua… 4        18    26 p     comp…</span></span>
+<span id="cb166-15"><a href="tidy-eval-basics.html#cb166-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 audi         a4 quattro   1.8  1999     4 auto(… 4        16    25 p     comp…</span></span>
+<span id="cb166-16"><a href="tidy-eval-basics.html#cb166-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 3 more rows</span></span></code></pre></div>
+<p><code>...</code> can take any number of arguments, so we can filter by an unlimited number of conditions.</p>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="tidy-eval-basics.html#cb167-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mpg_filter</span>(</span>
+<span id="cb167-2"><a href="tidy-eval-basics.html#cb167-2" aria-hidden="true" tabindex="-1"></a>  manufacturer <span class="sc">==</span> <span class="st">&quot;audi&quot;</span>, </span>
+<span id="cb167-3"><a href="tidy-eval-basics.html#cb167-3" aria-hidden="true" tabindex="-1"></a>  year <span class="sc">==</span> <span class="dv">1999</span>, </span>
+<span id="cb167-4"><a href="tidy-eval-basics.html#cb167-4" aria-hidden="true" tabindex="-1"></a>  drv <span class="sc">==</span> <span class="st">&quot;f&quot;</span>, </span>
+<span id="cb167-5"><a href="tidy-eval-basics.html#cb167-5" aria-hidden="true" tabindex="-1"></a>  fl <span class="sc">==</span> <span class="st">&quot;p&quot;</span></span>
+<span id="cb167-6"><a href="tidy-eval-basics.html#cb167-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb167-7"><a href="tidy-eval-basics.html#cb167-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 × 11</span></span>
+<span id="cb167-8"><a href="tidy-eval-basics.html#cb167-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   manufacturer model displ  year   cyl trans      drv     cty   hwy fl    class </span></span>
+<span id="cb167-9"><a href="tidy-eval-basics.html#cb167-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;      &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt; </span></span>
+<span id="cb167-10"><a href="tidy-eval-basics.html#cb167-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 audi         a4      1.8  1999     4 auto(l5)   f        18    29 p     compa…</span></span>
+<span id="cb167-11"><a href="tidy-eval-basics.html#cb167-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 audi         a4      1.8  1999     4 manual(m5) f        21    29 p     compa…</span></span>
+<span id="cb167-12"><a href="tidy-eval-basics.html#cb167-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 audi         a4      2.8  1999     6 auto(l5)   f        16    26 p     compa…</span></span>
+<span id="cb167-13"><a href="tidy-eval-basics.html#cb167-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 audi         a4      2.8  1999     6 manual(m5) f        18    26 p     compa…</span></span></code></pre></div>
+<p><code>mpg_filter()</code> <em>forwards</em> <code>...</code> to <code>filter()</code>, which allows <code>filter()</code> to act on the contents of <code>...</code> just as it would outside of the function.</p>
+<p>Here’s another example that uses <code>select()</code>.</p>
+<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="tidy-eval-basics.html#cb168-1" aria-hidden="true" tabindex="-1"></a>mpg_select <span class="ot">&lt;-</span> <span class="cf">function</span>(...) {</span>
+<span id="cb168-2"><a href="tidy-eval-basics.html#cb168-2" aria-hidden="true" tabindex="-1"></a>  mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb168-3"><a href="tidy-eval-basics.html#cb168-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(...)</span>
+<span id="cb168-4"><a href="tidy-eval-basics.html#cb168-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb168-5"><a href="tidy-eval-basics.html#cb168-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb168-6"><a href="tidy-eval-basics.html#cb168-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mpg_select</span>(<span class="at">car =</span> model, <span class="at">drivetrain =</span> drv)</span>
+<span id="cb168-7"><a href="tidy-eval-basics.html#cb168-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 234 × 2</span></span>
+<span id="cb168-8"><a href="tidy-eval-basics.html#cb168-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   car   drivetrain</span></span>
+<span id="cb168-9"><a href="tidy-eval-basics.html#cb168-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt;     </span></span>
+<span id="cb168-10"><a href="tidy-eval-basics.html#cb168-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 a4    f         </span></span>
+<span id="cb168-11"><a href="tidy-eval-basics.html#cb168-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 a4    f         </span></span>
+<span id="cb168-12"><a href="tidy-eval-basics.html#cb168-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 a4    f         </span></span>
+<span id="cb168-13"><a href="tidy-eval-basics.html#cb168-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 a4    f         </span></span>
+<span id="cb168-14"><a href="tidy-eval-basics.html#cb168-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 a4    f         </span></span>
+<span id="cb168-15"><a href="tidy-eval-basics.html#cb168-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 a4    f         </span></span>
+<span id="cb168-16"><a href="tidy-eval-basics.html#cb168-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 228 more rows</span></span></code></pre></div>
+</div>
+<div id="additional-arguments" class="section level3" number="13.2.2">
+<h3><span class="header-section-number">13.2.2</span> Additional arguments</h3>
+<p>Sometimes, you’ll want your function to take named arguments, but you’ll also want to allow for any number of additional arguments. You can use <code>{{ }}</code>, and <code>...</code>.</p>
+<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="tidy-eval-basics.html#cb169-1" aria-hidden="true" tabindex="-1"></a>grouped_mean_2 <span class="ot">&lt;-</span> <span class="cf">function</span>(df, var_summary, ...) {</span>
+<span id="cb169-2"><a href="tidy-eval-basics.html#cb169-2" aria-hidden="true" tabindex="-1"></a>  df <span class="sc">%&gt;%</span> </span>
+<span id="cb169-3"><a href="tidy-eval-basics.html#cb169-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(...) <span class="sc">%&gt;%</span> </span>
+<span id="cb169-4"><a href="tidy-eval-basics.html#cb169-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">mean =</span> <span class="fu">mean</span>({{ var_summary }})) <span class="sc">%&gt;%</span> </span>
+<span id="cb169-5"><a href="tidy-eval-basics.html#cb169-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>()</span>
+<span id="cb169-6"><a href="tidy-eval-basics.html#cb169-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb169-7"><a href="tidy-eval-basics.html#cb169-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb169-8"><a href="tidy-eval-basics.html#cb169-8" aria-hidden="true" tabindex="-1"></a><span class="fu">grouped_mean_2</span>(<span class="at">df =</span> mpg, <span class="at">var_summary =</span> cty, year, drv)</span>
+<span id="cb169-9"><a href="tidy-eval-basics.html#cb169-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 × 3</span></span>
+<span id="cb169-10"><a href="tidy-eval-basics.html#cb169-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    year drv    mean</span></span>
+<span id="cb169-11"><a href="tidy-eval-basics.html#cb169-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;dbl&gt;</span></span>
+<span id="cb169-12"><a href="tidy-eval-basics.html#cb169-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  1999 4      14.2</span></span>
+<span id="cb169-13"><a href="tidy-eval-basics.html#cb169-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  1999 f      20.0</span></span>
+<span id="cb169-14"><a href="tidy-eval-basics.html#cb169-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  1999 r      14  </span></span>
+<span id="cb169-15"><a href="tidy-eval-basics.html#cb169-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4  2008 4      14.4</span></span>
+<span id="cb169-16"><a href="tidy-eval-basics.html#cb169-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5  2008 f      20.0</span></span>
+<span id="cb169-17"><a href="tidy-eval-basics.html#cb169-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6  2008 r      14.1</span></span></code></pre></div>
+<p>With the <code>...</code>, we can pass any number of grouping variables into <code>group_by()</code>.</p>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="tidy-eval-basics.html#cb170-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grouped_mean_2</span>(<span class="at">df =</span> mpg, <span class="at">var_summary =</span> cty, year, drv, class)</span>
+<span id="cb170-2"><a href="tidy-eval-basics.html#cb170-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 23 × 4</span></span>
+<span id="cb170-3"><a href="tidy-eval-basics.html#cb170-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    year drv   class       mean</span></span>
+<span id="cb170-4"><a href="tidy-eval-basics.html#cb170-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;</span></span>
+<span id="cb170-5"><a href="tidy-eval-basics.html#cb170-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  1999 4     compact     16.5</span></span>
+<span id="cb170-6"><a href="tidy-eval-basics.html#cb170-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  1999 4     midsize     15  </span></span>
+<span id="cb170-7"><a href="tidy-eval-basics.html#cb170-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  1999 4     pickup      13  </span></span>
+<span id="cb170-8"><a href="tidy-eval-basics.html#cb170-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4  1999 4     subcompact  19.5</span></span>
+<span id="cb170-9"><a href="tidy-eval-basics.html#cb170-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5  1999 4     suv         13.8</span></span>
+<span id="cb170-10"><a href="tidy-eval-basics.html#cb170-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6  1999 f     compact     20.4</span></span>
+<span id="cb170-11"><a href="tidy-eval-basics.html#cb170-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 17 more rows</span></span></code></pre></div>
+</div>
+</div>
+<div id="assigning-names" class="section level2" number="13.3">
+<h2><span class="header-section-number">13.3</span> Assigning names</h2>
+<p>When you want to pass the name of a column into your function, you need to:</p>
+<ul>
+<li>Embrace the name with <code>{{ }}</code>.</li>
+<li>Use <code>:=</code> instead of <code>=</code> to assign the name.</li>
+</ul>
+<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="tidy-eval-basics.html#cb171-1" aria-hidden="true" tabindex="-1"></a>summary_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(df, var_summary, name_summary){ </span>
+<span id="cb171-2"><a href="tidy-eval-basics.html#cb171-2" aria-hidden="true" tabindex="-1"></a>  df <span class="sc">%&gt;%</span> </span>
+<span id="cb171-3"><a href="tidy-eval-basics.html#cb171-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>({{ name_summary }} <span class="sc">:</span><span class="er">=</span> <span class="fu">mean</span>({{ var_summary }}))</span>
+<span id="cb171-4"><a href="tidy-eval-basics.html#cb171-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb171-5"><a href="tidy-eval-basics.html#cb171-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb171-6"><a href="tidy-eval-basics.html#cb171-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary_mean</span>(<span class="at">df =</span> mpg, <span class="at">var_summary =</span> cty, <span class="at">name_summary =</span> cty_mean)</span>
+<span id="cb171-7"><a href="tidy-eval-basics.html#cb171-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 1</span></span>
+<span id="cb171-8"><a href="tidy-eval-basics.html#cb171-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   cty_mean</span></span>
+<span id="cb171-9"><a href="tidy-eval-basics.html#cb171-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      &lt;dbl&gt;</span></span>
+<span id="cb171-10"><a href="tidy-eval-basics.html#cb171-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     16.9</span></span></code></pre></div>
+<p>You have to use <code>:=</code> instead of just plain <code>=</code> because you can’t use <code>{{ }}</code> on both sides of a <code>=</code>.</p>
+<p>(<code>:=</code> is called the walrus operator because it looks like a sideways walrus.)</p>
+</div>
+<div id="splicing-with" class="section level2" number="13.4">
+<h2><span class="header-section-number">13.4</span> Splicing with <code>!!!</code></h2>
+<p>Say you want to recode a variable:</p>
+<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb172-1"><a href="tidy-eval-basics.html#cb172-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb172-2"><a href="tidy-eval-basics.html#cb172-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">drv =</span> <span class="fu">recode</span>(drv, <span class="st">&quot;f&quot;</span> <span class="ot">=</span> <span class="st">&quot;front&quot;</span>, <span class="st">&quot;r&quot;</span> <span class="ot">=</span> <span class="st">&quot;rear&quot;</span>, <span class="st">&quot;4&quot;</span> <span class="ot">=</span> <span class="st">&quot;four&quot;</span>))</span>
+<span id="cb172-3"><a href="tidy-eval-basics.html#cb172-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 234 × 11</span></span>
+<span id="cb172-4"><a href="tidy-eval-basics.html#cb172-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   manufacturer model displ  year   cyl trans      drv     cty   hwy fl    class </span></span>
+<span id="cb172-5"><a href="tidy-eval-basics.html#cb172-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;      &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt; </span></span>
+<span id="cb172-6"><a href="tidy-eval-basics.html#cb172-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 audi         a4      1.8  1999     4 auto(l5)   front    18    29 p     compa…</span></span>
+<span id="cb172-7"><a href="tidy-eval-basics.html#cb172-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 audi         a4      1.8  1999     4 manual(m5) front    21    29 p     compa…</span></span>
+<span id="cb172-8"><a href="tidy-eval-basics.html#cb172-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 audi         a4      2    2008     4 manual(m6) front    20    31 p     compa…</span></span>
+<span id="cb172-9"><a href="tidy-eval-basics.html#cb172-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 audi         a4      2    2008     4 auto(av)   front    21    30 p     compa…</span></span>
+<span id="cb172-10"><a href="tidy-eval-basics.html#cb172-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 audi         a4      2.8  1999     6 auto(l5)   front    16    26 p     compa…</span></span>
+<span id="cb172-11"><a href="tidy-eval-basics.html#cb172-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 audi         a4      2.8  1999     6 manual(m5) front    18    26 p     compa…</span></span>
+<span id="cb172-12"><a href="tidy-eval-basics.html#cb172-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 228 more rows</span></span></code></pre></div>
+<p>It’s often a good idea to store your recode mapping as a vector in your parameters section. To get this to work, you’ll need another tidyeval operator, <code>!!!</code>.</p>
+<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb173-1"><a href="tidy-eval-basics.html#cb173-1" aria-hidden="true" tabindex="-1"></a>recode_drv <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">f =</span> <span class="st">&quot;front&quot;</span>, <span class="at">r =</span> <span class="st">&quot;rear&quot;</span>, <span class="st">&quot;4&quot;</span> <span class="ot">=</span> <span class="st">&quot;four&quot;</span>)</span>
+<span id="cb173-2"><a href="tidy-eval-basics.html#cb173-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb173-3"><a href="tidy-eval-basics.html#cb173-3" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb173-4"><a href="tidy-eval-basics.html#cb173-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">drv =</span> <span class="fu">recode</span>(drv, <span class="sc">!!!</span> recode_drv))</span>
+<span id="cb173-5"><a href="tidy-eval-basics.html#cb173-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 234 × 11</span></span>
+<span id="cb173-6"><a href="tidy-eval-basics.html#cb173-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   manufacturer model displ  year   cyl trans      drv     cty   hwy fl    class </span></span>
+<span id="cb173-7"><a href="tidy-eval-basics.html#cb173-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;      &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt; </span></span>
+<span id="cb173-8"><a href="tidy-eval-basics.html#cb173-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 audi         a4      1.8  1999     4 auto(l5)   front    18    29 p     compa…</span></span>
+<span id="cb173-9"><a href="tidy-eval-basics.html#cb173-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 audi         a4      1.8  1999     4 manual(m5) front    21    29 p     compa…</span></span>
+<span id="cb173-10"><a href="tidy-eval-basics.html#cb173-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 audi         a4      2    2008     4 manual(m6) front    20    31 p     compa…</span></span>
+<span id="cb173-11"><a href="tidy-eval-basics.html#cb173-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 audi         a4      2    2008     4 auto(av)   front    21    30 p     compa…</span></span>
+<span id="cb173-12"><a href="tidy-eval-basics.html#cb173-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 audi         a4      2.8  1999     6 auto(l5)   front    16    26 p     compa…</span></span>
+<span id="cb173-13"><a href="tidy-eval-basics.html#cb173-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 audi         a4      2.8  1999     6 manual(m5) front    18    26 p     compa…</span></span>
+<span id="cb173-14"><a href="tidy-eval-basics.html#cb173-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 228 more rows</span></span></code></pre></div>
+<p><code>!!!</code> has two tasks:</p>
+<ul>
+<li>Unpack <code>recode_drv</code> so that each element is passed as a separate argument to <code>recode()</code> (i.e., <code>"f" = "front", "r" = "rear", "4" = "four"</code> instead of c(<code>"f" = "front", "r" = "rear", "4" = "four")</code>).</li>
+<li>Make sure that <code>recode()</code> treats the individual elements as data variables.</li>
+</ul>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="tidy-eval-section.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/dcl-docs/prog/edit/master/tidy-eval-basics.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "lunr",
+"options": null
+},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

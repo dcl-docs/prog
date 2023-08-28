@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>13 Summary | Functional Programming</title>
+  <meta name="description" content="This book is a practical introduction to functional programming using the tidyverse.">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+
+  <meta property="og:title" content="13 Summary | Functional Programming" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://datalab.stanford.edu/dcl-docs/prog" />
+  
+  <meta property="og:description" content="This book is a practical introduction to functional programming using the tidyverse." />
+  <meta name="github-repo" content="dcl-docs/prog" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="13 Summary | Functional Programming" />
+  
+  <meta name="twitter:description" content="This book is a practical introduction to functional programming using the tidyverse." />
+  
+
+<meta name="author" content="Sara Altman, Bill Behrman, Hadley Wickham">
+
+
+<meta name="date" content="2019-05-18">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="tidy-eval-section.html">
+<link rel="next" href="tidy-eval-detailed.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Functional Programming</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#an-evolving-book"><i class="fa fa-check"></i>An evolving book</a></li>
+</ul></li>
+<li class="part"><span><b>I Data Structures</b></span></li>
+<li class="chapter" data-level="1" data-path="data-structures.html"><a href="data-structures.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="data-structure-basics.html"><a href="data-structure-basics.html"><i class="fa fa-check"></i><b>2</b> Vectors, lists, and tibbles</a><ul>
+<li class="chapter" data-level="2.1" data-path="data-structure-basics.html"><a href="data-structure-basics.html#atomic-vectors"><i class="fa fa-check"></i><b>2.1</b> Atomic vectors</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="data-structure-basics.html"><a href="data-structure-basics.html#subsetting"><i class="fa fa-check"></i><b>2.1.1</b> Subsetting</a></li>
+<li class="chapter" data-level="2.1.2" data-path="data-structure-basics.html"><a href="data-structure-basics.html#augmented-vectors"><i class="fa fa-check"></i><b>2.1.2</b> Augmented vectors</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="data-structure-basics.html"><a href="data-structure-basics.html#lists"><i class="fa fa-check"></i><b>2.2</b> Lists</a></li>
+<li class="chapter" data-level="2.3" data-path="data-structure-basics.html"><a href="data-structure-basics.html#tibbles"><i class="fa fa-check"></i><b>2.3</b> Tibbles</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="data-structure-basics.html"><a href="data-structure-basics.html#dimensions"><i class="fa fa-check"></i><b>2.3.1</b> Dimensions</a></li>
+<li class="chapter" data-level="2.3.2" data-path="data-structure-basics.html"><a href="data-structure-basics.html#variables"><i class="fa fa-check"></i><b>2.3.2</b> Variables</a></li>
+</ul></li>
+</ul></li>
+<li class="part"><span><b>II Functions</b></span></li>
+<li class="chapter" data-level="3" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>3</b> Introduction</a></li>
+<li class="chapter" data-level="4" data-path="function-vector.html"><a href="function-vector.html"><i class="fa fa-check"></i><b>4</b> Vector functions</a><ul>
+<li class="chapter" data-level="4.1" data-path="function-vector.html"><a href="function-vector.html#temperature-recommendations"><i class="fa fa-check"></i><b>4.1</b> Temperature recommendations</a></li>
+<li class="chapter" data-level="4.2" data-path="function-vector.html"><a href="function-vector.html#vector-functions-and-mutate"><i class="fa fa-check"></i><b>4.2</b> Vector functions and <code>mutate()</code></a></li>
+<li class="chapter" data-level="4.3" data-path="function-vector.html"><a href="function-vector.html#vectorizing-if-else-statements"><i class="fa fa-check"></i><b>4.3</b> Vectorizing if-else statements</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="function-anonymous.html"><a href="function-anonymous.html"><i class="fa fa-check"></i><b>5</b> Anonymous functions</a></li>
+<li class="chapter" data-level="6" data-path="function-predicate.html"><a href="function-predicate.html"><i class="fa fa-check"></i><b>6</b> Predicate functions</a></li>
+<li class="part"><span><b>III Iteration</b></span></li>
+<li class="chapter" data-level="7" data-path="iteration.html"><a href="iteration.html"><i class="fa fa-check"></i><b>7</b> Introduction</a></li>
+<li class="chapter" data-level="8" data-path="purrr-basics.html"><a href="purrr-basics.html"><i class="fa fa-check"></i><b>8</b> Basic map functions</a><ul>
+<li class="chapter" data-level="8.1" data-path="purrr-basics.html"><a href="purrr-basics.html#iteration-as-an-assembly-line"><i class="fa fa-check"></i><b>8.1</b> Iteration as an assembly line</a></li>
+<li class="chapter" data-level="8.2" data-path="purrr-basics.html"><a href="purrr-basics.html#the-map-functions"><i class="fa fa-check"></i><b>8.2</b> The map functions</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="purrr-basics.html"><a href="purrr-basics.html#extra-arguments"><i class="fa fa-check"></i><b>8.2.1</b> Extra arguments</a></li>
+<li class="chapter" data-level="8.2.2" data-path="purrr-basics.html"><a href="purrr-basics.html#anonymous-functions-1"><i class="fa fa-check"></i><b>8.2.2</b> Anonymous functions</a></li>
+<li class="chapter" data-level="8.2.3" data-path="purrr-basics.html"><a href="purrr-basics.html#tibbles-1"><i class="fa fa-check"></i><b>8.2.3</b> Tibbles</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="purrr-mutate.html"><a href="purrr-mutate.html"><i class="fa fa-check"></i><b>9</b> purrr inside mutate</a></li>
+<li class="chapter" data-level="10" data-path="purrr-parallel.html"><a href="purrr-parallel.html"><i class="fa fa-check"></i><b>10</b> Map with multiple inputs</a><ul>
+<li class="chapter" data-level="10.1" data-path="purrr-parallel.html"><a href="purrr-parallel.html#map2"><i class="fa fa-check"></i><b>10.1</b> <code>map2()</code></a></li>
+<li class="chapter" data-level="10.2" data-path="purrr-parallel.html"><a href="purrr-parallel.html#pmap"><i class="fa fa-check"></i><b>10.2</b> <code>pmap()</code></a><ul>
+<li class="chapter" data-level="10.2.1" data-path="purrr-parallel.html"><a href="purrr-parallel.html#anonymous-functions-2"><i class="fa fa-check"></i><b>10.2.1</b> Anonymous functions</a></li>
+<li class="chapter" data-level="10.2.2" data-path="purrr-parallel.html"><a href="purrr-parallel.html#named-functions"><i class="fa fa-check"></i><b>10.2.2</b> Named functions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="purrr-extras.html"><a href="purrr-extras.html"><i class="fa fa-check"></i><b>11</b> Other purrr functions</a><ul>
+<li class="chapter" data-level="11.1" data-path="purrr-extras.html"><a href="purrr-extras.html#map-functions-that-output-tibbles"><i class="fa fa-check"></i><b>11.1</b> map functions that output tibbles</a><ul>
+<li class="chapter" data-level="11.1.1" data-path="purrr-extras.html"><a href="purrr-extras.html#dfr"><i class="fa fa-check"></i><b>11.1.1</b> <code>_dfr</code></a></li>
+<li class="chapter" data-level="11.1.2" data-path="purrr-extras.html"><a href="purrr-extras.html#dfc"><i class="fa fa-check"></i><b>11.1.2</b> <code>_dfc</code></a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="purrr-extras.html"><a href="purrr-extras.html#walk"><i class="fa fa-check"></i><b>11.2</b> Walk</a></li>
+<li class="chapter" data-level="11.3" data-path="purrr-extras.html"><a href="purrr-extras.html#predicate-functions-1"><i class="fa fa-check"></i><b>11.3</b> Predicate functions</a></li>
+</ul></li>
+<li class="part"><span><b>IV Tidy evaluation</b></span></li>
+<li class="chapter" data-level="12" data-path="tidy-eval-section.html"><a href="tidy-eval-section.html"><i class="fa fa-check"></i><b>12</b> Introduction</a></li>
+<li class="chapter" data-level="13" data-path="tidy-eval-summary.html"><a href="tidy-eval-summary.html"><i class="fa fa-check"></i><b>13</b> Summary</a><ul>
+<li class="chapter" data-level="13.1" data-path="tidy-eval-summary.html"><a href="tidy-eval-summary.html#passing-full-expressions-with-..."><i class="fa fa-check"></i><b>13.1</b> Passing full expressions with <code>...</code></a></li>
+<li class="chapter" data-level="13.2" data-path="tidy-eval-summary.html"><a href="tidy-eval-summary.html#named-arguments"><i class="fa fa-check"></i><b>13.2</b> Named arguments</a></li>
+<li class="chapter" data-level="13.3" data-path="tidy-eval-summary.html"><a href="tidy-eval-summary.html#named-arguments-and-any-number-of-additional-arguments"><i class="fa fa-check"></i><b>13.3</b> Named arguments and any number of additional arguments</a></li>
+<li class="chapter" data-level="13.4" data-path="tidy-eval-summary.html"><a href="tidy-eval-summary.html#assigning-names"><i class="fa fa-check"></i><b>13.4</b> Assigning names</a></li>
+<li class="chapter" data-level="13.5" data-path="tidy-eval-summary.html"><a href="tidy-eval-summary.html#recoding"><i class="fa fa-check"></i><b>13.5</b> Recoding</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="tidy-eval-detailed.html"><a href="tidy-eval-detailed.html"><i class="fa fa-check"></i><b>14</b> Tidy evaluation</a><ul>
+<li class="chapter" data-level="14.1" data-path="tidy-eval-detailed.html"><a href="tidy-eval-detailed.html#quoting-functions"><i class="fa fa-check"></i><b>14.1</b> Quoting functions</a><ul>
+<li class="chapter" data-level="14.1.1" data-path="tidy-eval-detailed.html"><a href="tidy-eval-detailed.html#quoted-arguments"><i class="fa fa-check"></i><b>14.1.1</b> Quoted arguments</a></li>
+<li class="chapter" data-level="14.1.2" data-path="tidy-eval-detailed.html"><a href="tidy-eval-detailed.html#strings-and-glue"><i class="fa fa-check"></i><b>14.1.2</b> Strings and <code>glue()</code></a></li>
+<li class="chapter" data-level="14.1.3" data-path="tidy-eval-detailed.html"><a href="tidy-eval-detailed.html#quosures"><i class="fa fa-check"></i><b>14.1.3</b> Quosures</a></li>
+</ul></li>
+<li class="chapter" data-level="14.2" data-path="tidy-eval-detailed.html"><a href="tidy-eval-detailed.html#wrapping-quoting-functions"><i class="fa fa-check"></i><b>14.2</b> Wrapping quoting functions</a><ul>
+<li class="chapter" data-level="14.2.1" data-path="tidy-eval-detailed.html"><a href="tidy-eval-detailed.html#enquo-and"><i class="fa fa-check"></i><b>14.2.1</b> <code>enquo()</code> and <code>!!</code></a></li>
+<li class="chapter" data-level="14.2.2" data-path="tidy-eval-detailed.html"><a href="tidy-eval-detailed.html#passing-..."><i class="fa fa-check"></i><b>14.2.2</b> Passing <code>...</code></a></li>
+<li class="chapter" data-level="14.2.3" data-path="tidy-eval-detailed.html"><a href="tidy-eval-detailed.html#assigning-names-1"><i class="fa fa-check"></i><b>14.2.3</b> Assigning names</a></li>
+</ul></li>
+<li class="chapter" data-level="14.3" data-path="tidy-eval-detailed.html"><a href="tidy-eval-detailed.html#passing-vectors-with"><i class="fa fa-check"></i><b>14.3</b> Passing vectors with <code>!!!</code></a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Functional Programming</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="summary" class="section level1">
+<h1><span class="header-section-number">13</span> Summary</h1>
+<p>Tidy evaluation is a complex subject, but you don’t really need to understand how it works to start using it in your functions. The following is a brief, practical summary of the most common use cases.</p>
+<div id="passing-full-expressions-with-..." class="section level2">
+<h2><span class="header-section-number">13.1</span> Passing full expressions with <code>...</code></h2>
+<p>You can use <code>...</code> to pass full expressions into a function. For example, the following function applies <code>filter()</code> to <code>mpg.</code></p>
+<pre class="sourceCode r"><code class="sourceCode r">mpg_filter &lt;-<span class="st"> </span><span class="cf">function</span>(...) {
+  mpg <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">filter</span>(...)
+}
+
+<span class="kw">mpg_filter</span>(manufacturer <span class="op">==</span><span class="st"> &quot;audi&quot;</span>, year <span class="op">==</span><span class="st"> </span><span class="dv">1999</span>)
+<span class="co">#&gt; # A tibble: 9 x 11</span>
+<span class="co">#&gt;   manufacturer model  displ  year   cyl trans drv     cty   hwy fl    class</span>
+<span class="co">#&gt;   &lt;chr&gt;        &lt;chr&gt;  &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;</span>
+<span class="co">#&gt; 1 audi         a4       1.8  1999     4 auto… f        18    29 p     comp…</span>
+<span class="co">#&gt; 2 audi         a4       1.8  1999     4 manu… f        21    29 p     comp…</span>
+<span class="co">#&gt; 3 audi         a4       2.8  1999     6 auto… f        16    26 p     comp…</span>
+<span class="co">#&gt; 4 audi         a4       2.8  1999     6 manu… f        18    26 p     comp…</span>
+<span class="co">#&gt; 5 audi         a4 qu…   1.8  1999     4 manu… 4        18    26 p     comp…</span>
+<span class="co">#&gt; 6 audi         a4 qu…   1.8  1999     4 auto… 4        16    25 p     comp…</span>
+<span class="co">#&gt; # … with 3 more rows</span></code></pre>
+<p><code>...</code> can take any number of arguments, so we can filter by an unlimited number of conditions.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mpg_filter</span>(
+  manufacturer <span class="op">==</span><span class="st"> &quot;audi&quot;</span>, 
+  year <span class="op">==</span><span class="st"> </span><span class="dv">1999</span>, 
+  drv <span class="op">==</span><span class="st"> &quot;f&quot;</span>, 
+  fl <span class="op">==</span><span class="st"> &quot;p&quot;</span>
+)
+<span class="co">#&gt; # A tibble: 4 x 11</span>
+<span class="co">#&gt;   manufacturer model displ  year   cyl trans  drv     cty   hwy fl    class</span>
+<span class="co">#&gt;   &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;</span>
+<span class="co">#&gt; 1 audi         a4      1.8  1999     4 auto(… f        18    29 p     comp…</span>
+<span class="co">#&gt; 2 audi         a4      1.8  1999     4 manua… f        21    29 p     comp…</span>
+<span class="co">#&gt; 3 audi         a4      2.8  1999     6 auto(… f        16    26 p     comp…</span>
+<span class="co">#&gt; 4 audi         a4      2.8  1999     6 manua… f        18    26 p     comp…</span></code></pre>
+<p>Passing <code>...</code> works anytime all you want to do is pass a full expression into a dplyr function. Here’s another example that uses <code>select()</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">mpg_select &lt;-<span class="st"> </span><span class="cf">function</span>(...) {
+  mpg <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">select</span>(...)
+}
+
+<span class="kw">mpg_select</span>(<span class="dt">car =</span> model, <span class="dt">drivetrain =</span> drv)
+<span class="co">#&gt; # A tibble: 234 x 2</span>
+<span class="co">#&gt;   car   drivetrain</span>
+<span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt;     </span>
+<span class="co">#&gt; 1 a4    f         </span>
+<span class="co">#&gt; 2 a4    f         </span>
+<span class="co">#&gt; 3 a4    f         </span>
+<span class="co">#&gt; 4 a4    f         </span>
+<span class="co">#&gt; 5 a4    f         </span>
+<span class="co">#&gt; 6 a4    f         </span>
+<span class="co">#&gt; # … with 228 more rows</span></code></pre>
+</div>
+<div id="named-arguments" class="section level2">
+<h2><span class="header-section-number">13.2</span> Named arguments</h2>
+<p>Sometimes, <code>...</code> won’t work because you’ll want to supply your function with named arguments.</p>
+<p>In the introduction, we noted the following function that doesn’t work:</p>
+<pre class="sourceCode r"><code class="sourceCode r">grouped_mean &lt;-<span class="st"> </span><span class="cf">function</span>(df, group_var, summary_var) {
+  df <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">group_by</span>(group_var) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(summary_var))
+}
+
+<span class="kw">grouped_mean</span>(<span class="dt">df =</span> mpg, <span class="dt">group_var =</span> manufacturer, <span class="dt">summary_var =</span> cty)
+<span class="co">#&gt; Error: Column `group_var` is unknown</span></code></pre>
+<p>We can create a function that works by by using <code>enquo()</code> and <code>!!</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">grouped_mean &lt;-<span class="st"> </span><span class="cf">function</span>(df, group_var, summary_var) {
+  group_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(group_var)
+  summary_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(summary_var)
+  
+  df <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">group_by</span>(<span class="op">!!</span><span class="st"> </span>group_var) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(<span class="op">!!</span><span class="st"> </span>summary_var))
+}
+
+<span class="kw">grouped_mean</span>(<span class="dt">df =</span> mpg, <span class="dt">group_var =</span> manufacturer, <span class="dt">summary_var =</span> cty)
+<span class="co">#&gt; # A tibble: 15 x 2</span>
+<span class="co">#&gt;   manufacturer  mean</span>
+<span class="co">#&gt;   &lt;chr&gt;        &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 audi          17.6</span>
+<span class="co">#&gt; 2 chevrolet     15  </span>
+<span class="co">#&gt; 3 dodge         13.1</span>
+<span class="co">#&gt; 4 ford          14  </span>
+<span class="co">#&gt; 5 honda         24.4</span>
+<span class="co">#&gt; 6 hyundai       18.6</span>
+<span class="co">#&gt; # … with 9 more rows</span></code></pre>
+<p>Here’s the steps:</p>
+<ul>
+<li>Apply <code>enquo()</code> to the arguments that refer to column names.</li>
+<li>When you want to reference those arguments, put <code>!!</code> before their names.</li>
+</ul>
+</div>
+<div id="named-arguments-and-any-number-of-additional-arguments" class="section level2">
+<h2><span class="header-section-number">13.3</span> Named arguments and any number of additional arguments</h2>
+<p>Sometimes, you’ll want your function to take named arguments, but you’ll also want to allow for any number of additional arguments. You can use <code>enquo()</code>, <code>!!</code>, and <code>...</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">grouped_mean_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="cf">function</span>(df, summary_var, ...) {
+  summary_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(summary_var)
+  
+  df <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">group_by</span>(...) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(<span class="op">!!</span><span class="st"> </span>summary_var))
+}
+
+<span class="kw">grouped_mean_2</span>(<span class="dt">df =</span> mpg, <span class="dt">summary_var =</span> cty, year, drv)
+<span class="co">#&gt; # A tibble: 6 x 3</span>
+<span class="co">#&gt; # Groups:   year [2]</span>
+<span class="co">#&gt;    year drv    mean</span>
+<span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt; 1  1999 4      14.2</span>
+<span class="co">#&gt; 2  1999 f      20.0</span>
+<span class="co">#&gt; 3  1999 r      14  </span>
+<span class="co">#&gt; 4  2008 4      14.4</span>
+<span class="co">#&gt; 5  2008 f      20.0</span>
+<span class="co">#&gt; 6  2008 r      14.1</span></code></pre>
+<p>With the <code>...</code>, we can pass any number of grouping variables into <code>group_by()</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">grouped_mean_2</span>(<span class="dt">df =</span> mpg, <span class="dt">summary_var =</span> cty, year, drv, class)
+<span class="co">#&gt; # A tibble: 23 x 4</span>
+<span class="co">#&gt; # Groups:   year, drv [6]</span>
+<span class="co">#&gt;    year drv   class       mean</span>
+<span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;</span>
+<span class="co">#&gt; 1  1999 4     compact     16.5</span>
+<span class="co">#&gt; 2  1999 4     midsize     15  </span>
+<span class="co">#&gt; 3  1999 4     pickup      13  </span>
+<span class="co">#&gt; 4  1999 4     subcompact  19.5</span>
+<span class="co">#&gt; 5  1999 4     suv         13.8</span>
+<span class="co">#&gt; 6  1999 f     compact     20.4</span>
+<span class="co">#&gt; # … with 17 more rows</span></code></pre>
+</div>
+<div id="assigning-names" class="section level2">
+<h2><span class="header-section-number">13.4</span> Assigning names</h2>
+<p>Many of the dpylr verbs allow you to name or rename columns. When you want to pass the name of a column into your function, you need to:</p>
+<ul>
+<li>Apply <code>enquo()</code> to the argument giving the name</li>
+<li>Put <code>!!</code> before the name when you reference it</li>
+<li>Use <code>:=</code> instead of <code>=</code> to assign the name</li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r">summary_mean &lt;-<span class="st"> </span><span class="cf">function</span>(df, summary_var, summary_name) {
+  summary_var &lt;-<span class="st"> </span><span class="kw">enquo</span>(summary_var)
+  summary_name &lt;-<span class="st"> </span><span class="kw">enquo</span>(summary_name)
+  
+  df <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">summarize</span>(<span class="op">!!</span><span class="st"> </span><span class="dt">summary_name :=</span> <span class="kw">mean</span>(<span class="op">!!</span><span class="st"> </span>summary_var))
+}
+
+<span class="kw">summary_mean</span>(<span class="dt">df =</span> mpg, <span class="dt">summary_var =</span> cty, <span class="dt">summary_name =</span> cty_mean)
+<span class="co">#&gt; # A tibble: 1 x 1</span>
+<span class="co">#&gt;   cty_mean</span>
+<span class="co">#&gt;      &lt;dbl&gt;</span>
+<span class="co">#&gt; 1     16.9</span></code></pre>
+</div>
+<div id="recoding" class="section level2">
+<h2><span class="header-section-number">13.5</span> Recoding</h2>
+<p><code>recode()</code> is also a dplyr verb. It is often useful to put your recode vector in the parameters section, instead of directly inside <code>recode()</code>. Use <code>!!!</code> to get this to work.</p>
+<pre class="sourceCode r"><code class="sourceCode r">recode_drv &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;f&quot;</span> =<span class="st"> &quot;front&quot;</span>, <span class="st">&quot;r&quot;</span> =<span class="st"> &quot;rear&quot;</span>, <span class="st">&quot;4&quot;</span> =<span class="st"> &quot;four&quot;</span>)
+
+mpg <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">drv =</span> <span class="kw">recode</span>(drv, <span class="op">!!!</span><span class="st"> </span>recode_drv))
+<span class="co">#&gt; # A tibble: 234 x 11</span>
+<span class="co">#&gt;   manufacturer model displ  year   cyl trans  drv     cty   hwy fl    class</span>
+<span class="co">#&gt;   &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;</span>
+<span class="co">#&gt; 1 audi         a4      1.8  1999     4 auto(… front    18    29 p     comp…</span>
+<span class="co">#&gt; 2 audi         a4      1.8  1999     4 manua… front    21    29 p     comp…</span>
+<span class="co">#&gt; 3 audi         a4      2    2008     4 manua… front    20    31 p     comp…</span>
+<span class="co">#&gt; 4 audi         a4      2    2008     4 auto(… front    21    30 p     comp…</span>
+<span class="co">#&gt; 5 audi         a4      2.8  1999     6 auto(… front    16    26 p     comp…</span>
+<span class="co">#&gt; 6 audi         a4      2.8  1999     6 manua… front    18    26 p     comp…</span>
+<span class="co">#&gt; # … with 228 more rows</span></code></pre>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="tidy-eval-section.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="tidy-eval-detailed.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/dcl-docs/prog/edit/master/tidy-eval-summary.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>11 Other purrr functions | Functional Programming</title>
+  <meta name="description" content="This book is a practical introduction to functional programming using the tidyverse." />
+  <meta name="generator" content="bookdown 0.23 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="11 Other purrr functions | Functional Programming" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://dcl-prog.stanford.edu" />
+  
+  <meta property="og:description" content="This book is a practical introduction to functional programming using the tidyverse." />
+  <meta name="github-repo" content="dcl-docs/prog" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="11 Other purrr functions | Functional Programming" />
+  
+  <meta name="twitter:description" content="This book is a practical introduction to functional programming using the tidyverse." />
+  
+
+<meta name="author" content="Sara Altman, Bill Behrman, Hadley Wickham" />
+
+
+<meta name="date" content="2021-09-09" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="purrr-parallel.html"/>
+<link rel="next" href="tidy-eval-section.html"/>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Functional Programming</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#an-evolving-book"><i class="fa fa-check"></i>An evolving book</a></li>
+</ul></li>
+<li class="part"><span><b>I Data Structures</b></span></li>
+<li class="chapter" data-level="1" data-path="data-structures.html"><a href="data-structures.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="data-structure-basics.html"><a href="data-structure-basics.html"><i class="fa fa-check"></i><b>2</b> Vectors, lists, and tibbles</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="data-structure-basics.html"><a href="data-structure-basics.html#atomic-vectors"><i class="fa fa-check"></i><b>2.1</b> Atomic vectors</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="data-structure-basics.html"><a href="data-structure-basics.html#properties"><i class="fa fa-check"></i><b>2.1.1</b> Properties</a></li>
+<li class="chapter" data-level="2.1.2" data-path="data-structure-basics.html"><a href="data-structure-basics.html#subsetting"><i class="fa fa-check"></i><b>2.1.2</b> Subsetting</a></li>
+<li class="chapter" data-level="2.1.3" data-path="data-structure-basics.html"><a href="data-structure-basics.html#applying-functions"><i class="fa fa-check"></i><b>2.1.3</b> Applying functions</a></li>
+<li class="chapter" data-level="2.1.4" data-path="data-structure-basics.html"><a href="data-structure-basics.html#augmented-vectors"><i class="fa fa-check"></i><b>2.1.4</b> Augmented vectors</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="data-structure-basics.html"><a href="data-structure-basics.html#lists"><i class="fa fa-check"></i><b>2.2</b> Lists</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="data-structure-basics.html"><a href="data-structure-basics.html#basics"><i class="fa fa-check"></i><b>2.2.1</b> Basics</a></li>
+<li class="chapter" data-level="2.2.2" data-path="data-structure-basics.html"><a href="data-structure-basics.html#flattening"><i class="fa fa-check"></i><b>2.2.2</b> Flattening</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="data-structure-basics.html"><a href="data-structure-basics.html#tibbles"><i class="fa fa-check"></i><b>2.3</b> Tibbles</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="data-structure-basics.html"><a href="data-structure-basics.html#creation"><i class="fa fa-check"></i><b>2.3.1</b> Creation</a></li>
+<li class="chapter" data-level="2.3.2" data-path="data-structure-basics.html"><a href="data-structure-basics.html#subsetting-1"><i class="fa fa-check"></i><b>2.3.2</b> Subsetting</a></li>
+<li class="chapter" data-level="2.3.3" data-path="data-structure-basics.html"><a href="data-structure-basics.html#dimensions"><i class="fa fa-check"></i><b>2.3.3</b> Dimensions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="list-columns.html"><a href="list-columns.html"><i class="fa fa-check"></i><b>3</b> List columns</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="list-columns.html"><a href="list-columns.html#creating"><i class="fa fa-check"></i><b>3.1</b> Creating</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="list-columns.html"><a href="list-columns.html#nest"><i class="fa fa-check"></i><b>3.1.1</b> <code>nest()</code></a></li>
+<li class="chapter" data-level="3.1.2" data-path="list-columns.html"><a href="list-columns.html#summarize-and-list"><i class="fa fa-check"></i><b>3.1.2</b> <code>summarize()</code> and <code>list()</code></a></li>
+<li class="chapter" data-level="3.1.3" data-path="list-columns.html"><a href="list-columns.html#mutate"><i class="fa fa-check"></i><b>3.1.3</b> <code>mutate()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="list-columns.html"><a href="list-columns.html#unnesting"><i class="fa fa-check"></i><b>3.2</b> Unnesting</a></li>
+<li class="chapter" data-level="3.3" data-path="list-columns.html"><a href="list-columns.html#manipulating"><i class="fa fa-check"></i><b>3.3</b> Manipulating</a></li>
+</ul></li>
+<li class="part"><span><b>II Functions</b></span></li>
+<li class="chapter" data-level="4" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>4</b> Introduction</a></li>
+<li class="chapter" data-level="5" data-path="function-vector.html"><a href="function-vector.html"><i class="fa fa-check"></i><b>5</b> Vector functions</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="function-vector.html"><a href="function-vector.html#temperature-recommendations"><i class="fa fa-check"></i><b>5.1</b> Temperature recommendations</a></li>
+<li class="chapter" data-level="5.2" data-path="function-vector.html"><a href="function-vector.html#vector-functions-and-mutate"><i class="fa fa-check"></i><b>5.2</b> Vector functions and <code>mutate()</code></a></li>
+<li class="chapter" data-level="5.3" data-path="function-vector.html"><a href="function-vector.html#vectorizing-if-else-statements"><i class="fa fa-check"></i><b>5.3</b> Vectorizing if-else statements</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="function-anonymous.html"><a href="function-anonymous.html"><i class="fa fa-check"></i><b>6</b> Anonymous functions</a></li>
+<li class="chapter" data-level="7" data-path="function-predicate.html"><a href="function-predicate.html"><i class="fa fa-check"></i><b>7</b> Predicate functions</a></li>
+<li class="part"><span><b>III Iteration</b></span></li>
+<li class="chapter" data-level="8" data-path="iteration.html"><a href="iteration.html"><i class="fa fa-check"></i><b>8</b> Introduction</a></li>
+<li class="chapter" data-level="9" data-path="purrr-basics.html"><a href="purrr-basics.html"><i class="fa fa-check"></i><b>9</b> Basic map functions</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="purrr-basics.html"><a href="purrr-basics.html#iteration-as-an-assembly-line"><i class="fa fa-check"></i><b>9.1</b> Iteration as an assembly line</a></li>
+<li class="chapter" data-level="9.2" data-path="purrr-basics.html"><a href="purrr-basics.html#the-map-functions"><i class="fa fa-check"></i><b>9.2</b> The map functions</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="purrr-basics.html"><a href="purrr-basics.html#extra-arguments"><i class="fa fa-check"></i><b>9.2.1</b> Extra arguments</a></li>
+<li class="chapter" data-level="9.2.2" data-path="purrr-basics.html"><a href="purrr-basics.html#anonymous-functions-1"><i class="fa fa-check"></i><b>9.2.2</b> Anonymous functions</a></li>
+<li class="chapter" data-level="9.2.3" data-path="purrr-basics.html"><a href="purrr-basics.html#tibbles-1"><i class="fa fa-check"></i><b>9.2.3</b> Tibbles</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="purrr-parallel.html"><a href="purrr-parallel.html"><i class="fa fa-check"></i><b>10</b> Map with multiple inputs</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="purrr-parallel.html"><a href="purrr-parallel.html#map2"><i class="fa fa-check"></i><b>10.1</b> <code>map2()</code></a></li>
+<li class="chapter" data-level="10.2" data-path="purrr-parallel.html"><a href="purrr-parallel.html#pmap"><i class="fa fa-check"></i><b>10.2</b> <code>pmap()</code></a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="purrr-parallel.html"><a href="purrr-parallel.html#anonymous-functions-2"><i class="fa fa-check"></i><b>10.2.1</b> Anonymous functions</a></li>
+<li class="chapter" data-level="10.2.2" data-path="purrr-parallel.html"><a href="purrr-parallel.html#named-functions"><i class="fa fa-check"></i><b>10.2.2</b> Named functions</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="purrr-extras.html"><a href="purrr-extras.html"><i class="fa fa-check"></i><b>11</b> Other purrr functions</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="purrr-extras.html"><a href="purrr-extras.html#map-functions-that-output-tibbles"><i class="fa fa-check"></i><b>11.1</b> Map functions that output tibbles</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="purrr-extras.html"><a href="purrr-extras.html#dfr"><i class="fa fa-check"></i><b>11.1.1</b> <code>_dfr</code></a></li>
+<li class="chapter" data-level="11.1.2" data-path="purrr-extras.html"><a href="purrr-extras.html#dfc"><i class="fa fa-check"></i><b>11.1.2</b> <code>_dfc</code></a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="purrr-extras.html"><a href="purrr-extras.html#walk"><i class="fa fa-check"></i><b>11.2</b> Walk</a></li>
+<li class="chapter" data-level="11.3" data-path="purrr-extras.html"><a href="purrr-extras.html#predicate-functions-1"><i class="fa fa-check"></i><b>11.3</b> Predicate functions</a></li>
+</ul></li>
+<li class="part"><span><b>IV Tidy evaluation</b></span></li>
+<li class="chapter" data-level="12" data-path="tidy-eval-section.html"><a href="tidy-eval-section.html"><i class="fa fa-check"></i><b>12</b> Introduction</a></li>
+<li class="chapter" data-level="13" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html"><i class="fa fa-check"></i><b>13</b> Tidy evaluation basics</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html#embracing-with"><i class="fa fa-check"></i><b>13.1</b> Embracing with <code>{{ }}</code></a></li>
+<li class="chapter" data-level="13.2" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html#forwarding-with-..."><i class="fa fa-check"></i><b>13.2</b> Forwarding with <code>...</code></a>
+<ul>
+<li class="chapter" data-level="13.2.1" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html#passing-full-expressions"><i class="fa fa-check"></i><b>13.2.1</b> Passing full expressions</a></li>
+<li class="chapter" data-level="13.2.2" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html#additional-arguments"><i class="fa fa-check"></i><b>13.2.2</b> Additional arguments</a></li>
+</ul></li>
+<li class="chapter" data-level="13.3" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html#assigning-names"><i class="fa fa-check"></i><b>13.3</b> Assigning names</a></li>
+<li class="chapter" data-level="13.4" data-path="tidy-eval-basics.html"><a href="tidy-eval-basics.html#splicing-with"><i class="fa fa-check"></i><b>13.4</b> Splicing with <code>!!!</code></a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Functional Programming</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="other-purrr-functions" class="section level1" number="11">
+<h1><span class="header-section-number">11</span> Other purrr functions</h1>
+<div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb142-1"><a href="purrr-extras.html#cb142-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<p>In this reading, you’ll learn about two more map variants, <code>map_dfr()</code> and <code>map_dfc()</code>. Then, you’ll learn about <code>walk()</code>, as well as some useful purrr functions that work with functions that return either <code>TRUE</code> or <code>FALSE</code>.</p>
+<p>The purrr package contains more functions than we can cover. The <a href="https://github.com/rstudio/cheatsheets/blob/master/purrr.pdf">purrr cheatsheet</a> is a great way to find helpful functions when you encounter a new type of iteration problem.</p>
+<div id="map-functions-that-output-tibbles" class="section level2" number="11.1">
+<h2><span class="header-section-number">11.1</span> Map functions that output tibbles</h2>
+<p>Instead of creating an atomic vector or list, the map variants <code>map_dfr()</code> and <code>map_dfc()</code> create a tibble.</p>
+<p>With these map functions, the assembly line worker creates a tibble for each input element, and the output conveyor belt ends up with a collection of tibbles.</p>
+<p><img src="images/map_df.png" width="503" style="display: block; margin: auto;" /></p>
+<p>The worker then combines all the small tibbles into a single, larger tibble. There are multiple ways to combine smaller tibbles into a larger tibble. <code>map_dfr()</code> (<em>r</em> for <em>rows</em>) stacks the smaller tibbles on top of each other.</p>
+<p><img src="images/map_dfr.png" width="254" style="display: block; margin: auto;" /></p>
+<p><code>map_dfc()</code> (<em>c</em> for <em>columns</em>) stacks them side-by-side.</p>
+<p><img src="images/map_dfc.png" width="438" style="display: block; margin: auto;" /></p>
+<p>There are <code>_dfr</code> and <code>_dfc</code> variants of <code>pmap()</code> and <code>map2()</code> as well. In the following sections, we’ll cover <code>map_dfr()</code> and <code>map_dfc()</code> in more detail.</p>
+<div id="dfr" class="section level3" number="11.1.1">
+<h3><span class="header-section-number">11.1.1</span> <code>_dfr</code></h3>
+<p><code>map_dfr()</code> is useful when reading in data from multiple files. The following code reads in several very simple csv files, each of which contains the name of a different dinosaur genus.</p>
+<div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb143-1"><a href="purrr-extras.html#cb143-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">&quot;data/purrr-extras/file_001.csv&quot;</span>)</span>
+<span id="cb143-2"><a href="purrr-extras.html#cb143-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 2</span></span>
+<span id="cb143-3"><a href="purrr-extras.html#cb143-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      id genus        </span></span>
+<span id="cb143-4"><a href="purrr-extras.html#cb143-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;        </span></span>
+<span id="cb143-5"><a href="purrr-extras.html#cb143-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 Hoplitosaurus</span></span>
+<span id="cb143-6"><a href="purrr-extras.html#cb143-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb143-7"><a href="purrr-extras.html#cb143-7" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">&quot;data/purrr-extras/file_002.csv&quot;</span>)</span>
+<span id="cb143-8"><a href="purrr-extras.html#cb143-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 2</span></span>
+<span id="cb143-9"><a href="purrr-extras.html#cb143-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      id genus        </span></span>
+<span id="cb143-10"><a href="purrr-extras.html#cb143-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;        </span></span>
+<span id="cb143-11"><a href="purrr-extras.html#cb143-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     2 Herrerasaurus</span></span>
+<span id="cb143-12"><a href="purrr-extras.html#cb143-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb143-13"><a href="purrr-extras.html#cb143-13" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">&quot;data/purrr-extras/file_003.csv&quot;</span>)</span>
+<span id="cb143-14"><a href="purrr-extras.html#cb143-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 2</span></span>
+<span id="cb143-15"><a href="purrr-extras.html#cb143-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      id genus      </span></span>
+<span id="cb143-16"><a href="purrr-extras.html#cb143-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;      </span></span>
+<span id="cb143-17"><a href="purrr-extras.html#cb143-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     3 Coelophysis</span></span></code></pre></div>
+<p><code>read_csv()</code> produces a tibble, and so we can use <code>map_dfr()</code> to map over all three file names and bind the resulting individual tibbles into a single tibble.</p>
+<div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="purrr-extras.html#cb144-1" aria-hidden="true" tabindex="-1"></a>files <span class="ot">&lt;-</span> <span class="fu">str_glue</span>(<span class="st">&quot;data/purrr-extras/file_00{1:3}.csv&quot;</span>)</span>
+<span id="cb144-2"><a href="purrr-extras.html#cb144-2" aria-hidden="true" tabindex="-1"></a>files</span>
+<span id="cb144-3"><a href="purrr-extras.html#cb144-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; data/purrr-extras/file_001.csv</span></span>
+<span id="cb144-4"><a href="purrr-extras.html#cb144-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; data/purrr-extras/file_002.csv</span></span>
+<span id="cb144-5"><a href="purrr-extras.html#cb144-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; data/purrr-extras/file_003.csv</span></span>
+<span id="cb144-6"><a href="purrr-extras.html#cb144-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb144-7"><a href="purrr-extras.html#cb144-7" aria-hidden="true" tabindex="-1"></a>files <span class="sc">%&gt;%</span> </span>
+<span id="cb144-8"><a href="purrr-extras.html#cb144-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_dfr</span>(read_csv)</span>
+<span id="cb144-9"><a href="purrr-extras.html#cb144-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 2</span></span>
+<span id="cb144-10"><a href="purrr-extras.html#cb144-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      id genus        </span></span>
+<span id="cb144-11"><a href="purrr-extras.html#cb144-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;        </span></span>
+<span id="cb144-12"><a href="purrr-extras.html#cb144-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 Hoplitosaurus</span></span>
+<span id="cb144-13"><a href="purrr-extras.html#cb144-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     2 Herrerasaurus</span></span>
+<span id="cb144-14"><a href="purrr-extras.html#cb144-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3 Coelophysis</span></span></code></pre></div>
+<p>The result is a tibble with three rows and two columns, because <code>map_dfr()</code> aligns the columns of the individual tibbles by name.</p>
+<p>The individual tibbles can have different numbers of rows or columns. <code>map_dfr()</code> just creates a column for each unique column name. If some of the individual tibbles lack a column that others have, <code>map_dfr()</code> fills in with <code>NA</code> values.</p>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb145-1"><a href="purrr-extras.html#cb145-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">&quot;data/purrr-extras/file_004.csv&quot;</span>)</span>
+<span id="cb145-2"><a href="purrr-extras.html#cb145-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 2 × 3</span></span>
+<span id="cb145-3"><a href="purrr-extras.html#cb145-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      id genus         start_period </span></span>
+<span id="cb145-4"><a href="purrr-extras.html#cb145-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;        </span></span>
+<span id="cb145-5"><a href="purrr-extras.html#cb145-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     4 Dilophosaurus Sinemurian   </span></span>
+<span id="cb145-6"><a href="purrr-extras.html#cb145-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     5 Segisaurus    Pliensbachian</span></span>
+<span id="cb145-7"><a href="purrr-extras.html#cb145-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb145-8"><a href="purrr-extras.html#cb145-8" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(files, <span class="st">&quot;data/purrr-extras/file_004.csv&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb145-9"><a href="purrr-extras.html#cb145-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_dfr</span>(read_csv)</span>
+<span id="cb145-10"><a href="purrr-extras.html#cb145-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 5 × 3</span></span>
+<span id="cb145-11"><a href="purrr-extras.html#cb145-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      id genus         start_period </span></span>
+<span id="cb145-12"><a href="purrr-extras.html#cb145-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;        </span></span>
+<span id="cb145-13"><a href="purrr-extras.html#cb145-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 Hoplitosaurus &lt;NA&gt;         </span></span>
+<span id="cb145-14"><a href="purrr-extras.html#cb145-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     2 Herrerasaurus &lt;NA&gt;         </span></span>
+<span id="cb145-15"><a href="purrr-extras.html#cb145-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3 Coelophysis   &lt;NA&gt;         </span></span>
+<span id="cb145-16"><a href="purrr-extras.html#cb145-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4     4 Dilophosaurus Sinemurian   </span></span>
+<span id="cb145-17"><a href="purrr-extras.html#cb145-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5     5 Segisaurus    Pliensbachian</span></span></code></pre></div>
+</div>
+<div id="dfc" class="section level3" number="11.1.2">
+<h3><span class="header-section-number">11.1.2</span> <code>_dfc</code></h3>
+<p><code>map_dfc()</code> is typically less useful than <code>map_dfr()</code> because it relies on row position to stack the tibbles side-by-side. Row position is prone to error, and it will often be difficult to check if the data in each row is aligned correctly. However, if you have data with variables in different places and are positive the rows are aligned, <code>map_dfc()</code> may be appropriate.</p>
+<p>Unfortunately, even if the individual tibbles contain a unique identifier for each row, <code>map_dfc()</code> doesn’t use the identifiers to verify that the rows are aligned correctly, nor does it combine identically named columns.</p>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb146-1"><a href="purrr-extras.html#cb146-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">&quot;data/purrr-extras/file_005.csv&quot;</span>)</span>
+<span id="cb146-2"><a href="purrr-extras.html#cb146-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 3</span></span>
+<span id="cb146-3"><a href="purrr-extras.html#cb146-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      id diet      start_period</span></span>
+<span id="cb146-4"><a href="purrr-extras.html#cb146-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;       </span></span>
+<span id="cb146-5"><a href="purrr-extras.html#cb146-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 herbivore Barremian</span></span>
+<span id="cb146-6"><a href="purrr-extras.html#cb146-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb146-7"><a href="purrr-extras.html#cb146-7" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">&quot;data/purrr-extras/file_001.csv&quot;</span>, <span class="st">&quot;data/purrr-extras/file_005.csv&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb146-8"><a href="purrr-extras.html#cb146-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_dfc</span>(read_csv)</span>
+<span id="cb146-9"><a href="purrr-extras.html#cb146-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 5</span></span>
+<span id="cb146-10"><a href="purrr-extras.html#cb146-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   id...1 genus         id...3 diet      start_period</span></span>
+<span id="cb146-11"><a href="purrr-extras.html#cb146-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;       </span></span>
+<span id="cb146-12"><a href="purrr-extras.html#cb146-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1      1 Hoplitosaurus      1 herbivore Barremian</span></span></code></pre></div>
+<p>Instead, you end up with a duplicated column (<code>id...1</code> and <code>id...3</code>).</p>
+<p>If you have a unique identifier for each row, it is much better to join on that identifier.</p>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb147-1"><a href="purrr-extras.html#cb147-1" aria-hidden="true" tabindex="-1"></a><span class="fu">left_join</span>(</span>
+<span id="cb147-2"><a href="purrr-extras.html#cb147-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_csv</span>(<span class="st">&quot;data/purrr-extras/file_001.csv&quot;</span>),</span>
+<span id="cb147-3"><a href="purrr-extras.html#cb147-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_csv</span>(<span class="st">&quot;data/purrr-extras/file_005.csv&quot;</span>),</span>
+<span id="cb147-4"><a href="purrr-extras.html#cb147-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">by =</span> <span class="st">&quot;id&quot;</span></span>
+<span id="cb147-5"><a href="purrr-extras.html#cb147-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb147-6"><a href="purrr-extras.html#cb147-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 4</span></span>
+<span id="cb147-7"><a href="purrr-extras.html#cb147-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      id genus         diet      start_period</span></span>
+<span id="cb147-8"><a href="purrr-extras.html#cb147-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;     &lt;chr&gt;       </span></span>
+<span id="cb147-9"><a href="purrr-extras.html#cb147-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 Hoplitosaurus herbivore Barremian</span></span></code></pre></div>
+<p>Also, because <code>map_dfc()</code> combines tibbles by row position, the tibbles can have different numbers of columns, but they should have the same number of rows.</p>
+</div>
+</div>
+<div id="walk" class="section level2" number="11.2">
+<h2><span class="header-section-number">11.2</span> Walk</h2>
+<p>The walk functions work similarly to the map functions, but you use them when you’re interested in applying a function that performs an action instead of producing data (e.g., <code>print()</code>).</p>
+<p>The walk functions are useful for performing actions like writing files and printing plots. For example, say we used purrr to generate a list of plots.</p>
+<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb148-1"><a href="purrr-extras.html#cb148-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">745</span>)</span>
+<span id="cb148-2"><a href="purrr-extras.html#cb148-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb148-3"><a href="purrr-extras.html#cb148-3" aria-hidden="true" tabindex="-1"></a>plot_rnorm <span class="ot">&lt;-</span> <span class="cf">function</span>(sd) {</span>
+<span id="cb148-4"><a href="purrr-extras.html#cb148-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">5000</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> sd)) <span class="sc">%&gt;%</span> </span>
+<span id="cb148-5"><a href="purrr-extras.html#cb148-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(x)) <span class="sc">+</span></span>
+<span id="cb148-6"><a href="purrr-extras.html#cb148-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">40</span>) <span class="sc">+</span></span>
+<span id="cb148-7"><a href="purrr-extras.html#cb148-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb148-8"><a href="purrr-extras.html#cb148-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb148-9"><a href="purrr-extras.html#cb148-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb148-10"><a href="purrr-extras.html#cb148-10" aria-hidden="true" tabindex="-1"></a>plots <span class="ot">&lt;-</span></span>
+<span id="cb148-11"><a href="purrr-extras.html#cb148-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">9</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb148-12"><a href="purrr-extras.html#cb148-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(plot_rnorm)</span></code></pre></div>
+<p>We can now use <code>walk()</code> to print them out.</p>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb149-1"><a href="purrr-extras.html#cb149-1" aria-hidden="true" tabindex="-1"></a>plots <span class="sc">%&gt;%</span> </span>
+<span id="cb149-2"><a href="purrr-extras.html#cb149-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">walk</span>(print)</span></code></pre></div>
+<p><img src="purrr-extras_files/figure-html/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /><img src="purrr-extras_files/figure-html/unnamed-chunk-11-2.png" width="672" style="display: block; margin: auto;" /><img src="purrr-extras_files/figure-html/unnamed-chunk-11-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The walk functions look like they don’t return anything, but they actually return their input <em>invisibly</em>. When functions return something invisibly, it just means they don’t print their return value out when you call them. This functionality makes the walk functions useful in pipes. You can call a walk function to perform an action, get your input back, and continue operating on that input.</p>
+</div>
+<div id="predicate-functions-1" class="section level2" number="11.3">
+<h2><span class="header-section-number">11.3</span> Predicate functions</h2>
+<p>In Chapter 7, we introduced <em>predicate functions</em>, which are functions that return a single <code>TRUE</code> or <code>FALSE</code>. purrr includes several useful functions that work with predicate functions.</p>
+<p><code>keep()</code> and <code>discard()</code> iterate over a vector and keep or discard only those elements for which the predicate function returns <code>TRUE</code>.</p>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="purrr-extras.html#cb150-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span></span>
+<span id="cb150-2"><a href="purrr-extras.html#cb150-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(</span>
+<span id="cb150-3"><a href="purrr-extras.html#cb150-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">a =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>),</span>
+<span id="cb150-4"><a href="purrr-extras.html#cb150-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">b =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>),</span>
+<span id="cb150-5"><a href="purrr-extras.html#cb150-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">c =</span> <span class="fu">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;z&quot;</span>)</span>
+<span id="cb150-6"><a href="purrr-extras.html#cb150-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb150-7"><a href="purrr-extras.html#cb150-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb150-8"><a href="purrr-extras.html#cb150-8" aria-hidden="true" tabindex="-1"></a>x <span class="sc">%&gt;%</span> </span>
+<span id="cb150-9"><a href="purrr-extras.html#cb150-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">discard</span>(is.character)</span>
+<span id="cb150-10"><a href="purrr-extras.html#cb150-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $a</span></span>
+<span id="cb150-11"><a href="purrr-extras.html#cb150-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1 2</span></span>
+<span id="cb150-12"><a href="purrr-extras.html#cb150-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb150-13"><a href="purrr-extras.html#cb150-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $b</span></span>
+<span id="cb150-14"><a href="purrr-extras.html#cb150-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 4 5 6</span></span></code></pre></div>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb151-1"><a href="purrr-extras.html#cb151-1" aria-hidden="true" tabindex="-1"></a>x <span class="sc">%&gt;%</span> </span>
+<span id="cb151-2"><a href="purrr-extras.html#cb151-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">keep</span>(<span class="sc">~</span> <span class="fu">length</span>(.) <span class="sc">==</span> <span class="dv">2</span>)</span>
+<span id="cb151-3"><a href="purrr-extras.html#cb151-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $a</span></span>
+<span id="cb151-4"><a href="purrr-extras.html#cb151-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1 2</span></span>
+<span id="cb151-5"><a href="purrr-extras.html#cb151-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb151-6"><a href="purrr-extras.html#cb151-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $c</span></span>
+<span id="cb151-7"><a href="purrr-extras.html#cb151-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;a&quot; &quot;z&quot;</span></span></code></pre></div>
+<p>With tibbles, you can use <code>keep()</code> and <code>discard()</code> to select columns that meet a certain condition.</p>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="purrr-extras.html#cb152-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb152-2"><a href="purrr-extras.html#cb152-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">keep</span>(is.numeric)</span>
+<span id="cb152-3"><a href="purrr-extras.html#cb152-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 234 × 5</span></span>
+<span id="cb152-4"><a href="purrr-extras.html#cb152-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   displ  year   cyl   cty   hwy</span></span>
+<span id="cb152-5"><a href="purrr-extras.html#cb152-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;</span></span>
+<span id="cb152-6"><a href="purrr-extras.html#cb152-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1   1.8  1999     4    18    29</span></span>
+<span id="cb152-7"><a href="purrr-extras.html#cb152-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2   1.8  1999     4    21    29</span></span>
+<span id="cb152-8"><a href="purrr-extras.html#cb152-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3   2    2008     4    20    31</span></span>
+<span id="cb152-9"><a href="purrr-extras.html#cb152-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4   2    2008     4    21    30</span></span>
+<span id="cb152-10"><a href="purrr-extras.html#cb152-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5   2.8  1999     6    16    26</span></span>
+<span id="cb152-11"><a href="purrr-extras.html#cb152-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6   2.8  1999     6    18    26</span></span>
+<span id="cb152-12"><a href="purrr-extras.html#cb152-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 228 more rows</span></span></code></pre></div>
+<p><code>some()</code> looks at the entire input vector and returns <code>TRUE</code> if the predicate is true for any element of the vector and <code>FAlSE</code> otherwise.</p>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="purrr-extras.html#cb153-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb153-2"><a href="purrr-extras.html#cb153-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">some</span>(is.numeric)</span>
+<span id="cb153-3"><a href="purrr-extras.html#cb153-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<p>For <code>every()</code> to return <code>TRUE</code>, every element of the vector must meet the predicate.</p>
+<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="purrr-extras.html#cb154-1" aria-hidden="true" tabindex="-1"></a>mpg <span class="sc">%&gt;%</span> </span>
+<span id="cb154-2"><a href="purrr-extras.html#cb154-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">every</span>(is.numeric)</span>
+<span id="cb154-3"><a href="purrr-extras.html#cb154-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
+<p>Other useful purrr functions that use predicate functions include <code>head_while()</code>, <code>compact()</code>, <code>has_element()</code>, and <code>detect()</code>. Take a look at the <a href="https://github.com/rstudio/cheatsheets/blob/master/purrr.pdf">purrr cheatsheet</a> for details.</p>
+
+</div>
+</div>
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="purrr-parallel.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="tidy-eval-section.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": null,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/dcl-docs/prog/edit/master/purrr-extras.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "lunr",
+"options": null
+},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
